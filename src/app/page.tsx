@@ -14,9 +14,9 @@ export default function Home() {
   const trendingProducts = products.slice(0, 4);
 
   const collections = [
-    { name: 'Summer Wear', image: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'summer fashion', href: '#' },
-    { name: 'Sneakers', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop', data_ai_hint: 'stylish sneakers', href: '#' },
-    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1511556820780-d912e42b4980?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'modern accessories', href: '#' }
+    { name: 'Clothes', image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop', data_ai_hint: 'clothes fashion', href: '#' },
+    { name: 'Footwear', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'stylish footwear', href: '#' },
+    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1588705234458-944c6c59d54e?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'fashion accessories', href: '#' }
   ];
 
   const features = [
