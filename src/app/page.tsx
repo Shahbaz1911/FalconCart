@@ -92,10 +92,10 @@ export default function Home() {
       {/* 3. Trending Products */}
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-8">Trending Now</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="flex gap-6 overflow-x-auto pb-4">
           {/* GSAP: Slide-in product cards */}
           {trendingProducts.map((product) => (
-            <div key={product.id} className="relative">
+            <div key={product.id} className="relative w-72 flex-shrink-0">
               <Badge className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground">🔥 Selling Fast</Badge>
               <ProductCard product={product} />
             </div>

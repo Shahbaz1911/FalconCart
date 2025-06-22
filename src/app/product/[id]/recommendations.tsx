@@ -67,9 +67,11 @@ export function Recommendations({ product }: RecommendationsProps) {
   return (
     <div>
       <h2 className="text-2xl font-bold font-headline mb-4">You might also like</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="flex gap-6 overflow-x-auto pb-4">
         {recommendations.map(recommendedProduct => (
-          <ProductCard key={recommendedProduct.id} product={recommendedProduct} />
+          <div key={recommendedProduct.id} className="w-72 flex-shrink-0">
+            <ProductCard product={recommendedProduct} />
+          </div>
         ))}
       </div>
     </div>
