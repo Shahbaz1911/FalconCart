@@ -24,7 +24,7 @@ const products: Product[] = [
     description: 'Walk on air with these revolutionary sneakers. Featuring self-lacing technology and kinetic energy harvesting soles, they are the future of footwear.',
     price: 349.99,
     image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1964&auto=format&fit=crop',
-    category: 'Apparel',
+    category: 'Footwear',
     data_ai_hint: 'futuristic shoes',
   },
   {
@@ -74,12 +74,12 @@ const products: Product[] = [
   },
   {
     id: '8',
-    name: 'Echo-Scribe Smartpen',
-    description: 'Digitize your handwritten notes in real-time. The Echo-Scribe captures your every stroke and syncs it to the cloud. It can also record audio linked to your notes.',
-    price: 199.99,
-    image: 'https://images.unsplash.com/photo-1512314889357-e157c22f938d?q=80&w=2071&auto=format&fit=crop',
-    category: 'Office',
-    data_ai_hint: 'smart pen',
+    name: 'Cyber-Shell Jacket',
+    description: 'A sleek, water-resistant jacket with smart-fabric technology. Adapts to temperature changes and has built-in connectivity pockets for your devices.',
+    price: 249.99,
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16e2d8?q=80&w=1964&auto=format&fit=crop',
+    category: 'Apparel',
+    data_ai_hint: 'tech jacket',
   },
 ];
 

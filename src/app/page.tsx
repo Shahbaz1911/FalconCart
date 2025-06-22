@@ -14,9 +14,9 @@ export default function Home() {
   const trendingProducts = products.slice(0, 4);
 
   const collections = [
-    { name: 'Clothes', image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop', data_ai_hint: 'clothes fashion', href: '#' },
-    { name: 'Footwear', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'stylish footwear', href: '#' },
-    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1588705234458-944c6c59d54e?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'fashion accessories', href: '#' }
+    { name: 'Clothes', image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop', data_ai_hint: 'clothes fashion', href: '/collections/apparel' },
+    { name: 'Footwear', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'stylish footwear', href: '/collections/footwear' },
+    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1588705234458-944c6c59d54e?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'fashion accessories', href: '/collections/accessories' }
   ];
 
   const features = [
