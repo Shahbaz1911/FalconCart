@@ -1,3 +1,4 @@
+
 import { ProductCard } from '@/components/product-card';
 import { getProducts } from '@/lib/products';
 import { Button } from '@/components/ui/button';
@@ -56,7 +57,7 @@ export default function Home() {
       {/* 1. Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center text-center text-white">
         {/* GSAP: Parallax scroll effect on this image */}
-        <Image src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" />
+        <Image src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" priority />
         <div className="absolute inset-0 bg-black/50 z-10" />
         <div className="z-20 p-4">
           {/* GSAP: Fade-in text animation */}
@@ -79,7 +80,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 group">
           {collections.map(collection => (
              // GSAP: Staggered fade-in on scroll
-            <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-95 hover:!scale-105">
+            <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-y-95 hover:!scale-y-105">
               <Image src={collection.image} width={400} height={500} alt={collection.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" data-ai-hint={collection.data_ai_hint} />
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                 <h3 className="text-white text-3xl font-bold font-headline">{collection.name}</h3>
