@@ -56,7 +56,7 @@ export default function Home() {
       {/* 1. Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center text-center text-white">
         {/* GSAP: Parallax scroll effect on this image */}
-        <Image src="https://placehold.co/1920x1080.png" layout="fill" objectFit="cover" alt="Fashion model" className="z-0" data-ai-hint="fashion model" />
+        <Image src="https://placehold.co/1920x1080.png" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" />
         <div className="absolute inset-0 bg-black/50 z-10" />
         <div className="z-20 p-4">
           {/* GSAP: Fade-in text animation */}
@@ -121,7 +121,7 @@ export default function Home() {
       <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-8 rounded-lg">
         {/* GSAP: Video zooms in on scroll */}
         <div className="relative aspect-video rounded-lg overflow-hidden">
-            <Image src="https://placehold.co/1280x720.png" layout="fill" objectFit="cover" alt="Product video" data-ai-hint="product video" />
+            <Image src="https://placehold.co/1280x720.png" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
         </div>
         {/* GSAP: Text slides up on scroll */}
         <div className="text-center md:text-left">
