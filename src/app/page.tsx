@@ -80,7 +80,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 group">
           {collections.map(collection => (
              // GSAP: Staggered fade-in on scroll
-            <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-y-95 hover:!scale-y-105">
+            <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-95 hover:!scale-105">
               <Image src={collection.image} width={400} height={500} alt={collection.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" data-ai-hint={collection.data_ai_hint} />
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                 <h3 className="text-white text-3xl font-bold font-headline">{collection.name}</h3>
