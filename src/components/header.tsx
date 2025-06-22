@@ -36,7 +36,7 @@ export function Header() {
           <div className="flex items-center">
             <Button variant="ghost" size="icon" asChild>
               <Link href="/cart">
-                <div className="relative">
+                <div id="cart-icon-container" className="relative">
                   <ShoppingCart className="h-6 w-6" />
                   {itemCount > 0 && (
                     <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-bold">
