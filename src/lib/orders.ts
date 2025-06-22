@@ -35,7 +35,7 @@ const orders: Order[] = [
           name: 'Astro-Gazer 9000',
           description: 'The latest in personal telescopes...',
           price: 1299.99,
-          image: 'https://placehold.co/600x600.png',
+          image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1841&auto=format&fit=crop',
           category: 'Electronics',
           data_ai_hint: 'telescope space'
         },
@@ -47,7 +47,7 @@ const orders: Order[] = [
           name: 'Hydro-Synth Plant Pot',
           description: 'A smart plant pot that plays serene music...',
           price: 89.99,
-          image: 'https://placehold.co/600x600.png',
+          image: 'https://images.unsplash.com/photo-1487035242944-78f234964654?q=80&w=1964&auto=format&fit=crop',
           category: 'Home Goods',
           data_ai_hint: 'smart planter'
         },
@@ -75,7 +75,7 @@ const orders: Order[] = [
           name: 'Chronos Coffee Machine',
           description: 'The perfect cup of coffee, every time.',
           price: 499.99,
-          image: 'https://placehold.co/600x600.png',
+          image: 'https://images.unsplash.com/photo-1611090956424-ec4a57161b9e?q=80&w=1964&auto=format&fit=crop',
           category: 'Appliances',
           data_ai_hint: 'coffee machine'
         },

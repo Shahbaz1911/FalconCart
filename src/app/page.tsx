@@ -14,9 +14,9 @@ export default function Home() {
   const trendingProducts = products.slice(0, 4);
 
   const collections = [
-    { name: 'Summer Wear', image: 'https://placehold.co/400x500.png', data_ai_hint: 'summer fashion', href: '#' },
-    { name: 'Sneakers', image: 'https://placehold.co/400x500.png', data_ai_hint: 'stylish sneakers', href: '#' },
-    { name: 'Accessories', image: 'https://placehold.co/400x500.png', data_ai_hint: 'modern accessories', href: '#' }
+    { name: 'Summer Wear', image: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'summer fashion', href: '#' },
+    { name: 'Sneakers', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop', data_ai_hint: 'stylish sneakers', href: '#' },
+    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1511556820780-d912e42b4980?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'modern accessories', href: '#' }
   ];
 
   const features = [
@@ -28,21 +28,21 @@ export default function Home() {
   const reviews = [
     {
       name: 'Alex Johnson',
-      avatar: 'https://placehold.co/100x100.png',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop',
       rating: 5,
       review: 'The Quantum Sneakers are a game-changer! So comfortable and stylish. I feel like I\'m walking on clouds.',
       data_ai_hint: 'man portrait',
     },
     {
       name: 'Maria Garcia',
-      avatar: 'https://placehold.co/100x100.png',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop',
       rating: 5,
       review: 'I love my Nova-Glow Lamp. It has completely changed the ambiance of my workspace. The quality is top-notch!',
       data_ai_hint: 'woman portrait',
     },
     {
       name: 'Sam Lee',
-      avatar: 'https://placehold.co/100x100.png',
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop',
       rating: 4,
       review: 'The Chronos Coffee Machine makes a perfect cup every single time. It\'s a bit pricey, but worth it for a coffee lover.',
       data_ai_hint: 'person portrait',
@@ -56,7 +56,7 @@ export default function Home() {
       {/* 1. Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center text-center text-white">
         {/* GSAP: Parallax scroll effect on this image */}
-        <Image src="https://placehold.co/1920x1080.png" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" />
+        <Image src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" />
         <div className="absolute inset-0 bg-black/50 z-10" />
         <div className="z-20 p-4">
           {/* GSAP: Fade-in text animation */}
@@ -121,7 +121,7 @@ export default function Home() {
       <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-8 rounded-lg">
         {/* GSAP: Video zooms in on scroll */}
         <div className="relative aspect-video rounded-lg overflow-hidden">
-            <Image src="https://placehold.co/1280x720.png" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
+            <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
         </div>
         {/* GSAP: Text slides up on scroll */}
         <div className="text-center md:text-left">
