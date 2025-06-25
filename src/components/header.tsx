@@ -4,10 +4,25 @@ import Link from 'next/link';
 import { ShoppingCart, Package, Home, Rocket } from 'lucide-react';
 import { Button } from './ui/button';
 import { useCart } from '@/hooks/use-cart';
+import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 export function Header() {
   const { items } = useCart();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+  const cartIconRef = useRef<HTMLDivElement>(null);
+  const prevItemCountRef = useRef(itemCount);
+
+  useEffect(() => {
+    if (itemCount > prevItemCountRef.current) {
+      if (cartIconRef.current) {
+        gsap.timeline()
+          .to(cartIconRef.current, { scale: 1.3, duration: 0.15, ease: 'power1.inOut' })
+          .to(cartIconRef.current, { scale: 1, duration: 0.15, ease: 'power1.inOut' });
+      }
+    }
+    prevItemCountRef.current = itemCount;
+  }, [itemCount]);
 
   return (
     <header className="bg-card shadow-md sticky top-0 z-40">
@@ -36,7 +51,7 @@ export function Header() {
           <div className="flex items-center">
             <Button variant="ghost" size="icon" asChild>
               <Link href="/cart">
-                <div id="cart-icon-container" className="relative">
+                <div id="cart-icon-container" ref={cartIconRef} className="relative">
                   <ShoppingCart className="h-6 w-6" />
                   {itemCount > 0 && (
                     <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-bold">
