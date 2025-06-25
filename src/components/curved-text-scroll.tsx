@@ -130,11 +130,11 @@ export function CurvedTextScroll() {
       return;
     }
 
-    // Animate the clicked link to "zoom in"
+    // Animate the clicked link to "zoom in" to fill the window
     gsap.to(target, {
-      scale: 1.5,
+      scale: 20,
       opacity: 0,
-      duration: 0.4,
+      duration: 0.6,
       ease: 'power2.in',
       onComplete: () => {
         router.push(href);
