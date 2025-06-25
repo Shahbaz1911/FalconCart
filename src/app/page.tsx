@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Headset, Star, Truck, Undo2 } from 'lucide-react';
+import { Headset, Star, Truck, Undo2, Shirt, Watch, Gem, Footprints, Sparkles, ShoppingBag } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 
@@ -56,20 +56,41 @@ export default function Home() {
     <div className="space-y-24 md:space-y-32 overflow-hidden">
       {/* 1. Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center text-center text-white">
-        {/* GSAP: Parallax scroll effect on this image */}
         <Image src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" priority />
         <div className="absolute inset-0 bg-black/50 z-10" />
-        <div className="z-20 p-4">
-          {/* GSAP: Fade-in text animation */}
-          <h1 className="text-5xl md:text-7xl font-bold font-headline">Style Meets Comfort</h1>
-          <p className="text-xl md:text-2xl mt-4 max-w-2xl mx-auto">Discover premium fashion made for you</p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Button size="lg" asChild>
-              <Link href="#">Shop Now</Link>
-            </Button>
-            <Button size="lg" variant="secondary" asChild>
-              <Link href="#">View Collections</Link>
-            </Button>
+        <div className="z-20 p-4 relative">
+          <div className="absolute inset-0">
+            <div className="absolute top-[15%] left-[10%] animate-float-subtle" style={{ animationDelay: '0s' }}>
+              <Shirt className="h-10 w-10 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:-rotate-12" />
+            </div>
+            <div className="absolute top-[20%] right-[12%] animate-float-subtle" style={{ animationDelay: '1s' }}>
+              <Watch className="h-8 w-8 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
+            </div>
+            <div className="absolute bottom-[25%] left-[20%] animate-float-subtle" style={{ animationDelay: '2.5s', animationDuration: '8s' }}>
+              <Gem className="h-7 w-7 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-6" />
+            </div>
+            <div className="absolute bottom-[15%] right-[25%] animate-float-subtle" style={{ animationDelay: '4s', animationDuration: '7s' }}>
+              <Footprints className="h-9 w-9 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
+            </div>
+            <div className="absolute top-[50%] left-[30%] animate-float-subtle" style={{ animationDelay: '1.5s', animationDuration: '9s' }}>
+              <Sparkles className="h-6 w-6 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110" />
+            </div>
+            <div className="absolute top-[60%] right-[35%] animate-float-subtle" style={{ animationDelay: '3s', animationDuration: '5s' }}>
+              <ShoppingBag className="h-8 w-8 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110" />
+            </div>
+          </div>
+          
+          <div className="relative">
+            <h1 className="text-5xl md:text-7xl font-bold font-headline">Style Meets Comfort</h1>
+            <p className="text-xl md:text-2xl mt-4 max-w-2xl mx-auto">Discover premium fashion made for you</p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Button size="lg" asChild>
+                <Link href="#">Shop Now</Link>
+              </Button>
+              <Button size="lg" variant="secondary" asChild>
+                <Link href="#">View Collections</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -79,7 +100,6 @@ export default function Home() {
         <h2 className="text-3xl font-bold font-headline text-center mb-8">Featured Collections</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 group">
           {collections.map(collection => (
-             // GSAP: Staggered fade-in on scroll
             <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-95 hover:!scale-105">
               <Image src={collection.image} width={400} height={500} alt={collection.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" data-ai-hint={collection.data_ai_hint} />
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
@@ -94,7 +114,6 @@ export default function Home() {
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-8">Trending Now</h2>
         <div className="flex gap-6 overflow-x-auto pb-4">
-          {/* GSAP: Slide-in product cards */}
           {trendingProducts.map((product) => (
             <div key={product.id} className="relative w-72 flex-shrink-0">
               <Badge className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground">🔥 Selling Fast</Badge>
@@ -108,7 +127,6 @@ export default function Home() {
       <section className="bg-secondary/50 rounded-lg p-8 md:p-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {features.map(feature => (
-             // GSAP: Fade-in from bottom + icon bounce
             <div key={feature.title} className="flex flex-col items-center">
               <div className="text-primary bg-background rounded-full p-4 mb-4">{feature.icon}</div>
               <h3 className="text-xl font-bold font-headline">{feature.title}</h3>
@@ -120,11 +138,9 @@ export default function Home() {
 
       {/* 5. Product Video Teaser */}
       <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-8 rounded-lg">
-        {/* GSAP: Video zooms in on scroll */}
         <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
         </div>
-        {/* GSAP: Text slides up on scroll */}
         <div className="text-center md:text-left">
             <h2 className="text-3xl font-bold font-headline">Experience Our Quality</h2>
             <p className="mt-4 text-muted-foreground">See our products in action and discover the craftsmanship and passion that goes into every piece we create.</p>
@@ -138,7 +154,6 @@ export default function Home() {
         <h2 className="text-3xl font-bold font-headline text-center mb-8">What Our Customers Say</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.map(review => (
-            // GSAP: Cards rotate-in or float
             <Card key={review.name}>
               <CardContent className="p-6">
                 <div className="flex items-center mb-4">
@@ -164,7 +179,6 @@ export default function Home() {
 
       {/* 7. Newsletter */}
       <section className="bg-primary text-primary-foreground p-12 rounded-lg text-center">
-        {/* GSAP: Floating blob shapes in background */}
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
         <p className="mt-2 max-w-xl mx-auto">Get 10% off your first order and be the first to know about new collections and exclusive offers.</p>
         <form className="mt-6 flex flex-col sm:flex-row max-w-md mx-auto gap-2">
