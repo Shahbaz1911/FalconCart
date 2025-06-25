@@ -70,8 +70,11 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
-              <span className="text-xl font-bold font-headline">Falcon Cart</span>
+            <Link href="/" className="bg-primary px-4 rounded-md hover:bg-primary/90 transition-colors flex items-center h-10">
+              <span className="text-xl font-headline uppercase flex items-baseline">
+                <span className="font-bold bg-primary-foreground text-primary rounded-sm px-2 py-1">FALCON</span>
+                <span className="font-bold text-primary-foreground ml-2">CART</span>
+              </span>
             </Link>
           </div>
           <nav
