@@ -79,24 +79,20 @@ export function Header() {
   };
 
   useLayoutEffect(() => {
-    if (sheetContentRef.current) {
+    if (sheetContentRef.current && mobileMenuOpen) {
       const links = sheetContentRef.current.querySelectorAll('a');
-      if (mobileMenuOpen) {
-        gsap.fromTo(
-          links,
-          { opacity: 0, y: 20 },
-          {
+      gsap.fromTo(links,
+        { opacity: 0, y: 20, visibility: 'hidden' },
+        {
             opacity: 1,
             y: 0,
+            visibility: 'visible',
             duration: 0.4,
             ease: 'power2.out',
             stagger: 0.1,
-            onStart: () => gsap.set(links, { visibility: 'visible' }),
-          }
-        );
-      } else {
-        gsap.set(links, { opacity: 0, y: 0, visibility: 'hidden' });
-      }
+            delay: 0.1 
+        }
+      );
     }
   }, [mobileMenuOpen]);
 
@@ -200,7 +196,7 @@ export function Header() {
                     <nav className="flex flex-col gap-4 text-lg font-medium mt-10">
                       {navLinks.map((link) => (
                         <SheetClose asChild key={link.href}>
-                          <Link href={link.href} onClick={() => setMobileMenuOpen(false)} className="invisible">
+                          <Link href={link.href} onClick={() => setMobileMenuOpen(false)}>
                             {link.name}
                           </Link>
                         </SheetClose>
@@ -208,13 +204,13 @@ export function Header() {
                     </nav>
                     <div className="mt-8 border-t border-border pt-6 flex flex-col gap-4">
                       <SheetClose asChild>
-                          <Link href="/account" className="flex items-center gap-2 text-lg font-medium invisible" onClick={() => setMobileMenuOpen(false)}>
+                          <Link href="/account" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
                               <User className="h-6 w-6" />
                               Account
                           </Link>
                       </SheetClose>
                         <SheetClose asChild>
-                          <Link href="/cart" className="flex items-center gap-2 text-lg font-medium invisible" onClick={() => setMobileMenuOpen(false)}>
+                          <Link href="/cart" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
                               <ShoppingCart className="h-6 w-6" />
                               Cart {isClient && itemCount > 0 && `(${itemCount})`}
                           </Link>
