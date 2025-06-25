@@ -51,7 +51,7 @@ export function Header() {
     
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('resize', updateIndicatorToActive);
+      window.removeEventListener('resize', updateIndicatorTo-active);
     };
   }, [pathname, updateIndicatorToActive]);
 
@@ -70,10 +70,14 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="bg-primary px-4 rounded-md hover:bg-primary/90 transition-colors flex items-center h-10">
-              <span className="text-xl font-headline uppercase flex items-baseline">
-                <span className="font-bold bg-primary-foreground text-primary rounded-sm px-2 py-1">FALCON</span>
-                <span className="font-bold text-primary-foreground ml-2">CART</span>
+            <Link href="/" className="group flex items-center h-10 rounded-md overflow-hidden transition-opacity hover:opacity-90">
+              <span className="text-xl font-headline uppercase flex items-center h-full">
+                <span className="font-bold bg-primary-foreground text-primary px-3 flex items-center h-full">
+                  FALCON
+                </span>
+                <span className="font-bold bg-primary text-primary-foreground px-3 flex items-center h-full">
+                  CART
+                </span>
               </span>
             </Link>
           </div>
