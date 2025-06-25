@@ -1,4 +1,6 @@
+'use client';
 
+import { useState, useMemo } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { getProducts } from '@/lib/products';
 import { Button } from '@/components/ui/button';
@@ -6,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Headset, Star, Truck, Undo2 } from 'lucide-react';
+import { Headset, Star, Truck, Undo2, PackageOpen } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { HeroSection } from '@/components/hero-section';
@@ -14,9 +16,19 @@ import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
 
 export default function Home() {
-  const products = getProducts();
-  const trendingProducts = products.slice(0, 6);
-  const featuredProducts = products.slice(6, 10);
+  const allProducts = getProducts();
+  const featuredProducts = allProducts.slice(6, 10);
+  
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  
+  const categories = useMemo(() => ['All', ...new Set(allProducts.map(p => p.category))], [allProducts]);
+  
+  const trendingProducts = useMemo(() => {
+    const products = selectedCategory === 'All'
+      ? allProducts.slice(0, 8) // Get top 8 trending overall
+      : allProducts.filter(p => p.category === selectedCategory);
+    return products.slice(0, 8); // Limit to 8 results for display
+  }, [allProducts, selectedCategory]);
 
   const features = [
     { icon: <Truck />, title: 'Free Shipping', description: 'On all orders over $50' },
@@ -32,17 +44,38 @@ export default function Home() {
       {/* 2. Featured Collections */}
       <FeaturedCollections />
 
-      {/* 3. Trending Products */}
+      {/* 3. Trending Products with Filters */}
       <section>
-        <h2 className="text-3xl font-bold font-headline text-center mb-8">Trending Products</h2>
-        <div className="flex gap-6 overflow-x-auto pb-4">
-          {trendingProducts.map((product) => (
-            <div key={product.id} className="relative w-72 flex-shrink-0">
-              <Badge className="absolute top-2 left-2 z-10 bg-destructive text-destructive-foreground">🔥 Selling Fast</Badge>
-              <ProductCard product={product} />
-            </div>
+        <h2 className="text-3xl font-bold font-headline text-center mb-4">Trending Products</h2>
+        <p className="text-muted-foreground text-center mb-8">Check out what's popular right now.</p>
+        
+        {/* Category Filters */}
+        <div className="flex justify-center flex-wrap gap-2 mb-8">
+          {categories.map(category => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory(category)}
+            >
+              {category}
+            </Button>
           ))}
         </div>
+
+        {/* Products Grid */}
+        {trendingProducts.length > 0 ? (
+           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {trendingProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 bg-secondary/50 rounded-lg">
+              <PackageOpen className="mx-auto h-12 w-12 text-muted-foreground" />
+              <h3 className="mt-4 text-xl font-semibold">No Trending Products Found</h3>
+              <p className="mt-2 text-muted-foreground">Try selecting another category to see what's popular.</p>
+          </div>
+        )}
       </section>
 
       {/* 4. Our Featured Picks */}
