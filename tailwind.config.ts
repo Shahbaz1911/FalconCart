@@ -22,45 +22,45 @@ export default {
         code: ['monospace'],
       },
       colors: {
-        background: 'hsl(40 50% 95%)',
-        foreground: 'hsl(25 35% 25%)',
-        card: {
-          DEFAULT: 'hsl(40 50% 100%)',
-          foreground: 'hsl(25 35% 25%)',
-        },
-        popover: {
-          DEFAULT: 'hsl(40 50% 100%)',
-          foreground: 'hsl(25 35% 25%)',
-        },
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: 'hsl(30 45% 40%)',
-          foreground: 'hsl(40 50% 98%)',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
         },
         secondary: {
-          DEFAULT: 'hsl(35 40% 90%)',
-          foreground: 'hsl(25 35% 25%)',
-        },
-        muted: {
-          DEFAULT: 'hsl(35 40% 90%)',
-          foreground: 'hsl(30 25% 50%)',
-        },
-        accent: {
-          DEFAULT: 'hsl(30 65% 60%)',
-          foreground: 'hsl(25 35% 15%)',
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
         },
         destructive: {
-          DEFAULT: 'hsl(0 84.2% 60.2%)',
-          foreground: 'hsl(210 40% 98%)',
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
-        border: 'hsl(35 30% 85%)',
-        input: 'hsl(35 30% 85%)',
-        ring: 'hsl(30 45% 40%)',
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
         chart: {
-          '1': 'hsl(12 76% 61%)',
-          '2': 'hsl(173 58% 39%)',
-          '3': 'hsl(197 37% 24%)',
-          '4': 'hsl(43 74% 66%)',
-          '5': 'hsl(27 87% 67%)',
+          '1': 'hsl(var(--chart-1))',
+          '2': 'hsl(var(--chart-2))',
+          '3': 'hsl(var(--chart-3))',
+          '4': 'hsl(var(--chart-4))',
+          '5': 'hsl(var(--chart-5))',
         },
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
@@ -119,6 +119,9 @@ export default {
           from: { transform: 'scale(1)', opacity: '1' },
           to: { transform: 'scale(0)', opacity: '0' },
         },
+        'spin-slow': {
+          'to': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -128,6 +131,7 @@ export default {
         'running-cart': 'running-cart 0.3s ease-in-out infinite',
         'grow-from-top-right': 'grow-from-top-right 0.3s ease-out',
         'shrink-to-top-right': 'shrink-to-top-right 0.2s ease-in',
+        'spin-slow': 'spin-slow 20s linear infinite',
       },
     },
   },
