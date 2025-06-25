@@ -134,7 +134,9 @@ export function CurvedTextScroll() {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
-    { name: 'Collection', href: '/collections/apparel' },
+    { name: 'Clothes', href: '/collections/apparel' },
+    { name: 'Footwear', href: '/collections/footwear' },
+    { name: 'Accessories', href: '/collections/accessories' },
     { name: 'Profile', href: '/account/profile' },
     { name: 'Order', href: '/orders' },
     { name: 'Cart', href: '/cart' },
