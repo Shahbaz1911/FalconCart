@@ -60,7 +60,7 @@ const TextLine = ({
     <div
       ref={textRef}
       className={cn(
-        'text-6xl md:text-8xl lg:text-9xl font-black font-headline whitespace-nowrap uppercase tracking-tighter flex items-center gap-x-12',
+        'text-8xl md:text-[9rem] lg:text-[12rem] leading-none font-black font-headline whitespace-nowrap uppercase tracking-tighter flex items-center gap-x-12',
         isPrimary ? 'text-primary' : 'text-foreground'
       )}
     >
@@ -152,7 +152,7 @@ export function CurvedTextScroll() {
       className="relative h-[200vh] w-full overflow-hidden"
     >
       <div className="pin-container h-screen w-full flex flex-col items-center justify-center">
-        <div className="space-y-2 md:space-y-4 -rotate-3">
+        <div className="space-y-0 -rotate-3">
           <TextLine
             direction={1}
             links={repeatedLinks}
