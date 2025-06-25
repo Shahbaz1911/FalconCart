@@ -6,9 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Headset, Star, Truck, Undo2, Shirt, Watch, Gem, Footprints, Sparkles, ShoppingBag } from 'lucide-react';
+import { Headset, Star, Truck, Undo2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { HeroSection } from '@/components/hero-section';
 
 export default function Home() {
   const products = getProducts();
@@ -53,47 +54,9 @@ export default function Home() {
   // GSAP animations can be implemented in a useEffect hook for each section.
 
   return (
-    <div className="space-y-24 md:space-y-32 overflow-hidden">
+    <div className="space-y-24 md:space-y-32 overflow-x-hidden">
       {/* 1. Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center text-center text-white">
-        <Image src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" fill alt="Fashion model" className="z-0 object-cover" data-ai-hint="fashion model" priority />
-        <div className="absolute inset-0 bg-black/50 z-10" />
-        <div className="z-20 p-4 relative">
-          <div className="absolute inset-0">
-            <div className="absolute top-[15%] left-[10%] animate-float-subtle" style={{ animationDelay: '0s' }}>
-              <Shirt className="h-10 w-10 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:-rotate-12" />
-            </div>
-            <div className="absolute top-[20%] right-[12%] animate-float-subtle" style={{ animationDelay: '1s' }}>
-              <Watch className="h-8 w-8 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
-            </div>
-            <div className="absolute bottom-[25%] left-[20%] animate-float-subtle" style={{ animationDelay: '2.5s', animationDuration: '8s' }}>
-              <Gem className="h-7 w-7 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-6" />
-            </div>
-            <div className="absolute bottom-[15%] right-[25%] animate-float-subtle" style={{ animationDelay: '4s', animationDuration: '7s' }}>
-              <Footprints className="h-9 w-9 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
-            </div>
-            <div className="absolute top-[50%] left-[30%] animate-float-subtle" style={{ animationDelay: '1.5s', animationDuration: '9s' }}>
-              <Sparkles className="h-6 w-6 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110" />
-            </div>
-            <div className="absolute top-[60%] right-[35%] animate-float-subtle" style={{ animationDelay: '3s', animationDuration: '5s' }}>
-              <ShoppingBag className="h-8 w-8 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110" />
-            </div>
-          </div>
-          
-          <div className="relative">
-            <h1 className="text-5xl md:text-7xl font-bold font-headline">Style Meets Comfort</h1>
-            <p className="text-xl md:text-2xl mt-4 max-w-2xl mx-auto">Discover premium fashion made for you</p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button size="lg" asChild>
-                <Link href="#">Shop Now</Link>
-              </Button>
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="#">View Collections</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* 2. Featured Collections */}
       <section>
