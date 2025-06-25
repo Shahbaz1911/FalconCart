@@ -11,20 +11,20 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import gsap from 'gsap';
 
 export function Header() {
+  const pathname = usePathname();
   const { items } = useCart();
-  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const [isClient, setIsClient] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const sheetContentRef = useRef<HTMLDivElement>(null);
+
+  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
@@ -57,6 +57,7 @@ export function Header() {
   }, [computeActiveLinkIndex]);
 
   useEffect(() => {
+    if (pathname === '/') return;
     const timeoutId = setTimeout(updateIndicatorToActive, 50);
     window.addEventListener('resize', updateIndicatorToActive);
     
@@ -92,6 +93,10 @@ export function Header() {
       );
     }
   }, [mobileMenuOpen]);
+
+  if (pathname === '/') {
+    return null;
+  }
 
   return (
     <header className="bg-card shadow-md sticky top-0 z-40">
