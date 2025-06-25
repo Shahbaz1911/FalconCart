@@ -2,18 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarTrigger,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarInset,
-} from '@/components/ui/sidebar';
-import { Home, Package, Settings, ShoppingCart, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+const accountNavLinks = [
+    { href: '/account', label: 'Dashboard' },
+    { href: '/account/profile', label: 'Profile' },
+    { href: '/orders', label: 'Orders' },
+    { href: '/cart', label: 'Cart' },
+    { href: '/account/settings', label: 'Settings' },
+];
 
 export default function AccountLayout({
   children,
@@ -22,58 +19,34 @@ export default function AccountLayout({
 }) {
   const pathname = usePathname();
 
+  const getIsActive = (linkHref: string, currentPathname: string) => {
+    if (linkHref === '/orders' || linkHref === '/cart') {
+        return currentPathname.startsWith(linkHref);
+    }
+    return currentPathname === linkHref;
+  }
+
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader className="hidden md:flex">
-          <SidebarTrigger />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/account'}>
-                <Link href="/account">
-                  <Home />
-                  Dashboard
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/account/profile'}>
-                <Link href="/account/profile">
-                  <User />
-                  Profile
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname.startsWith('/orders')}>
-                <Link href="/orders">
-                  <Package />
-                  Orders
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname.startsWith('/cart')}>
-                <Link href="/cart">
-                  <ShoppingCart />
-                  Cart
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/account/settings'}>
-                <Link href="/account/settings">
-                  <Settings />
-                  Settings
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
+    <div>
+        <div className="mb-8 border-b">
+            <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Account navigation">
+                {accountNavLinks.map(link => (
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        className={cn(
+                            "whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium",
+                            getIsActive(link.href, pathname)
+                                ? 'border-primary text-primary'
+                                : 'border-transparent text-muted-foreground hover:border-border hover:text-primary'
+                        )}
+                    >
+                        {link.label}
+                    </Link>
+                ))}
+            </nav>
+        </div>
+        <div>{children}</div>
+    </div>
   );
 }
