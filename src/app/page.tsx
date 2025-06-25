@@ -10,45 +10,17 @@ import { Headset, Star, Truck, Undo2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { HeroSection } from '@/components/hero-section';
+import { FeaturedCollections } from '@/components/featured-collections';
+import { CustomerReviews } from '@/components/customer-reviews';
 
 export default function Home() {
   const products = getProducts();
   const trendingProducts = products.slice(0, 4);
 
-  const collections = [
-    { name: 'Clothes', image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=2071&auto=format&fit=crop', data_ai_hint: 'clothes fashion', href: '/collections/apparel' },
-    { name: 'Footwear', image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'stylish footwear', href: '/collections/footwear' },
-    { name: 'Accessories', image: 'https://images.unsplash.com/photo-1588705234458-944c6c59d54e?q=80&w=1974&auto=format&fit=crop', data_ai_hint: 'fashion accessories', href: '/collections/accessories' }
-  ];
-
   const features = [
     { icon: <Truck />, title: 'Free Shipping', description: 'On all orders over $50' },
     { icon: <Undo2 />, title: 'Easy Returns', description: '30-day return policy' },
     { icon: <Headset />, title: '24/7 Support', description: 'We are here to help' }
-  ];
-
-  const reviews = [
-    {
-      name: 'Alex Johnson',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop',
-      rating: 5,
-      review: 'The Quantum Sneakers are a game-changer! So comfortable and stylish. I feel like I\'m walking on clouds.',
-      data_ai_hint: 'man portrait',
-    },
-    {
-      name: 'Maria Garcia',
-      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop',
-      rating: 5,
-      review: 'I love my Nova-Glow Lamp. It has completely changed the ambiance of my workspace. The quality is top-notch!',
-      data_ai_hint: 'woman portrait',
-    },
-    {
-      name: 'Sam Lee',
-      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1974&auto=format&fit=crop',
-      rating: 4,
-      review: 'The Chronos Coffee Machine makes a perfect cup every single time. It\'s a bit pricey, but worth it for a coffee lover.',
-      data_ai_hint: 'person portrait',
-    }
   ];
   
   // GSAP animations can be implemented in a useEffect hook for each section.
@@ -59,19 +31,7 @@ export default function Home() {
       <HeroSection />
 
       {/* 2. Featured Collections */}
-      <section>
-        <h2 className="text-3xl font-bold font-headline text-center mb-8">Featured Collections</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 group">
-          {collections.map(collection => (
-            <Link href={collection.href} key={collection.name} className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-95 hover:!scale-105">
-              <Image src={collection.image} width={400} height={500} alt={collection.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" data-ai-hint={collection.data_ai_hint} />
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <h3 className="text-white text-3xl font-bold font-headline">{collection.name}</h3>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <FeaturedCollections />
 
       {/* 3. Trending Products */}
       <section>
@@ -113,32 +73,7 @@ export default function Home() {
 
 
       {/* 6. Customer Reviews */}
-      <section>
-        <h2 className="text-3xl font-bold font-headline text-center mb-8">What Our Customers Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {reviews.map(review => (
-            <Card key={review.name}>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  <Avatar>
-                    <AvatarImage src={review.avatar} alt={review.name} data-ai-hint={review.data_ai_hint} />
-                    <AvatarFallback>{review.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="ml-4">
-                    <p className="font-semibold">{review.name}</p>
-                    <div className="flex items-center gap-0.5">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < review.rating ? 'text-primary fill-current' : 'text-muted'}`} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p className="text-muted-foreground italic">&ldquo;{review.review}&rdquo;</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
+      <CustomerReviews />
 
       {/* 7. Newsletter */}
       <section className="bg-primary text-primary-foreground p-12 rounded-lg text-center">
