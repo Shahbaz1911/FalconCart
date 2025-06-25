@@ -1,0 +1,18 @@
+import { getProducts } from '@/lib/products';
+import { ProductGrid } from './product-grid';
+
+export default function ProductsPage() {
+  const products = getProducts();
+  
+  return (
+    <div>
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold font-headline">All Products</h1>
+        <p className="text-muted-foreground mt-2">
+          Browse our entire collection and find your next favorite item.
+        </p>
+      </div>
+      <ProductGrid products={products} />
+    </div>
+  );
+}

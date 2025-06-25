@@ -5,8 +5,8 @@ import { Button } from "./ui/button";
 export function Footer() {
   const quickLinks = [
     { name: "Home", href: "/" },
-    { name: "Products", href: "/" },
-    { name: "Orders", href: "/orders" },
+    { name: "Products", href: "/products" },
+    { name: "Account", href: "/account" },
     { name: "Cart", href: "/cart" },
   ];
 

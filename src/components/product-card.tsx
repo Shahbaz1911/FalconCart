@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Product } from '@/lib/products';
 import { Button } from './ui/button';
+import { Star } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -28,6 +29,12 @@ export function ProductCard({ product }: ProductCardProps) {
           <CardTitle className="font-headline text-lg leading-tight mb-2">
             {product.name}
           </CardTitle>
+          <div className="flex items-center gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`h-4 w-4 ${i < product.rating ? 'text-primary fill-current' : 'text-muted'}`} />
+              ))}
+              <span className="text-xs text-muted-foreground ml-1">({product.rating.toFixed(1)})</span>
+          </div>
         </CardContent>
         <CardFooter className="p-4 pt-0 flex justify-between items-center">
           <p className="text-xl font-semibold text-primary">

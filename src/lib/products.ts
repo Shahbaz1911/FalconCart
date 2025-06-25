@@ -5,6 +5,8 @@ export interface Product {
   price: number;
   image: string;
   category: string;
+  rating: number;
+  stock: number;
   data_ai_hint?: string;
 }
 
@@ -16,6 +18,8 @@ const products: Product[] = [
     price: 1299.99,
     image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1841&auto=format&fit=crop',
     category: 'Electronics',
+    rating: 5,
+    stock: 15,
     data_ai_hint: 'telescope space',
   },
   {
@@ -25,6 +29,8 @@ const products: Product[] = [
     price: 349.99,
     image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1964&auto=format&fit=crop',
     category: 'Footwear',
+    rating: 4,
+    stock: 30,
     data_ai_hint: 'futuristic shoes',
   },
   {
@@ -34,6 +40,8 @@ const products: Product[] = [
     price: 89.99,
     image: 'https://images.unsplash.com/photo-1487035242944-78f234964654?q=80&w=1964&auto=format&fit=crop',
     category: 'Home Goods',
+    rating: 5,
+    stock: 50,
     data_ai_hint: 'smart planter',
   },
   {
@@ -43,6 +51,8 @@ const products: Product[] = [
     price: 499.99,
     image: 'https://images.unsplash.com/photo-1611090956424-ec4a57161b9e?q=80&w=1964&auto=format&fit=crop',
     category: 'Appliances',
+    rating: 5,
+    stock: 22,
     data_ai_hint: 'coffee machine',
   },
   {
@@ -52,6 +62,8 @@ const products: Product[] = [
     price: 129.99,
     image: 'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?q=80&w=1964&auto=format&fit=crop',
     category: 'Home Goods',
+    rating: 4,
+    stock: 45,
     data_ai_hint: 'desk lamp',
   },
   {
@@ -61,6 +73,8 @@ const products: Product[] = [
     price: 799.00,
     image: 'https://images.unsplash.com/photo-1527977966376-1c8408f9f108?q=80&w=1965&auto=format&fit=crop',
     category: 'Electronics',
+    rating: 4,
+    stock: 18,
     data_ai_hint: 'camera drone',
   },
   {
@@ -70,6 +84,8 @@ const products: Product[] = [
     price: 159.50,
     image: 'https://images.unsplash.com/photo-1577733966930-d98d7b73a334?q=80&w=1965&auto=format&fit=crop',
     category: 'Accessories',
+    rating: 5,
+    stock: 60,
     data_ai_hint: 'modern backpack',
   },
   {
@@ -79,6 +95,8 @@ const products: Product[] = [
     price: 249.99,
     image: 'https://images.unsplash.com/photo-1551028719-00167b16e2d8?q=80&w=1964&auto=format&fit=crop',
     category: 'Apparel',
+    rating: 4,
+    stock: 25,
     data_ai_hint: 'tech jacket',
   },
   {
@@ -88,6 +106,8 @@ const products: Product[] = [
     price: 59.99,
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1980&auto=format&fit=crop',
     category: 'Apparel',
+    rating: 3,
+    stock: 150,
     data_ai_hint: 'white t-shirt',
   },
   {
@@ -97,6 +117,8 @@ const products: Product[] = [
     price: 119.99,
     image: 'https://images.unsplash.com/photo-1602293589914-9e1952a8a349?q=80&w=1964&auto=format&fit=crop',
     category: 'Apparel',
+    rating: 4,
+    stock: 75,
     data_ai_hint: 'denim jeans',
   },
   {
@@ -106,6 +128,8 @@ const products: Product[] = [
     price: 45.0,
     image: 'https://images.unsplash.com/photo-1533050487297-09b450131914?q=80&w=2070&auto=format&fit=crop',
     category: 'Apparel',
+    rating: 4,
+    stock: 80,
     data_ai_hint: 'straw hat',
   },
   {
@@ -115,6 +139,8 @@ const products: Product[] = [
     price: 75.0,
     image: 'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?q=80&w=1935&auto=format&fit=crop',
     category: 'Apparel',
+    rating: 5,
+    stock: 40,
     data_ai_hint: 'elegant scarf',
   },
   {
@@ -124,6 +150,8 @@ const products: Product[] = [
     price: 189.99,
     image: 'https://images.unsplash.com/photo-1520639888713-7851c4a0360a?q=80&w=1974&auto=format&fit=crop',
     category: 'Footwear',
+    rating: 5,
+    stock: 35,
     data_ai_hint: 'hiking boots',
   },
   {
@@ -133,6 +161,8 @@ const products: Product[] = [
     price: 129.99,
     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ab?q=80&w=2070&auto=format&fit=crop',
     category: 'Footwear',
+    rating: 4,
+    stock: 90,
     data_ai_hint: 'running shoes',
   },
   {
@@ -142,6 +172,8 @@ const products: Product[] = [
     price: 149.0,
     image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop',
     category: 'Footwear',
+    rating: 4,
+    stock: 55,
     data_ai_hint: 'leather loafers',
   },
   {
@@ -151,6 +183,8 @@ const products: Product[] = [
     price: 69.99,
     image: 'https://images.unsplash.com/photo-1603487742131-4160a9991c84?q=80&w=1974&auto=format&fit=crop',
     category: 'Footwear',
+    rating: 3,
+    stock: 120,
     data_ai_hint: 'comfortable sandals',
   },
   {
@@ -160,6 +194,8 @@ const products: Product[] = [
     price: 429.0,
     image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?q=80&w=1964&auto=format&fit=crop',
     category: 'Accessories',
+    rating: 5,
+    stock: 48,
     data_ai_hint: 'smart watch',
   },
   {
@@ -167,8 +203,10 @@ const products: Product[] = [
     name: 'Kinetic Leather Wallet',
     description: 'A classic bifold wallet crafted from premium leather, with RFID-blocking technology to keep your cards secure.',
     price: 85.0,
-    image: 'https://images.unsplash.com/photo-1619118399943-611b193d56a7?q=80&w=1974&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1619118399943-611b1952a8a3?q=80&w=1974&auto=format&fit=crop',
     category: 'Accessories',
+    rating: 4,
+    stock: 110,
     data_ai_hint: 'leather wallet',
   },
   {
@@ -178,6 +216,8 @@ const products: Product[] = [
     price: 155.0,
     image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=1780&auto=format&fit=crop',
     category: 'Accessories',
+    rating: 4,
+    stock: 65,
     data_ai_hint: 'stylish sunglasses',
   },
   {
@@ -187,6 +227,8 @@ const products: Product[] = [
     price: 55.0,
     image: 'https://images.unsplash.com/photo-1623908382137-89741fa2c275?q=80&w=1974&auto=format&fit=crop',
     category: 'Accessories',
+    rating: 4,
+    stock: 95,
     data_ai_hint: 'leather belt',
   },
 ];

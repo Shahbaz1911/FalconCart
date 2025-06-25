@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 import { Button } from './ui/button';
 import { useCart } from '@/hooks/use-cart';
 import { usePathname } from 'next/navigation';
@@ -25,17 +25,23 @@ export function Header() {
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Clothes', href: '/collections/apparel' },
-    { name: 'Footwear', href: '/collections/footwear' },
-    { name: 'Accessories', href: '/collections/accessories' },
-    { name: 'Orders', href: '/orders' },
+    { name: 'Products', href: '/products' },
+    { name: 'Collections', href: '/collections/apparel' },
   ];
 
-  const activeLinkIndex = navLinks.findIndex(link => pathname.startsWith(link.href) && (link.href === '/' ? pathname === '/' : true));
+  const computeActiveLinkIndex = useCallback(() => {
+    if (pathname === '/') return 0;
+    if (pathname.startsWith('/products')) return 1;
+    if (pathname.startsWith('/collections')) return 2;
+    return -1;
+  }, [pathname]);
+  
+  const activeLinkIndex = computeActiveLinkIndex();
 
   const updateIndicatorToActive = useCallback(() => {
-    if (activeLinkIndex !== -1 && linkRefs.current[activeLinkIndex]) {
-      const activeLinkEl = linkRefs.current[activeLinkIndex];
+    const newActiveIndex = computeActiveLinkIndex();
+    if (newActiveIndex !== -1 && linkRefs.current[newActiveIndex]) {
+      const activeLinkEl = linkRefs.current[newActiveIndex];
       if (activeLinkEl && navRef.current) {
         setIndicatorStyle({
           left: activeLinkEl.offsetLeft,
@@ -45,14 +51,11 @@ export function Header() {
     } else {
       setIndicatorStyle({ width: 0, left: 0 });
     }
-  }, [activeLinkIndex]);
+  }, [computeActiveLinkIndex]);
 
 
   useEffect(() => {
-    // A timeout helps ensure all refs are populated and layout is stable
     const timeoutId = setTimeout(updateIndicatorToActive, 50);
-    
-    // Also re-calculate on resize
     window.addEventListener('resize', updateIndicatorToActive);
     
     return () => {
@@ -113,7 +116,13 @@ export function Header() {
               style={{ ...indicatorStyle, zIndex: 5 }}
             />
           </nav>
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
+             <Button variant="ghost" size="icon" asChild>
+              <Link href="/account">
+                <User className="h-6 w-6" />
+                <span className="sr-only">Account</span>
+              </Link>
+            </Button>
             <Button variant="ghost" size="icon" asChild>
               <Link href="/cart">
                 <div id="cart-icon-container" className="relative">
