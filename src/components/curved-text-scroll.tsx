@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,17 +20,35 @@ const TextLine = ({
   links: { name: string; href: string }[];
   direction?: number;
   isPrimary?: boolean;
-  onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
+  onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string, name: string) => void;
 }) => {
   const textRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
+    const el = textRef.current;
+    if (!el) return;
+
+    // Width of a single block of text links to make the loop seamless.
+    const singleBlockWidth = el.scrollWidth / 3;
+
     const ctx = gsap.context(() => {
-      gsap.to(textRef.current, {
-        xPercent: 10 * direction,
+      // Continuous marquee animation
+      gsap.fromTo(
+        el,
+        { x: 0 },
+        {
+          x: -singleBlockWidth * direction,
+          duration: 40, // Adjust duration for speed
+          ease: 'none',
+          repeat: -1,
+        }
+      );
+
+      // Skew on scroll to maintain the curved illusion
+      gsap.to(el, {
         skewX: 1.5 * direction,
         scrollTrigger: {
-          trigger: textRef.current,
+          trigger: el,
           scrub: 0.5,
         },
       });
@@ -46,11 +65,11 @@ const TextLine = ({
       )}
     >
       {links.map((link, index) => (
-        <React.Fragment key={index}>
+        <React.Fragment key={`${link.name}-${index}`}>
           <Link
             href={link.href}
             className="transition-colors hover:text-accent"
-            onClick={(e) => onLinkClick(e, link.href)}
+            onClick={(e) => onLinkClick(e, link.href, link.name)}
           >
             {link.name}
           </Link>
@@ -64,6 +83,7 @@ const TextLine = ({
 export function CurvedTextScroll() {
   const componentRef = useRef<HTMLElement>(null);
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -80,10 +100,21 @@ export function CurvedTextScroll() {
 
   const handleLinkClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
+    href: string,
+    name: string
   ) => {
     e.preventDefault();
     const target = e.currentTarget;
+
+    if (name === 'Theme') {
+      setTheme(theme === 'dark' ? 'light' : 'dark');
+      // Add a subtle feedback animation for theme change
+      gsap.fromTo(target, 
+        { opacity: 0.5, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' }
+      );
+      return;
+    }
 
     // Animate the clicked link to "zoom in"
     gsap.to(target, {
@@ -108,6 +139,7 @@ export function CurvedTextScroll() {
     { name: 'Order', href: '/orders' },
     { name: 'Cart', href: '/cart' },
     { name: 'Setting', href: '/account/settings' },
+    { name: 'Theme', href: '#' },
   ];
 
   const repeatedLinks = [...navLinks, ...navLinks, ...navLinks];
