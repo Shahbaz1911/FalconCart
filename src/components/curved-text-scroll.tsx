@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useLayoutEffect, useRef } from 'react';
@@ -30,10 +31,12 @@ const TextLine = ({
 
     // Width of a single block of text links to make the loop seamless.
     const singleBlockWidth = el.scrollWidth / 3;
+    
+    let marqueeAnimation: gsap.core.Tween;
 
     const ctx = gsap.context(() => {
       // Continuous marquee animation
-      gsap.fromTo(
+      marqueeAnimation = gsap.fromTo(
         el,
         { x: 0 },
         {
@@ -53,7 +56,18 @@ const TextLine = ({
         },
       });
     });
-    return () => ctx.revert();
+
+    const handleMouseEnter = () => marqueeAnimation?.pause();
+    const handleMouseLeave = () => marqueeAnimation?.resume();
+
+    el.addEventListener('mouseenter', handleMouseEnter);
+    el.addEventListener('mouseleave', handleMouseLeave);
+
+    return () => {
+      el.removeEventListener('mouseenter', handleMouseEnter);
+      el.removeEventListener('mouseleave', handleMouseLeave);
+      ctx.revert();
+    };
   }, [direction]);
 
   return (
