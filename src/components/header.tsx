@@ -152,14 +152,20 @@ export function Header() {
                       <div className="relative h-5 w-5" aria-hidden="true">
                         <span
                           className={cn(
-                            "absolute block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
-                            mobileMenuOpen ? "rotate-45" : "-translate-y-1"
+                            "absolute block h-0.5 w-full bg-current transition-all duration-300",
+                            mobileMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-[25%]"
                           )}
                         />
                         <span
                           className={cn(
-                            "absolute block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
-                            mobileMenuOpen ? "-rotate-45" : "translate-y-1"
+                            "absolute block h-0.5 w-full bg-current transition-all duration-300 top-1/2 -translate-y-1/2",
+                             mobileMenuOpen ? "opacity-0" : "opacity-100"
+                          )}
+                        />
+                        <span
+                          className={cn(
+                            "absolute block h-0.5 w-full bg-current transition-all duration-300",
+                            mobileMenuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "top-[75%] -translate-y-full"
                           )}
                         />
                       </div>
