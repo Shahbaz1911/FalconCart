@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Rocket } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { Button } from './ui/button';
 import { useCart } from '@/hooks/use-cart';
 import { usePathname } from 'next/navigation';
@@ -69,10 +69,9 @@ export function Header() {
     <header className="bg-card shadow-md sticky top-0 z-40">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2 text-primary">
-              <Rocket className="h-8 w-8" />
-              <span className="text-2xl font-bold font-headline">Falcon Cart</span>
+          <div className="flex items-center">
+            <Link href="/" className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors">
+              <span className="text-xl font-bold font-headline">Falcon Cart</span>
             </Link>
           </div>
           <nav
