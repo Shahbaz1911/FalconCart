@@ -23,7 +23,7 @@ export default function CollectionPage({ params }: CollectionPageProps) {
   const displayCategoryName = category.toLowerCase() === 'apparel' ? 'Clothes' : categoryName;
 
   return (
-    <div>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <CollectionView 
         products={products} 
         category={category} 

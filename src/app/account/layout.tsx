@@ -27,7 +27,7 @@ export default function AccountLayout({
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8 border-b">
             <nav className="-mb-px flex space-x-6 overflow-x-auto" aria-label="Account navigation">
                 {accountNavLinks.map(link => (

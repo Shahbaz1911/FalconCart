@@ -10,6 +10,7 @@ export default function OrdersPage() {
 
   if (orders.length === 0) {
     return (
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-20">
             <PackageCheck className="mx-auto h-16 w-16 text-muted-foreground" />
             <h1 className="mt-4 text-3xl font-bold font-headline">No Orders Yet</h1>
@@ -18,11 +19,12 @@ export default function OrdersPage() {
                 <Link href="/">Browse Products</Link>
             </Button>
         </div>
+      </div>
     );
   }
 
   return (
-    <div>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">
         Your Orders
       </h1>

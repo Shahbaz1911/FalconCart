@@ -84,10 +84,12 @@ export default function CheckoutPage() {
   
   if (items.length === 0 && !isPlacingOrder) {
     return (
-        <div className="text-center py-20">
-            <h1 className="text-3xl font-bold font-headline">Your cart is empty.</h1>
-            <p className="text-muted-foreground mt-2">Add items to your cart before checking out.</p>
-            <Button asChild className="mt-4"><Link href="/">Go Shopping</Link></Button>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="text-center py-20">
+                <h1 className="text-3xl font-bold font-headline">Your cart is empty.</h1>
+                <p className="text-muted-foreground mt-2">Add items to your cart before checking out.</p>
+                <Button asChild className="mt-4"><Link href="/">Go Shopping</Link></Button>
+            </div>
         </div>
     )
   }
@@ -95,129 +97,131 @@ export default function CheckoutPage() {
   const selectedPaymentMethod = form.watch('paymentMethod');
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
-            <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Shipping Information</CardTitle></CardHeader>
-                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <FormField control={form.control} name="fullName" render={({ field }) => (
-                        <FormItem className="sm:col-span-2"><FormLabel>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="address" render={({ field }) => (
-                        <FormItem className="sm:col-span-2"><FormLabel>Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="city" render={({ field }) => (
-                        <FormItem><FormLabel>City</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="state" render={({ field }) => (
-                        <FormItem><FormLabel>State / Province</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="zip" render={({ field }) => (
-                        <FormItem><FormLabel>ZIP / Postal Code</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                    <FormField control={form.control} name="country" render={({ field }) => (
-                        <FormItem><FormLabel>Country</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
-                    )} />
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Payment Details</CardTitle></CardHeader>
-                <CardContent>
-                    <FormField
-                      control={form.control}
-                      name="paymentMethod"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Payment Method</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-                            >
-                              <FormItem>
-                                <FormControl>
-                                  <RadioGroupItem value="card" id="card" className="peer sr-only" />
-                                </FormControl>
-                                <Label htmlFor="card" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
-                                  <CreditCard className="mb-3 h-6 w-6" />
-                                  Credit Card
-                                </Label>
-                              </FormItem>
-                               <FormItem>
-                                <FormControl>
-                                  <RadioGroupItem value="paypal" id="paypal" className="peer sr-only" />
-                                </FormControl>
-                                <Label htmlFor="paypal" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
-                                  <PayPalIcon />
-                                  PayPal
-                                </Label>
-                              </FormItem>
-                               <FormItem>
-                                <FormControl>
-                                  <RadioGroupItem value="upi" id="upi" className="peer sr-only" />
-                                </FormControl>
-                                <Label htmlFor="upi" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
-                                  <UpiIcon />
-                                  UPI
-                                </Label>
-                              </FormItem>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+              <Card>
+                  <CardHeader><CardTitle className="font-headline text-2xl">Shipping Information</CardTitle></CardHeader>
+                  <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormField control={form.control} name="fullName" render={({ field }) => (
+                          <FormItem className="sm:col-span-2"><FormLabel>Full Name</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="address" render={({ field }) => (
+                          <FormItem className="sm:col-span-2"><FormLabel>Address</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="city" render={({ field }) => (
+                          <FormItem><FormLabel>City</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="state" render={({ field }) => (
+                          <FormItem><FormLabel>State / Province</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="zip" render={({ field }) => (
+                          <FormItem><FormLabel>ZIP / Postal Code</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                      <FormField control={form.control} name="country" render={({ field }) => (
+                          <FormItem><FormLabel>Country</FormLabel><FormControl><Input {...field} /></FormControl><FormMessage /></FormItem>
+                      )} />
+                  </CardContent>
+              </Card>
+              <Card>
+                  <CardHeader><CardTitle className="font-headline text-2xl">Payment Details</CardTitle></CardHeader>
+                  <CardContent>
+                      <FormField
+                        control={form.control}
+                        name="paymentMethod"
+                        render={({ field }) => (
+                          <FormItem className="space-y-3">
+                            <FormLabel>Payment Method</FormLabel>
+                            <FormControl>
+                              <RadioGroup
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+                              >
+                                <FormItem>
+                                  <FormControl>
+                                    <RadioGroupItem value="card" id="card" className="peer sr-only" />
+                                  </FormControl>
+                                  <Label htmlFor="card" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
+                                    <CreditCard className="mb-3 h-6 w-6" />
+                                    Credit Card
+                                  </Label>
+                                </FormItem>
+                                 <FormItem>
+                                  <FormControl>
+                                    <RadioGroupItem value="paypal" id="paypal" className="peer sr-only" />
+                                  </FormControl>
+                                  <Label htmlFor="paypal" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
+                                    <PayPalIcon />
+                                    PayPal
+                                  </Label>
+                                </FormItem>
+                                 <FormItem>
+                                  <FormControl>
+                                    <RadioGroupItem value="upi" id="upi" className="peer sr-only" />
+                                  </FormControl>
+                                  <Label htmlFor="upi" className={cn("flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary", "cursor-pointer")}>
+                                    <UpiIcon />
+                                    UPI
+                                  </Label>
+                                </FormItem>
+                              </RadioGroup>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    {selectedPaymentMethod === 'card' && (
-                        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
-                            <FormField control={form.control} name="cardNumber" render={({ field }) => (
-                                <FormItem className="sm:col-span-4"><FormLabel>Card Number</FormLabel><FormControl><Input placeholder="•••• •••• •••• ••••" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="expiryDate" render={({ field }) => (
-                                <FormItem className="sm:col-span-2"><FormLabel>Expiry Date</FormLabel><FormControl><Input placeholder="MM/YY" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                            <FormField control={form.control} name="cvc" render={({ field }) => (
-                                <FormItem className="sm:col-span-2"><FormLabel>CVC</FormLabel><FormControl><Input placeholder="•••" {...field} /></FormControl><FormMessage /></FormItem>
-                            )} />
-                        </div>
-                    )}
-                    {selectedPaymentMethod === 'paypal' && (
-                        <div className="mt-6 text-center bg-secondary/50 p-6 rounded-md">
-                            <p>You will be redirected to PayPal to complete your purchase.</p>
-                        </div>
-                    )}
-                    {selectedPaymentMethod === 'upi' && (
-                         <div className="mt-6 text-center bg-secondary/50 p-6 rounded-md">
-                            <p>Scan the QR code or enter your UPI ID in your payment app.</p>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
-        </div>
-        <div className="lg:col-span-1">
-            <Card>
-                <CardHeader><CardTitle className="font-headline text-2xl">Order Summary</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                    {items.map(item => (
-                        <div key={item.product.id} className="flex justify-between items-center text-sm">
-                            <span>{item.product.name} x {item.quantity}</span>
-                            <span className="font-medium">${(item.product.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                    ))}
-                    <Separator />
-                    <div className="flex justify-between font-bold text-lg">
-                        <span>Total</span>
-                        <span>${totalPrice.toFixed(2)}</span>
-                    </div>
-                </CardContent>
-            </Card>
-            <Button type="submit" size="lg" className="w-full mt-6" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? 'Processing...' : 'Place Order'}
-            </Button>
-        </div>
-      </form>
-    </Form>
+                      {selectedPaymentMethod === 'card' && (
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+                              <FormField control={form.control} name="cardNumber" render={({ field }) => (
+                                  <FormItem className="sm:col-span-4"><FormLabel>Card Number</FormLabel><FormControl><Input placeholder="•••• •••• •••• ••••" {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="expiryDate" render={({ field }) => (
+                                  <FormItem className="sm:col-span-2"><FormLabel>Expiry Date</FormLabel><FormControl><Input placeholder="MM/YY" {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                              <FormField control={form.control} name="cvc" render={({ field }) => (
+                                  <FormItem className="sm:col-span-2"><FormLabel>CVC</FormLabel><FormControl><Input placeholder="•••" {...field} /></FormControl><FormMessage /></FormItem>
+                              )} />
+                          </div>
+                      )}
+                      {selectedPaymentMethod === 'paypal' && (
+                          <div className="mt-6 text-center bg-secondary/50 p-6 rounded-md">
+                              <p>You will be redirected to PayPal to complete your purchase.</p>
+                          </div>
+                      )}
+                      {selectedPaymentMethod === 'upi' && (
+                           <div className="mt-6 text-center bg-secondary/50 p-6 rounded-md">
+                              <p>Scan the QR code or enter your UPI ID in your payment app.</p>
+                          </div>
+                      )}
+                  </CardContent>
+              </Card>
+          </div>
+          <div className="lg:col-span-1">
+              <Card>
+                  <CardHeader><CardTitle className="font-headline text-2xl">Order Summary</CardTitle></CardHeader>
+                  <CardContent className="space-y-4">
+                      {items.map(item => (
+                          <div key={item.product.id} className="flex justify-between items-center text-sm">
+                              <span>{item.product.name} x {item.quantity}</span>
+                              <span className="font-medium">${(item.product.price * item.quantity).toFixed(2)}</span>
+                          </div>
+                      ))}
+                      <Separator />
+                      <div className="flex justify-between font-bold text-lg">
+                          <span>Total</span>
+                          <span>${totalPrice.toFixed(2)}</span>
+                      </div>
+                  </CardContent>
+              </Card>
+              <Button type="submit" size="lg" className="w-full mt-6" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Processing...' : 'Place Order'}
+              </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

@@ -119,6 +119,9 @@ export default {
           from: { transform: 'scale(1)', opacity: '1' },
           to: { transform: 'scale(0)', opacity: '0' },
         },
+        'spin-slow': {
+          'to': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -128,6 +131,7 @@ export default {
         'running-cart': 'running-cart 0.3s ease-in-out infinite',
         'grow-from-top-right': 'grow-from-top-right 0.3s ease-out',
         'shrink-to-top-right': 'shrink-to-top-right 0.2s ease-in',
+        'spin-slow': 'spin-slow 20s linear infinite',
       },
     },
   },
