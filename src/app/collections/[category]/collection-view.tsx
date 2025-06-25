@@ -4,10 +4,11 @@ import { ProductCard } from '@/components/product-card';
 import { Button } from '@/components/ui/button';
 import { PackageOpen } from 'lucide-react';
 import Link from 'next/link';
-import { useRef, useLayoutEffect } from 'react';
+import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Product } from '@/lib/products';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CollectionViewProps {
   products: Product[];
@@ -18,9 +19,15 @@ interface CollectionViewProps {
 export function CollectionView({ products, category, displayCategoryName }: CollectionViewProps) {
   const componentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useLayoutEffect(() => {
-    if (products.length > 0) {
+    if (products.length > 0 && !isMobile && isClient) {
       gsap.registerPlugin(ScrollTrigger);
 
       const component = componentRef.current;
@@ -49,7 +56,7 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
 
       return () => ctx.revert();
     }
-  }, [products]);
+  }, [products, isMobile, isClient]);
 
   if (products.length === 0) {
     return (
@@ -76,17 +83,28 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
         </p>
       </div>
       
-      <div ref={componentRef} className="h-[80vh] w-full overflow-hidden">
-          <div ref={trackRef} className="flex h-full items-center gap-6 w-max pr-10">
-              {products.map((product) => (
-                <div key={product.id} className="w-72 flex-shrink-0">
-                  <ProductCard product={product} />
-                </div>
-              ))}
-          </div>
-      </div>
-      {/* Spacer to ensure there's scrollable area after the pinned section */}
-      <div className="h-screen"></div>
+      {isClient && isMobile ? (
+        // Mobile View: Vertical Grid
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      ) : (
+        // Desktop View: Horizontal Scroll with GSAP
+        <div ref={componentRef} className="h-[80vh] w-full overflow-hidden">
+            <div ref={trackRef} className="flex h-full items-center gap-6 w-max pr-10">
+                {products.map((product) => (
+                  <div key={product.id} className="w-72 flex-shrink-0">
+                    <ProductCard product={product} />
+                  </div>
+                ))}
+            </div>
+        </div>
+      )}
+      
+      {/* Spacer for desktop horizontal scroll */}
+      {!isMobile && isClient && <div className="h-screen"></div>}
     </>
   );
 }

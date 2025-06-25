@@ -78,16 +78,16 @@ export function HeroSection() {
           <div className="absolute top-[15%] left-[10%] animate-float-subtle" style={{ animationDelay: '0s' }}>
             <Shirt className="h-10 w-10 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:-rotate-12" />
           </div>
-          <div className="absolute top-[20%] right-[12%] animate-float-subtle" style={{ animationDelay: '1s' }}>
+          <div className="absolute top-[20%] right-[12%] animate-float-subtle hidden md:block" style={{ animationDelay: '1s' }}>
             <Watch className="h-8 w-8 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
           </div>
-          <div className="absolute bottom-[25%] left-[20%] animate-float-subtle" style={{ animationDelay: '2.5s', animationDuration: '8s' }}>
+          <div className="absolute bottom-[25%] left-[20%] animate-float-subtle hidden md:block" style={{ animationDelay: '2.5s', animationDuration: '8s' }}>
             <Gem className="h-7 w-7 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-6" />
           </div>
           <div className="absolute bottom-[15%] right-[25%] animate-float-subtle" style={{ animationDelay: '4s', animationDuration: '7s' }}>
             <Footprints className="h-9 w-9 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110 hover:rotate-12" />
           </div>
-          <div className="absolute top-[50%] left-[30%] animate-float-subtle" style={{ animationDelay: '1.5s', animationDuration: '9s' }}>
+          <div className="absolute top-[50%] left-[30%] animate-float-subtle hidden md:block" style={{ animationDelay: '1.5s', animationDuration: '9s' }}>
             <Sparkles className="h-6 w-6 text-white/20 transition-all duration-300 hover:text-white/80 hover:scale-110" />
           </div>
           <div className="absolute top-[60%] right-[35%] animate-float-subtle" style={{ animationDelay: '3s', animationDuration: '5s' }}>
@@ -96,14 +96,14 @@ export function HeroSection() {
         </div>
 
         <div className="relative">
-          <h1 ref={headlineRef} className="text-5xl md:text-7xl font-bold font-headline">Style Meets Comfort</h1>
-          <p ref={paragraphRef} className="text-xl md:text-2xl mt-4 max-w-2xl mx-auto">Discover premium fashion made for you</p>
-          <div ref={buttonsRef} className="mt-8 flex justify-center gap-4">
+          <h1 ref={headlineRef} className="text-4xl sm:text-5xl lg:text-7xl font-bold font-headline">Style Meets Comfort</h1>
+          <p ref={paragraphRef} className="text-lg sm:text-xl lg:text-2xl mt-4 max-w-2xl mx-auto">Discover premium fashion made for you</p>
+          <div ref={buttonsRef} className="mt-8 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href="#">Shop Now</Link>
+              <Link href="/products">Shop Now</Link>
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link href="#">View Collections</Link>
+              <Link href="/collections/apparel">View Collections</Link>
             </Button>
           </div>
         </div>

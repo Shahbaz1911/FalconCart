@@ -107,7 +107,7 @@ export default function Home() {
       </section>
 
       {/* 6. Product Video Teaser */}
-      <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-8 rounded-lg">
+      <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-4 sm:p-8 rounded-lg">
         <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
         </div>
@@ -123,7 +123,7 @@ export default function Home() {
       <CustomerReviews />
 
       {/* 8. Newsletter */}
-      <section className="bg-primary text-primary-foreground p-12 rounded-lg text-center">
+      <section className="bg-primary text-primary-foreground p-8 sm:p-12 rounded-lg text-center">
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
         <p className="mt-2 max-w-xl mx-auto">Get 10% off your first order and be the first to know about new collections and exclusive offers.</p>
         <form className="mt-6 flex flex-col sm:flex-row max-w-md mx-auto gap-2">

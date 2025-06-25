@@ -33,11 +33,11 @@ export default function CartPage() {
             <CardTitle className="font-headline text-2xl">Shopping Cart ({items.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {items.map(({ product, quantity }) => (
-                <div key={product.id} className="flex items-center justify-between gap-4">
+                <div key={product.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="relative h-20 w-20 rounded-md overflow-hidden bg-gray-100">
+                    <div className="relative h-20 w-20 rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
                       <Image
                         src={product.image}
                         alt={product.name}
@@ -51,12 +51,12 @@ export default function CartPage() {
                       <p className="text-sm text-muted-foreground">${product.price.toFixed(2)}</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-between">
                      <Input
                         type="number"
                         min="1"
                         value={quantity}
-                        onChange={(e) => updateItemQuantity(product.id, parseInt(e.target.value))}
+                        onChange={(e) => updateItemQuantity(product.id, parseInt(e.target.value, 10) || 1)}
                         className="w-20 text-center"
                         aria-label={`Quantity for ${product.name}`}
                       />

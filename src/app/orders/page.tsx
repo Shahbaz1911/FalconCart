@@ -44,14 +44,14 @@ export default function OrdersPage() {
               </div>
             </CardHeader>
             <CardContent>
-               <div className="flex items-center justify-between">
+               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div>
-                    <h3 className="font-semibold mb-2">Status: <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>{order.status}</Badge></h3>
+                    <h3 className="font-semibold mb-2 sm:mb-0">Status: <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>{order.status}</Badge></h3>
                     <p className="text-sm text-muted-foreground">
                         {order.items.length} item{order.items.length > 1 ? 's' : ''} in this order.
                     </p>
                   </div>
-                  <Button asChild variant="outline">
+                  <Button asChild variant="outline" className="w-full sm:w-auto">
                     <Link href={`/orders/${order.id}`}>View Order Details</Link>
                   </Button>
                </div>
