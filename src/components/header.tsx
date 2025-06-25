@@ -11,6 +11,12 @@ import { cn } from '@/lib/utils';
 export function Header() {
   const { items } = useCart();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
 
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
@@ -51,7 +57,7 @@ export function Header() {
     
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener('resize', updateIndicatorTo-active);
+      window.removeEventListener('resize', updateIndicatorToActive);
     };
   }, [pathname, updateIndicatorToActive]);
 
@@ -112,7 +118,7 @@ export function Header() {
               <Link href="/cart">
                 <div id="cart-icon-container" className="relative">
                   <ShoppingCart className="h-6 w-6" />
-                  {itemCount > 0 && (
+                  {isClient && itemCount > 0 && (
                     <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-bold">
                       {itemCount}
                     </span>
