@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, User } from 'lucide-react';
+import { Home, LayoutGrid, ShoppingBasket, ShoppingCart, User } from 'lucide-react';
 import { Button } from './ui/button';
 import { useCart } from '@/hooks/use-cart';
 import { usePathname } from 'next/navigation';
-import { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import gsap from 'gsap';
@@ -20,7 +20,6 @@ export function Header() {
     setIsClient(true);
   }, []);
 
-
   const pathname = usePathname();
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
   const navRef = useRef<HTMLDivElement>(null);
@@ -28,9 +27,9 @@ export function Header() {
   const sheetContentRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Products', href: '/products' },
-    { name: 'Collections', href: '/collections/apparel' },
+    { name: 'Home', href: '/', icon: Home },
+    { name: 'Products', href: '/products', icon: ShoppingBasket },
+    { name: 'Collections', href: '/collections/apparel', icon: LayoutGrid },
   ];
 
   const computeActiveLinkIndex = useCallback(() => {
@@ -57,7 +56,6 @@ export function Header() {
     }
   }, [computeActiveLinkIndex]);
 
-
   useEffect(() => {
     const timeoutId = setTimeout(updateIndicatorToActive, 50);
     window.addEventListener('resize', updateIndicatorToActive);
@@ -82,11 +80,10 @@ export function Header() {
     if (sheetContentRef.current && mobileMenuOpen) {
       const links = sheetContentRef.current.querySelectorAll('a');
       gsap.fromTo(links,
-        { opacity: 0, y: 20, visibility: 'hidden' },
+        { opacity: 0, y: 20 },
         {
             opacity: 1,
             y: 0,
-            visibility: 'visible',
             duration: 0.4,
             ease: 'power2.out',
             stagger: 0.1,
@@ -126,13 +123,14 @@ export function Header() {
                   ref={el => { linkRefs.current[index] = el; }}
                   onMouseEnter={() => handleHover(index)}
                   className={cn(
-                    'px-4 py-1.5 rounded-full text-sm font-medium transition-colors relative z-10',
+                    'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors relative z-10',
                     activeLinkIndex === index
                       ? 'text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
-                  {link.name}
+                  <link.icon className="h-4 w-4" />
+                  <span>{link.name}</span>
                 </Link>
               ))}
               <div
@@ -169,26 +167,26 @@ export function Header() {
                 <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon">
-                      <div className={cn("relative h-5 w-5 transition-transform duration-500 ease-in-out", mobileMenuOpen && "rotate-180")}>
-                        <span
-                          className={cn(
-                            "absolute block h-0.5 w-full bg-current transition-all duration-300",
-                            mobileMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-[25%]"
-                          )}
-                        />
-                        <span
-                          className={cn(
-                            "absolute block h-0.5 w-full bg-current transition-all duration-300 top-1/2 -translate-y-1/2",
-                             mobileMenuOpen ? "opacity-0" : "opacity-100"
-                          )}
-                        />
-                        <span
-                          className={cn(
-                            "absolute block h-0.5 w-full bg-current transition-all duration-300",
-                            mobileMenuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "top-[75%] -translate-y-full"
-                          )}
-                        />
-                      </div>
+                        <div className="relative h-5 w-5">
+                            <span
+                                className={cn(
+                                "absolute left-0 top-1 block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
+                                mobileMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                                )}
+                            ></span>
+                            <span
+                                className={cn(
+                                "absolute left-0 top-1/2 block h-0.5 w-full -translate-y-1/2 transform bg-current transition-all duration-300 ease-in-out",
+                                mobileMenuOpen ? "opacity-0" : "opacity-100"
+                                )}
+                            ></span>
+                            <span
+                                className={cn(
+                                "absolute left-0 bottom-1 block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
+                                mobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                                )}
+                            ></span>
+                        </div>
                       <span className="sr-only">Open menu</span>
                     </Button>
                   </SheetTrigger>
@@ -196,25 +194,26 @@ export function Header() {
                     <nav className="flex flex-col gap-4 text-lg font-medium mt-10">
                       {navLinks.map((link) => (
                         <SheetClose asChild key={link.href}>
-                          <Link href={link.href} onClick={() => setMobileMenuOpen(false)}>
-                            {link.name}
-                          </Link>
+                           <Link href={link.href} className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
+                            <link.icon className="h-6 w-6" />
+                            <span>{link.name}</span>
+                           </Link>
                         </SheetClose>
                       ))}
                     </nav>
                     <div className="mt-8 border-t border-border pt-6 flex flex-col gap-4">
                       <SheetClose asChild>
-                          <Link href="/account" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
+                          <Link href="/account" className="flex items-center gap-3 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
                               <User className="h-6 w-6" />
                               Account
                           </Link>
                       </SheetClose>
-                        <SheetClose asChild>
-                          <Link href="/cart" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
-                              <ShoppingCart className="h-6 w-6" />
-                              Cart {isClient && itemCount > 0 && `(${itemCount})`}
-                          </Link>
-                        </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/cart" className="flex items-center gap-3 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
+                            <ShoppingCart className="h-6 w-6" />
+                            Cart {isClient && itemCount > 0 && `(${itemCount})`}
+                        </Link>
+                      </SheetClose>
                     </div>
                   </SheetContent>
                 </Sheet>
