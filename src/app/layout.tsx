@@ -4,6 +4,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { CartProvider } from '@/hooks/use-cart';
 import { Toaster } from "@/components/ui/toaster"
+import { Preloader } from '@/components/preloader';
 
 export const metadata: Metadata = {
   title: 'Falcon Cart',
@@ -25,6 +26,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen">
         <CartProvider>
+          <Preloader />
           <Header />
           <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {children}
