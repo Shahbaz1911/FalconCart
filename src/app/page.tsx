@@ -15,7 +15,8 @@ import { CustomerReviews } from '@/components/customer-reviews';
 
 export default function Home() {
   const products = getProducts();
-  const trendingProducts = products.slice(0, 4);
+  const trendingProducts = products.slice(0, 6);
+  const featuredProducts = products.slice(6, 10);
 
   const features = [
     { icon: <Truck />, title: 'Free Shipping', description: 'On all orders over $50' },
@@ -23,8 +24,6 @@ export default function Home() {
     { icon: <Headset />, title: '24/7 Support', description: 'We are here to help' }
   ];
   
-  // GSAP animations can be implemented in a useEffect hook for each section.
-
   return (
     <div className="space-y-24 md:space-y-32 overflow-x-hidden">
       {/* 1. Hero Section */}
@@ -35,7 +34,7 @@ export default function Home() {
 
       {/* 3. Trending Products */}
       <section>
-        <h2 className="text-3xl font-bold font-headline text-center mb-8">Trending Now</h2>
+        <h2 className="text-3xl font-bold font-headline text-center mb-8">Trending Products</h2>
         <div className="flex gap-6 overflow-x-auto pb-4">
           {trendingProducts.map((product) => (
             <div key={product.id} className="relative w-72 flex-shrink-0">
@@ -46,7 +45,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Why Shop With Us */}
+      {/* 4. Our Featured Picks */}
+      <section>
+        <h2 className="text-3xl font-bold font-headline text-center mb-8">Our Featured Picks</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {featuredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        <div className="text-center mt-12">
+          <Button asChild size="lg" variant="outline">
+            <Link href="/products">View All Products</Link>
+          </Button>
+        </div>
+      </section>
+
+      {/* 5. Why Shop With Us */}
       <section className="bg-secondary/50 rounded-lg p-8 md:p-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {features.map(feature => (
@@ -59,7 +73,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Product Video Teaser */}
+      {/* 6. Product Video Teaser */}
       <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-8 rounded-lg">
         <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
@@ -72,10 +86,10 @@ export default function Home() {
       </section>
 
 
-      {/* 6. Customer Reviews */}
+      {/* 7. Customer Reviews */}
       <CustomerReviews />
 
-      {/* 7. Newsletter */}
+      {/* 8. Newsletter */}
       <section className="bg-primary text-primary-foreground p-12 rounded-lg text-center">
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
         <p className="mt-2 max-w-xl mx-auto">Get 10% off your first order and be the first to know about new collections and exclusive offers.</p>
