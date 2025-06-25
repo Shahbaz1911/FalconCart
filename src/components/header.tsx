@@ -7,11 +7,13 @@ import { useCart } from '@/hooks/use-cart';
 import { usePathname } from 'next/navigation';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 export function Header() {
   const { items } = useCart();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const [isClient, setIsClient] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -117,25 +119,78 @@ export function Header() {
             />
           </nav>
           <div className="flex items-center gap-2">
-             <Button variant="ghost" size="icon" asChild>
-              <Link href="/account">
-                <User className="h-6 w-6" />
-                <span className="sr-only">Account</span>
-              </Link>
-            </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/cart">
-                <div id="cart-icon-container" className="relative">
-                  <ShoppingCart className="h-6 w-6" />
-                  {isClient && itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-bold">
-                      {itemCount}
-                    </span>
-                  )}
-                </div>
-                <span className="sr-only">Shopping Cart</span>
-              </Link>
-            </Button>
+            {/* Desktop icons */}
+            <div className="hidden md:flex items-center gap-2">
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="/account">
+                  <User className="h-6 w-6" />
+                  <span className="sr-only">Account</span>
+                </Link>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <Link href="/cart">
+                  <div id="cart-icon-container" className="relative">
+                    <ShoppingCart className="h-6 w-6" />
+                    {isClient && itemCount > 0 && (
+                      <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-bold">
+                        {itemCount}
+                      </span>
+                    )}
+                  </div>
+                  <span className="sr-only">Shopping Cart</span>
+                </Link>
+              </Button>
+            </div>
+            
+            {/* Mobile Menu Trigger */}
+            <div className="md:hidden">
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <div className="relative h-5 w-5" aria-hidden="true">
+                      <span
+                        className={cn(
+                          "absolute block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
+                          mobileMenuOpen ? "rotate-45" : "-translate-y-1"
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          "absolute block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
+                          mobileMenuOpen ? "-rotate-45" : "translate-y-1"
+                        )}
+                      />
+                    </div>
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="w-full max-w-xs p-6">
+                  <nav className="flex flex-col gap-4 text-lg font-medium">
+                    {navLinks.map((link) => (
+                      <SheetClose asChild key={link.href}>
+                        <Link href={link.href} onClick={() => setMobileMenuOpen(false)}>
+                          {link.name}
+                        </Link>
+                      </SheetClose>
+                    ))}
+                  </nav>
+                  <div className="mt-8 border-t border-border pt-6 flex flex-col gap-4">
+                     <SheetClose asChild>
+                        <Link href="/account" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
+                            <User className="h-6 w-6" />
+                            Account
+                        </Link>
+                     </SheetClose>
+                      <SheetClose asChild>
+                        <Link href="/cart" className="flex items-center gap-2 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
+                            <ShoppingCart className="h-6 w-6" />
+                            Cart {isClient && itemCount > 0 && `(${itemCount})`}
+                        </Link>
+                      </SheetClose>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </div>
