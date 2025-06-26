@@ -115,7 +115,7 @@ export function Header() {
                   ref={el => { if(el) linkRefs.current[index] = el; }}
                   onMouseEnter={() => handleHover(index)}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors relative z-10',
+                    'flex items-center gap-2 px-4 py-1.5 text-sm font-medium transition-colors relative z-10',
                     activeLinkIndex === index
                       ? (isHomepage ? 'text-primary' : 'text-primary-foreground')
                       : (isHomepage ? 'text-gray-200 hover:text-white' : 'text-muted-foreground hover:text-foreground')
