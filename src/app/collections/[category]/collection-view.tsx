@@ -10,6 +10,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Product } from '@/lib/products';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface CollectionViewProps {
   products: Product[];
@@ -59,11 +60,24 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
     }
   }, [products, isMobile, isClient]);
 
+  const header = (
+    <div className="mb-8">
+      <Link href="/" className="text-sm text-primary hover:underline">&larr; Back to Home</Link>
+      <h1 className="text-3xl md:text-4xl font-headline font-bold mt-2">
+        {displayCategoryName} Collection
+      </h1>
+      <p className="mt-2 text-muted-foreground">
+        Explore our hand-picked selection of {category.toLowerCase()}.
+      </p>
+    </div>
+  );
+
   if (products.length === 0) {
     return (
       <div className="text-center py-20">
-        <PackageOpen className="mx-auto h-16 w-16 text-muted-foreground" />
-        <h1 className="mt-4 text-3xl font-bold font-headline">No Products Found in {displayCategoryName}</h1>
+        {header}
+        <PackageOpen className="mx-auto h-16 w-16 text-muted-foreground mt-10" />
+        <h2 className="mt-4 text-xl font-bold font-headline">No Products Found in {displayCategoryName}</h2>
         <p className="mt-2 text-muted-foreground">We couldn't find any products in this collection. Check back later!</p>
         <Button asChild className="mt-6">
           <Link href="/">Explore Other Collections</Link>
@@ -72,19 +86,24 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
     );
   }
 
+  if (!isClient) {
+    return (
+        <>
+            {header}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {products.slice(0, 6).map((p) => (
+                    <Skeleton key={p.id} className="h-72 w-full" />
+                ))}
+            </div>
+        </>
+    )
+  }
+
   return (
     <>
-      <div className="mb-8">
-        <Link href="/" className="text-sm text-primary hover:underline">&larr; Back to Home</Link>
-        <h1 className="text-3xl md:text-4xl font-headline font-bold mt-2">
-          {displayCategoryName} Collection
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Explore our hand-picked selection of {category.toLowerCase()}.
-        </p>
-      </div>
+      {header}
       
-      {isClient && isMobile ? (
+      {isMobile ? (
         // Mobile View: Vertical Grid
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {products.map((product) => (
@@ -105,7 +124,7 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
       )}
       
       {/* Spacer for desktop horizontal scroll */}
-      {!isMobile && isClient && <div className="h-screen"></div>}
+      {!isMobile && <div className="h-screen"></div>}
     </>
   );
 }
