@@ -37,7 +37,7 @@ export function HeroSection() {
     }, []);
 
   return (
-    <section className="relative h-screen w-screen -mt-8 -ml-[50vw] left-1/2 flex items-center justify-center text-center text-white overflow-hidden">
+    <section className="relative h-screen w-screen -mt-8 left-1/2 -translate-x-1/2 flex items-center justify-center text-center text-white">
         {carouselImages.map((image, index) => (
             <div
                 key={index}

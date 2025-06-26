@@ -37,7 +37,7 @@ export default function Home() {
   ];
   
   return (
-    <div className="space-y-24 md:space-y-32 overflow-x-hidden">
+    <div className="space-y-24 md:space-y-32">
       {/* 1. Hero Section */}
       <HeroSection />
 
