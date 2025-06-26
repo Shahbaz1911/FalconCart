@@ -8,6 +8,7 @@ import { Preloader } from '@/components/preloader';
 import { ThemeProvider } from '@/components/theme-provider';
 import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { CustomCursor } from '@/components/custom-cursor';
+import { AuthProvider } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
   title: 'Falcon Cart',
@@ -34,17 +35,19 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <CartProvider>
-            <CustomCursor />
-            <Preloader />
-            <Header />
-            <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
-              {children}
-            </main>
-            <Footer />
-            <MobileBottomNav />
-            <Toaster />
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <CustomCursor />
+              <Preloader />
+              <Header />
+              <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20 md:pb-8">
+                {children}
+              </main>
+              <Footer />
+              <MobileBottomNav />
+              <Toaster />
+            </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

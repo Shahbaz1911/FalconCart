@@ -6,17 +6,19 @@ import { Home, ShoppingBasket, User, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/hooks/use-cart';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useAuth } from './auth-provider';
 
 const navLinks = [
   { name: 'Home', href: '/', icon: Home },
   { name: 'Products', href: '/products', icon: ShoppingBasket },
-  { name: 'Account', href: '/account', icon: User },
+  { name: 'Account', href: '/account', icon: User, auth: true },
   { name: 'Cart', href: '/cart', icon: ShoppingCart, isCart: true },
 ];
 
 export function MobileBottomNav() {
   const pathname = usePathname();
   const { items } = useCart();
+  const { user } = useAuth();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const [isClient, setIsClient] = useState(false);
 
@@ -27,6 +29,13 @@ export function MobileBottomNav() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  const getHref = (link: (typeof navLinks)[0]) => {
+      if (link.auth && !user) {
+          return '/login';
+      }
+      return link.href;
+  }
 
   const computeActiveLinkIndex = useCallback(() => {
     const sortedLinks = [...navLinks]
@@ -77,8 +86,8 @@ export function MobileBottomNav() {
       >
         {navLinks.map((link, index) => (
           <Link
-            key={link.href}
-            href={link.href}
+            key={link.name}
+            href={getHref(link)}
             ref={el => { if(el) linkRefs.current[index] = el; }}
             className={cn(
               'flex items-center justify-center h-12 w-12 text-sm font-medium transition-colors relative z-10 rounded-full',
