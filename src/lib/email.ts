@@ -11,20 +11,31 @@ const isEmailConfigured =
   process.env.EMAIL_HOST &&
   process.env.EMAIL_PORT &&
   process.env.EMAIL_USER &&
-  process.env.EMAIL_PASS;
+  process.env.EMAIL_PASS &&
+  !process.env.EMAIL_HOST.includes('your_email_host');
 
 let transporter: nodemailer.Transporter | null = null;
 
 if (isEmailConfigured) {
-  transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: parseInt(process.env.EMAIL_PORT!, 10),
-    secure: parseInt(process.env.EMAIL_PORT!, 10) === 465, // true for 465, false for other ports
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  try {
+    const port = parseInt(process.env.EMAIL_PORT!, 10);
+    if (isNaN(port)) {
+      throw new Error(`Invalid EMAIL_PORT: "${process.env.EMAIL_PORT}". It must be a number.`);
+    }
+
+    transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: port,
+      secure: port === 465, // true for 465, false for other ports
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  } catch (e) {
+    console.error("Could not create email transporter. Emails will not be sent.", e);
+    transporter = null;
+  }
 } else {
   console.warn(
     'Email service is not configured. Please set EMAIL_HOST, EMAIL_PORT, EMAIL_USER, and EMAIL_PASS in your .env file.'
