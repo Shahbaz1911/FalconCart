@@ -5,16 +5,13 @@ import { Home, LayoutGrid, ShoppingBasket, ShoppingCart, User } from 'lucide-rea
 import { Button } from './ui/button';
 import { useCart } from '@/hooks/use-cart';
 import { usePathname } from 'next/navigation';
-import React, { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
-import gsap from 'gsap';
 
 export function Header() {
   const { items } = useCart();
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const [isClient, setIsClient] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -25,7 +22,6 @@ export function Header() {
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
-  const sheetContentRef = useRef<HTMLDivElement>(null);
 
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
@@ -76,23 +72,6 @@ export function Header() {
         });
     }
   };
-
-  useLayoutEffect(() => {
-    if (sheetContentRef.current && mobileMenuOpen) {
-      const links = sheetContentRef.current.querySelectorAll('a');
-      gsap.fromTo(links,
-        { opacity: 0, y: 20 },
-        {
-            opacity: 1,
-            y: 0,
-            duration: 0.4,
-            ease: 'power2.out',
-            stagger: 0.1,
-            delay: 0.1 
-        }
-      );
-    }
-  }, [mobileMenuOpen]);
 
   return (
     <header className={cn(
@@ -176,63 +155,6 @@ export function Header() {
                     <span className="sr-only">Shopping Cart</span>
                   </Link>
                 </Button>
-              </div>
-              
-              {/* Mobile Menu Trigger */}
-              <div className="md:hidden">
-                <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="ghost" size="icon" className={cn(isHomepage && 'text-white hover:bg-black/20 hover:text-white')}>
-                        <div className="relative h-5 w-5">
-                            <span
-                                className={cn(
-                                "absolute left-0 top-1 block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
-                                mobileMenuOpen ? "rotate-45 translate-y-1.5" : ""
-                                )}
-                            ></span>
-                            <span
-                                className={cn(
-                                "absolute left-0 top-1/2 block h-0.5 w-full -translate-y-1/2 transform bg-current transition-all duration-300 ease-in-out",
-                                mobileMenuOpen ? "opacity-0" : "opacity-100"
-                                )}
-                            ></span>
-                            <span
-                                className={cn(
-                                "absolute left-0 bottom-1 block h-0.5 w-full transform bg-current transition-all duration-300 ease-in-out",
-                                mobileMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
-                                )}
-                            ></span>
-                        </div>
-                      <span className="sr-only">Open menu</span>
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent ref={sheetContentRef} side="right" className="w-full max-w-xs p-6">
-                    <nav className="flex flex-col gap-4 text-lg font-medium mt-10">
-                      {navLinks.map((link) => (
-                        <SheetClose asChild key={link.href}>
-                           <Link href={link.href} className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-                            <link.icon className="h-6 w-6" />
-                            <span>{link.name}</span>
-                           </Link>
-                        </SheetClose>
-                      ))}
-                    </nav>
-                    <div className="mt-8 border-t border-border pt-6 flex flex-col gap-4">
-                      <SheetClose asChild>
-                          <Link href="/account" className="flex items-center gap-3 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
-                              <User className="h-6 w-6" />
-                              Account
-                          </Link>
-                      </SheetClose>
-                      <SheetClose asChild>
-                        <Link href="/cart" className="flex items-center gap-3 text-lg font-medium" onClick={() => setMobileMenuOpen(false)}>
-                            <ShoppingCart className="h-6 w-6" />
-                            Cart {isClient && itemCount > 0 && `(${itemCount})`}
-                        </Link>
-                      </SheetClose>
-                    </div>
-                  </SheetContent>
-                </Sheet>
               </div>
             </div>
           </div>
