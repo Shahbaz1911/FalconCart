@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
@@ -76,7 +77,7 @@ export function ApparelShowcase() {
   );
 
   return (
-    <section>
+    <section id="apparel-showcase">
       {isMobile ? (
         <>
             {header}
