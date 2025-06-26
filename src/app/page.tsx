@@ -12,6 +12,7 @@ import { HeroSection } from '@/components/hero-section';
 import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ApparelShowcase } from '@/components/apparel-showcase';
 
 export default function Home() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -52,6 +53,8 @@ export default function Home() {
 
       <FeaturedCollections />
 
+      <ApparelShowcase />
+
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-4">Trending Products</h2>
         <p className="text-muted-foreground text-center mb-8">Check out what's popular right now.</p>
@@ -60,7 +63,7 @@ export default function Home() {
           {categories.map(category => (
             <Button
               key={category}
-              variant={selectedCategory === category ? 'default' : 'outline'}
+              variant={selectedCategory === category ? 'default' : 'secondary'}
               onClick={() => setSelectedCategory(category)}
             >
               {category}
