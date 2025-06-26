@@ -16,6 +16,21 @@ export default {
       },
     },
     extend: {
+      fontSize: {
+        'xs': '0.8rem',
+        'sm': '0.9rem',
+        'base': '1.05rem',
+        'lg': '1.2rem',
+        'xl': '1.35rem',
+        '2xl': '1.65rem',
+        '3xl': '2.0rem',
+        '4xl': '2.5rem',
+        '5xl': '3.25rem',
+        '6xl': '4.0rem',
+        '7xl': '5.0rem',
+        '8xl': '6.5rem',
+        '9xl': '8.5rem',
+      },
       fontFamily: {
         body: ['Inter', 'sans-serif'],
         headline: ['"Space Grotesk"', 'sans-serif'],

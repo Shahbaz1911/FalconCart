@@ -70,7 +70,7 @@ export function FeaturedCollections() {
                     href={collection.href} 
                     key={collection.name} 
                     ref={el => { if(el) cardsRef.current[index] = el; }}
-                    className="group/item relative block overflow-hidden rounded-lg transition-transform duration-300 ease-in-out group-hover:scale-95 hover:!scale-105"
+                    className="group/item relative block overflow-hidden rounded-lg transition-all duration-500 ease-in-out group-hover:scale-90 group-hover:-rotate-3 hover:!scale-105 hover:!rotate-0"
                 >
                     <Image src={collection.image} width={400} height={500} alt={collection.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-110" data-ai-hint={collection.data_ai_hint} />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
