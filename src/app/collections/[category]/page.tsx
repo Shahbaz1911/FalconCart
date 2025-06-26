@@ -1,3 +1,4 @@
+
 import { getProducts } from '@/lib/products';
 import { notFound } from 'next/navigation';
 import { CollectionView } from './collection-view';
