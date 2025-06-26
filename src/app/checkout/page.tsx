@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -17,7 +18,6 @@ import { OrderSuccessAnimation } from '@/components/order-success-animation';
 import { CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
-import { createOrder } from '@/lib/orders';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/components/auth-provider';
 import { generateOrderImage } from '@/ai/flows/generate-order-image';
@@ -78,19 +78,10 @@ export default function CheckoutPage() {
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     setIsPlacingOrder(true);
     try {
-      const newOrderId = await createOrder({
-        items: items,
-        total: totalPrice,
-        status: 'Processing',
-        shippingAddress: {
-          fullName: values.fullName,
-          address: values.address,
-          city: values.city,
-          state: values.state,
-          zip: values.zip,
-          country: values.country,
-        },
-      });
+      // Since this version uses static data, we simulate order creation.
+      // We generate a mock order ID for the confirmation flows.
+      const newOrderId = `ord-${Math.random().toString(36).substring(2, 9)}`;
+      console.log(`Checkout successful. Mock Order ID: ${newOrderId}`);
 
       // Fire-and-forget email confirmation
       if (user?.email) {
@@ -116,13 +107,15 @@ export default function CheckoutPage() {
         })();
       }
 
-      // The success animation will take over from here
+      // The success animation will take over from here.
+      // It handles clearing the cart and redirecting upon completion.
+
     } catch (error) {
-      console.error('Failed to create order:', error);
+      console.error('An unexpected error occurred during checkout:', error);
       setIsPlacingOrder(false); // Stop animation on error
       toast({
-        title: 'Order Placement Failed',
-        description: 'There was a problem submitting your order. Please try again.',
+        title: 'Checkout Failed',
+        description: 'There was a problem processing your request. Please try again.',
         variant: 'destructive',
       });
     }
