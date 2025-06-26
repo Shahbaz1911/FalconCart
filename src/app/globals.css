@@ -85,4 +85,11 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Hide default cursor for the custom cursor effect */
+  @media (pointer: fine) {
+    html {
+      cursor: none;
+    }
+  }
 }
