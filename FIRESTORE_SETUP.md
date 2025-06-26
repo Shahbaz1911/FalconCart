@@ -55,7 +55,50 @@ Create a new document for each product. Use the `id` value as the **Document ID*
     "data_ai_hint": "futuristic shoes"
 }
 ```
-_... (You can add more products by following the structure in the old `src/lib/products.ts` file if needed.)_
+
+**Document ID: 3**
+```json
+{
+    "name": "Hydro-Synth Plant Pot",
+    "description": "A smart plant pot that plays serene, synthesized music based on your plant's moisture levels. Keeps your plant and you happy.",
+    "price": 89.99,
+    "image": "https://images.unsplash.com/photo-1487035242944-78f234964654?q=80&w=1964&auto=format&fit=crop",
+    "category": "Home Goods",
+    "rating": 5,
+    "stock": 50,
+    "data_ai_hint": "smart planter"
+}
+```
+
+**Document ID: 4**
+```json
+{
+    "name": "Gravity-Defy Hoodie",
+    "description": "A sleek, modern hoodie made from advanced smart-fabric that adapts to your body temperature. Perfect for any urban explorer.",
+    "price": 189.99,
+    "image": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop",
+    "category": "Apparel",
+    "rating": 5,
+    "stock": 25,
+    "data_ai_hint": "stylish hoodie"
+}
+```
+
+**Document ID: 5**
+```json
+{
+    "name": "Chrono-Watch X",
+    "description": "A minimalist smartwatch that blends classic design with futuristic tech. Track your vitals, get notifications, and look sharp.",
+    "price": 499.99,
+    "image": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1974&auto=format&fit=crop",
+    "category": "Accessories",
+    "rating": 5,
+    "stock": 20,
+    "data_ai_hint": "smart watch"
+}
+```
+
+_... (You can add more products by following this structure)_
 
 
 ### `customers` collection
