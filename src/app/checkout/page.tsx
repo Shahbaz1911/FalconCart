@@ -19,6 +19,9 @@ import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { createOrder } from '@/lib/orders';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/components/auth-provider';
+import { generateOrderImage } from '@/ai/flows/generate-order-image';
+import { sendOrderConfirmation } from '@/ai/flows/send-order-confirmation';
 
 // SVG for PayPal
 const PayPalIcon = () => (
@@ -61,6 +64,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -74,7 +78,7 @@ export default function CheckoutPage() {
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     setIsPlacingOrder(true);
     try {
-      await createOrder({
+      const newOrderId = await createOrder({
         items: items,
         total: totalPrice,
         status: 'Processing',
@@ -87,6 +91,31 @@ export default function CheckoutPage() {
           country: values.country,
         },
       });
+
+      // Fire-and-forget email confirmation
+      if (user?.email) {
+        (async () => {
+          try {
+            console.log('Generating order image...');
+            const imageResult = await generateOrderImage({
+              productNames: items.map(item => item.product.name),
+              totalPrice: totalPrice,
+              orderId: newOrderId,
+            });
+
+            console.log('Sending confirmation email...');
+            await sendOrderConfirmation({
+              email: user.email!,
+              orderId: newOrderId,
+              imageDataUri: imageResult.imageDataUri,
+            });
+          } catch (emailError) {
+            console.error('Failed to send confirmation email:', emailError);
+            // Non-critical, so we don't show a toast to the user
+          }
+        })();
+      }
+
       // The success animation will take over from here
     } catch (error) {
       console.error('Failed to create order:', error);
