@@ -1,24 +1,27 @@
+import { getProducts } from '@/lib/products';
+import { CollectionView } from './collection-view';
+import { notFound } from 'next/navigation';
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { PackageOpen } from 'lucide-react';
+interface CollectionPageProps {
+  params: {
+    category: string;
+  };
+}
 
-export default function GenericCollectionPage({ params }: { params: { category: string }}) {
-  const categoryName = decodeURIComponent(params.category).replace(/-/g, ' ');
+export default async function CollectionPage({ params }: CollectionPageProps) {
+  const category = decodeURIComponent(params.category);
+  const allProducts = await getProducts();
+  
+  const allCategories = [...new Set(allProducts.map(p => p.category.toLowerCase()))];
+  
+  if (!allCategories.includes(category.toLowerCase())) {
+    notFound();
+  }
 
-  return (
-    <div className="text-center py-20">
-      <PackageOpen className="mx-auto h-16 w-16 text-muted-foreground" />
-      <h1 className="mt-4 text-3xl font-bold font-headline">Collection Not Found</h1>
-      <p className="mt-2 text-muted-foreground capitalize">
-        We couldn't find any products in the "{categoryName}" collection.
-      </p>
-      <p className="mt-1 text-muted-foreground">
-        This page is a placeholder. To see products here, you would typically set up a Firestore database and populate it with items for this category.
-      </p>
-      <Button asChild className="mt-6">
-        <Link href="/">Explore Other Collections</Link>
-      </Button>
-    </div>
-  );
+  const products = allProducts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+
+  // Capitalize first letter of each word for display
+  const displayCategoryName = category.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+
+  return <CollectionView products={products} category={category} displayCategoryName={displayCategoryName} />;
 }
