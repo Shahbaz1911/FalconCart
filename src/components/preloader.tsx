@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ShoppingCart } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 
@@ -40,15 +40,8 @@ export function Preloader() {
         !isVisible && 'opacity-0 pointer-events-none'
       )}
     >
-      <div className="w-full max-w-xs">
-        <div className="relative w-full h-12 mb-4">
-          <div
-            className="absolute top-0 transition-all duration-100 ease-linear"
-            style={{ left: `${progress}%`, transform: `translateX(-${progress}%)` }}
-          >
-            <ShoppingCart className="w-12 h-12 text-primary animate-running-cart" />
-          </div>
-        </div>
+      <div className="w-full max-w-xs flex flex-col items-center">
+        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
         <Progress value={progress} className="w-full h-2" />
         <p className="mt-4 text-lg font-semibold text-center font-headline text-primary">
           Loading... {progress}%
