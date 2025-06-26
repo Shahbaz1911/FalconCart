@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
 import { PackageCheck } from 'lucide-react';
 
-export default function OrdersPage() {
-  const orders = getOrders();
+export default async function OrdersPage() {
+  const orders = await getOrders();
 
   if (orders.length === 0) {
     return (

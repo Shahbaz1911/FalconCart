@@ -24,8 +24,8 @@ const chartData = [
   { name: 'Dec', total: Math.floor(Math.random() * 5000) + 1000 },
 ];
 
-export default function AdminDashboardPage() {
-    const recentOrders = getOrders().slice(0, 5);
+export default async function AdminDashboardPage() {
+    const recentOrders = (await getOrders()).slice(0, 5);
   return (
     <div className="space-y-8">
       <PageHeader title="Dashboard" description="Here's a summary of your store's performance." />

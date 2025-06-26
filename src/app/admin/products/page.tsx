@@ -8,8 +8,8 @@ import { MoreHorizontal, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-export default function AdminProductsPage() {
-  const products = getProducts();
+export default async function AdminProductsPage() {
+  const products = await getProducts();
 
   return (
     <div className="space-y-8">

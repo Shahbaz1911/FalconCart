@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -12,21 +13,24 @@ const firebaseConfig = {
 
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
+let db: Firestore | null = null;
 
 // Only initialize Firebase if the API key is provided and not a placeholder
 if (firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('your_api_key')) {
     try {
         app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
         auth = getAuth(app);
+        db = getFirestore(app);
     } catch (e) {
         console.error("Firebase initialization error:", e);
         app = null;
         auth = null;
+        db = null;
     }
 } else {
     // This message will show in the server console
-    console.warn("Firebase config not set up in your .env file. Authentication features will be disabled.");
+    console.warn("Firebase config not set up in your .env file. Authentication and database features will be disabled.");
 }
 
 
-export { app, auth };
+export { app, auth, db };

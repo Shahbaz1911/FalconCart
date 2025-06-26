@@ -4,10 +4,10 @@ import { DollarSign, Package, CreditCard, Activity } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export default function AccountDashboardPage() {
-    const orders = getOrders();
+export default async function AccountDashboardPage() {
+    const orders = await getOrders();
     const totalSpent = orders.reduce((acc, order) => acc + order.total, 0);
-    const latestOrder = orders[0];
+    const latestOrder = orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
   return (
     <div className="space-y-8">

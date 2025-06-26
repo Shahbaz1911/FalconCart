@@ -26,9 +26,13 @@ export function Recommendations({ product }: RecommendationsProps) {
         });
 
         if (result && result.recommendations) {
-          const recommendedProducts = result.recommendations
-            .map(rec => getProductById(rec.productId))
-            .filter((p): p is Product => p !== undefined && p.id !== product.id)
+          const recommendedProductPromises = result.recommendations
+            .map(rec => getProductById(rec.productId));
+
+          const resolvedProducts = await Promise.all(recommendedProductPromises);
+          
+          const recommendedProducts = resolvedProducts
+            .filter((p): p is Product => !!p && p.id !== product.id)
             .slice(0, 3); // Take up to 3 valid, different products
 
           setRecommendations(recommendedProducts);

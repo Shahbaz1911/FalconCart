@@ -1,8 +1,8 @@
 import { getProducts } from '@/lib/products';
 import { ProductGrid } from './product-grid';
 
-export default function ProductsPage() {
-  const products = getProducts();
+export default async function ProductsPage() {
+  const products = await getProducts();
   
   return (
     <div>

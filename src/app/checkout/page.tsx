@@ -17,6 +17,8 @@ import { OrderSuccessAnimation } from '@/components/order-success-animation';
 import { CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
+import { createOrder } from '@/lib/orders';
+import { useToast } from '@/hooks/use-toast';
 
 // SVG for PayPal
 const PayPalIcon = () => (
@@ -58,6 +60,7 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof checkoutSchema>>({
     resolver: zodResolver(checkoutSchema),
@@ -68,9 +71,32 @@ export default function CheckoutPage() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof checkoutSchema>) => {
-    console.log('Order submitted:', values);
+  const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     setIsPlacingOrder(true);
+    try {
+      await createOrder({
+        items: items,
+        total: totalPrice,
+        status: 'Processing',
+        shippingAddress: {
+          fullName: values.fullName,
+          address: values.address,
+          city: values.city,
+          state: values.state,
+          zip: values.zip,
+          country: values.country,
+        },
+      });
+      // The success animation will take over from here
+    } catch (error) {
+      console.error('Failed to create order:', error);
+      setIsPlacingOrder(false); // Stop animation on error
+      toast({
+        title: 'Order Placement Failed',
+        description: 'There was a problem submitting your order. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
   
   const handleAnimationComplete = () => {

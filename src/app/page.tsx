@@ -1,22 +1,32 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
-import { getProducts } from '@/lib/products';
+import { getProducts, type Product } from '@/lib/products';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Headset, Star, Truck, Undo2, PackageOpen } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Headset, PackageOpen, Truck, Undo2 } from 'lucide-react';
 import { HeroSection } from '@/components/hero-section';
 import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
-  const allProducts = getProducts();
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      const products = await getProducts();
+      setAllProducts(products);
+      setLoading(false);
+    };
+    fetchProducts();
+  }, []);
+  
   const featuredProducts = allProducts.slice(6, 10);
   
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -25,9 +35,9 @@ export default function Home() {
   
   const trendingProducts = useMemo(() => {
     const products = selectedCategory === 'All'
-      ? allProducts.slice(0, 8) // Get top 8 trending overall
+      ? allProducts.slice(0, 8)
       : allProducts.filter(p => p.category === selectedCategory);
-    return products.slice(0, 8); // Limit to 8 results for display
+    return products.slice(0, 8);
   }, [allProducts, selectedCategory]);
 
   const features = [
@@ -38,18 +48,14 @@ export default function Home() {
   
   return (
     <div className="space-y-24 md:space-y-32">
-      {/* 1. Hero Section */}
       <HeroSection />
 
-      {/* 2. Featured Collections */}
       <FeaturedCollections />
 
-      {/* 3. Trending Products with Filters */}
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-4">Trending Products</h2>
         <p className="text-muted-foreground text-center mb-8">Check out what's popular right now.</p>
         
-        {/* Category Filters */}
         <div className="flex justify-center flex-wrap gap-2 mb-8">
           {categories.map(category => (
             <Button
@@ -62,8 +68,11 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Products Grid */}
-        {trendingProducts.length > 0 ? (
+        {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-72 w-full" />)}
+            </div>
+        ) : trendingProducts.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {trendingProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -78,14 +87,19 @@ export default function Home() {
         )}
       </section>
 
-      {/* 4. Our Featured Picks */}
       <section>
         <h2 className="text-3xl font-bold font-headline text-center mb-8">Our Featured Picks</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-72 w-full" />)}
+            </div>
+        ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+            ))}
+            </div>
+        )}
         <div className="text-center mt-12">
           <Button asChild size="lg" variant="outline">
             <Link href="/products">View All Products</Link>
@@ -93,7 +107,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. Why Shop With Us */}
       <section className="bg-secondary/50 rounded-lg p-8 md:p-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {features.map(feature => (
@@ -106,7 +119,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Product Video Teaser */}
       <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-4 sm:p-8 rounded-lg">
         <div className="relative aspect-video rounded-lg overflow-hidden">
             <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
@@ -119,10 +131,8 @@ export default function Home() {
       </section>
 
 
-      {/* 7. Customer Reviews */}
       <CustomerReviews />
 
-      {/* 8. Newsletter */}
       <section className="bg-primary text-primary-foreground p-8 sm:p-12 rounded-lg text-center">
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
         <p className="mt-2 max-w-xl mx-auto">Get 10% off your first order and be the first to know about new collections and exclusive offers.</p>

@@ -7,8 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 
-export default function AdminCustomersPage() {
-  const customers = getCustomers();
+export default async function AdminCustomersPage() {
+  const customers = await getCustomers();
 
   return (
     <div className="space-y-8">

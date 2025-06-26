@@ -12,8 +12,8 @@ interface OrderDetailPageProps {
   };
 }
 
-export default function OrderDetailPage({ params }: OrderDetailPageProps) {
-  const order = getOrderById(params.id);
+export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
+  const order = await getOrderById(params.id);
 
   if (!order) {
     notFound();

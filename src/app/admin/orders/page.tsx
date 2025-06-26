@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AdminOrdersPage() {
-  const orders = getOrders();
+export default async function AdminOrdersPage() {
+  const orders = await getOrders();
 
   return (
     <div className="space-y-8">

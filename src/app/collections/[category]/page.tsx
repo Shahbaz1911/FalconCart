@@ -8,9 +8,9 @@ interface CollectionPageProps {
   };
 }
 
-export default function CollectionPage({ params }: CollectionPageProps) {
+export default async function CollectionPage({ params }: CollectionPageProps) {
   const { category } = params;
-  const allProducts = getProducts();
+  const allProducts = await getProducts();
   
   const allCategories = [...new Set(allProducts.map(p => p.category.toLowerCase()))];
   if (!allCategories.includes(category.toLowerCase())) {
@@ -34,7 +34,7 @@ export default function CollectionPage({ params }: CollectionPageProps) {
 }
 
 export async function generateStaticParams() {
-    const products = getProducts();
+    const products = await getProducts();
     const categories = [...new Set(products.map(p => p.category.toLowerCase()))];
     return categories.map(category => ({
         category,
