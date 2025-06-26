@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import gsap from 'gsap';
 
@@ -60,14 +60,14 @@ export function Preloader() {
       <div ref={containerRef} className="flex flex-col items-center">
         <div className="relative w-16 h-16 text-primary">
           {/* Background Outline Icon */}
-          <ShoppingBag className="absolute inset-0 w-full h-full" strokeWidth={1.5} />
+          <ShoppingCart className="absolute inset-0 w-full h-full" strokeWidth={1.5} />
           
           {/* Filled Icon for Progress */}
           <div
             className="absolute bottom-0 left-0 w-full overflow-hidden"
             style={{ height: `${progress}%` }}
           >
-            <ShoppingBag className="absolute bottom-0 left-0 w-full h-16 fill-primary" strokeWidth={1.5} />
+            <ShoppingCart className="absolute bottom-0 left-0 w-full h-16 fill-primary" strokeWidth={1.5} />
           </div>
         </div>
         <p className="mt-4 text-lg font-semibold text-center font-headline text-primary">
