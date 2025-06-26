@@ -25,7 +25,7 @@ export function Header() {
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
     { name: 'Products', href: '/products', icon: ShoppingBasket },
-    { name: 'Collections', href: '/collections/apparel', icon: LayoutGrid, className: 'hidden md:flex' },
+    { name: 'Collections', href: '/collections/apparel', icon: LayoutGrid },
     { name: 'Account', href: '/account', icon: User },
     { name: 'Cart', href: '/cart', icon: ShoppingCart, isCart: true },
   ];
@@ -80,7 +80,7 @@ export function Header() {
 
   return (
     <header className={cn(
-        "w-full top-0 z-40 transition-all duration-300",
+        "hidden md:flex w-full top-0 z-40 transition-all duration-300",
         isHomepage ? 'absolute' : 'sticky bg-card shadow-md'
       )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,7 +95,7 @@ export function Header() {
                   FALCON
                 </span>
                 <span className={cn(
-                    "font-bold hidden sm:flex items-center h-full px-3",
+                    "font-bold flex items-center h-full px-3",
                     isHomepage ? 'bg-black/50 text-white' : 'bg-primary text-primary-foreground'
                   )}>
                   CART
@@ -120,12 +120,10 @@ export function Header() {
                   ref={el => { if(el) linkRefs.current[index] = el; }}
                   onMouseEnter={() => handleHover(index)}
                   className={cn(
-                    'flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-colors relative z-10 rounded-full',
-                    'md:px-4',
+                    'flex items-center gap-2 px-4 py-1.5 text-sm font-medium transition-colors relative z-10 rounded-full',
                     activeLinkIndex === index
                       ? (isHomepage ? 'text-primary' : 'text-primary-foreground')
-                      : (isHomepage ? 'text-gray-200 hover:text-white' : 'text-muted-foreground hover:text-foreground'),
-                    link.className
+                      : (isHomepage ? 'text-gray-200 hover:text-white' : 'text-muted-foreground hover:text-foreground')
                   )}
                 >
                   <div id={link.isCart ? "cart-icon-container" : undefined} className="relative">
@@ -136,7 +134,7 @@ export function Header() {
                       </span>
                     )}
                   </div>
-                  <span className="hidden md:inline">{link.name}</span>
+                  <span>{link.name}</span>
                 </Link>
               ))}
               <div

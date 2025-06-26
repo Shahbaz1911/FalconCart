@@ -6,6 +6,7 @@ import { CartProvider } from '@/hooks/use-cart';
 import { Toaster } from "@/components/ui/toaster"
 import { Preloader } from '@/components/preloader';
 import { ThemeProvider } from '@/components/theme-provider';
+import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 
 export const metadata: Metadata = {
   title: 'Falcon Cart',
@@ -39,6 +40,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <MobileBottomNav />
             <Toaster />
           </CartProvider>
         </ThemeProvider>
