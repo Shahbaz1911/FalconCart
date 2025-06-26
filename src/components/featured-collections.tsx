@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { cn } from '@/lib/utils';
 
 const collections = [
-    { name: 'Apparel', image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2070&auto=format&fit=crop', data_ai_hint: 'stylish clothes', href: '/#apparel-showcase' },
+    { name: 'Apparel', image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=2070&auto=format&fit=crop', data_ai_hint: 'stylish clothes', href: '/collections/apparel' },
     { name: 'Footwear', image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ab?q=80&w=2070&auto=format&fit=crop', data_ai_hint: 'running shoes', href: '/collections/footwear' },
     { name: 'Electronics', image: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?q=80&w=1964&auto=format&fit=crop', data_ai_hint: 'tech gadgets', href: '/collections/electronics' },
     { name: 'Accessories', image: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2080&auto=format&fit=crop', data_ai_hint: 'luxury watch', href: '/collections/accessories' },
