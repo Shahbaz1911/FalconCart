@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
+import { useState, useEffect, useRef } from 'react';
+import { ShoppingBag } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import gsap from 'gsap';
 
 export function Preloader() {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // This effect runs only on the client
@@ -17,10 +18,24 @@ export function Preloader() {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
           clearInterval(intervalId);
-          setTimeout(() => {
-            setIsVisible(false);
-            document.body.style.overflow = '';
-          }, 500);
+          if (containerRef.current) {
+            gsap.to(containerRef.current, {
+              x: '100vw', // Move it off-screen to the right
+              opacity: 0,
+              duration: 0.8,
+              ease: 'power2.in',
+              onComplete: () => {
+                setIsVisible(false);
+                document.body.style.overflow = '';
+              },
+            });
+          } else {
+              // Fallback if ref isn't available
+              setTimeout(() => {
+                setIsVisible(false);
+                document.body.style.overflow = '';
+              }, 500);
+          }
           return 100;
         }
         return prevProgress + 1;
@@ -29,7 +44,9 @@ export function Preloader() {
 
     return () => {
       clearInterval(intervalId);
-      document.body.style.overflow = '';
+      if(document.body) {
+        document.body.style.overflow = '';
+      }
     };
   }, []);
 
@@ -40,9 +57,19 @@ export function Preloader() {
         !isVisible && 'opacity-0 pointer-events-none'
       )}
     >
-      <div className="w-full max-w-xs flex flex-col items-center">
-        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-        <Progress value={progress} className="w-full h-2" />
+      <div ref={containerRef} className="flex flex-col items-center">
+        <div className="relative w-16 h-16 text-primary">
+          {/* Background Outline Icon */}
+          <ShoppingBag className="absolute inset-0 w-full h-full" strokeWidth={1.5} />
+          
+          {/* Filled Icon for Progress */}
+          <div
+            className="absolute bottom-0 left-0 w-full overflow-hidden"
+            style={{ height: `${progress}%` }}
+          >
+            <ShoppingBag className="absolute bottom-0 left-0 w-full h-16 fill-primary" strokeWidth={1.5} />
+          </div>
+        </div>
         <p className="mt-4 text-lg font-semibold text-center font-headline text-primary">
           Loading... {progress}%
         </p>
