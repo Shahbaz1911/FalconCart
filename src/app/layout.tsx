@@ -9,6 +9,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { CustomCursor } from '@/components/custom-cursor';
 import { AuthProvider } from '@/components/auth-provider';
+import { Chatbot } from '@/components/chatbot';
 
 export const metadata: Metadata = {
   title: 'Falcon Cart',
@@ -45,6 +46,7 @@ export default function RootLayout({
               </main>
               <Footer />
               <MobileBottomNav />
+              <Chatbot />
               <Toaster />
             </CartProvider>
           </AuthProvider>

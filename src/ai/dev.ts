@@ -6,3 +6,4 @@ import '@/ai/flows/personalized-landing.ts';
 import '@/ai/flows/send-welcome-email.ts';
 import '@/ai/flows/generate-order-image.ts';
 import '@/ai/flows/send-order-confirmation.ts';
+import '@/ai/flows/chat.ts';
