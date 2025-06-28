@@ -1,7 +1,7 @@
 'use client';
 
 import { useOrders } from '@/hooks/use-orders';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
@@ -11,13 +11,6 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-
-
-interface OrderDetailPageProps {
-  params: {
-    id: string;
-  };
-}
 
 const OrderStatusTracker = ({ status }: { status: 'Processing' | 'Shipped' | 'Delivered' }) => {
     const statuses = ['Processing', 'Shipped', 'Delivered'];
@@ -58,9 +51,11 @@ const OrderStatusTracker = ({ status }: { status: 'Processing' | 'Shipped' | 'De
     );
 }
 
-export default function OrderDetailPage({ params }: OrderDetailPageProps) {
+export default function OrderDetailPage() {
+  const params = useParams();
   const { getOrderById } = useOrders();
-  const order = getOrderById(params.id);
+  const orderId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const order = getOrderById(orderId);
 
   if (!order) {
     notFound();
