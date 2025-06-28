@@ -191,7 +191,7 @@ export function Chatbot() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Add items to cart..."
+                placeholder="Try 'add sneakers to my cart'"
                 className="pr-12"
                 disabled={loading}
               />
