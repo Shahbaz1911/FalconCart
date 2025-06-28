@@ -1,9 +1,10 @@
 import { getOrders } from '@/lib/orders';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { PackageCheck } from 'lucide-react';
+import { PackageCheck, ChevronRight } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Image from 'next/image';
 
 export default async function OrdersPage() {
   const orders = await getOrders();
@@ -21,44 +22,74 @@ export default async function OrdersPage() {
     );
   }
 
+  const getStatusBadgeVariant = (status: string) => {
+    switch (status) {
+      case 'Delivered': return 'default';
+      case 'Shipped': return 'secondary';
+      case 'Processing': return 'outline';
+      default: return 'secondary';
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">
         Your Orders
       </h1>
-      <div className="space-y-6">
+      <Accordion type="single" collapsible className="w-full space-y-4">
         {orders.map(order => (
-          <Card key={order.id}>
-            <CardHeader className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <CardDescription>Order Placed</CardDescription>
-                <CardTitle className="text-base font-medium">{order.date}</CardTitle>
-              </div>
-              <div>
-                <CardDescription>Total</CardDescription>
-                <CardTitle className="text-base font-medium">${order.total.toFixed(2)}</CardTitle>
-              </div>
-              <div className="md:col-span-2">
-                <CardDescription>Order ID</CardDescription>
-                <CardTitle className="text-sm font-mono text-muted-foreground">{order.id}</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <AccordionItem key={order.id} value={order.id} className="border rounded-lg bg-card">
+            <AccordionTrigger className="p-4 hover:no-underline">
+              <div className="grid grid-cols-2 sm:grid-cols-4 w-full text-left gap-4">
                   <div>
-                    <h3 className="font-semibold mb-2 sm:mb-0">Status: <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>{order.status}</Badge></h3>
-                    <p className="text-sm text-muted-foreground">
-                        {order.items.length} item{order.items.length > 1 ? 's' : ''} in this order.
-                    </p>
+                      <p className="text-xs text-muted-foreground">Order Placed</p>
+                      <p className="text-sm font-medium">{order.date}</p>
                   </div>
-                  <Button asChild variant="outline" className="w-full sm:w-auto">
-                    <Link href={`/orders/${order.id}`}>View Order Details</Link>
-                  </Button>
-               </div>
-            </CardContent>
-          </Card>
+                  <div>
+                      <p className="text-xs text-muted-foreground">Total</p>
+                      <p className="text-sm font-medium">${order.total.toFixed(2)}</p>
+                  </div>
+                  <div>
+                      <p className="text-xs text-muted-foreground">Status</p>
+                      <Badge variant={getStatusBadgeVariant(order.status)} className="text-xs">{order.status}</Badge>
+                  </div>
+                   <div className="hidden sm:block">
+                      <p className="text-xs text-muted-foreground">Order ID</p>
+                      <p className="text-sm font-mono text-muted-foreground truncate">{order.id}</p>
+                  </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="p-4 border-t">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h4 className="font-semibold mb-2">Items</h4>
+                  <div className="flex -space-x-2 overflow-hidden">
+                    {order.items.map(({ product }) => (
+                      <div key={product.id} className="inline-block h-12 w-12 rounded-full ring-2 ring-background">
+                         <Image
+                          src={product.image}
+                          alt={product.name}
+                          width={48}
+                          height={48}
+                          className="h-full w-full object-cover rounded-full"
+                          data-ai-hint={product.data_ai_hint}
+                        />
+                      </div>
+                    ))}
+                    {order.items.length > 5 && <div className="flex items-center justify-center h-12 w-12 rounded-full bg-muted text-xs font-medium ring-2 ring-background">+{order.items.length - 5}</div>}
+                  </div>
+                </div>
+                <Button asChild variant="outline" className="w-full sm:w-auto self-end">
+                  <Link href={`/orders/${order.id}`}>
+                    View Details
+                    <ChevronRight className="h-4 w-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </div>
   );
 }

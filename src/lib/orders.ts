@@ -1,13 +1,8 @@
-
 import type { Product } from './products';
+import { allProducts } from './products';
 
-const mockProducts: Record<string, Product> = {
-    'ap1': { id: 'ap1', name: 'Gravity-Defy Hoodie', price: 189.99, image: 'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=2070&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 25, description: 'A sleek, modern hoodie made from advanced smart-fabric.', data_ai_hint: 'stylish hoodie' },
-    'fw1': { id: 'fw1', name: 'Quantum Sneakers', price: 349.99, image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1964&auto=format&fit=crop', category: 'Footwear', rating: 4, stock: 30, description: 'Walk on air with these revolutionary sneakers, featuring self-lacing technology.', data_ai_hint: 'futuristic shoes' },
-    'el1': { id: 'el1', name: 'Astro-Gazer 9000', price: 1299.99, image: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1841&auto=format&fit=crop', category: 'Electronics', rating: 5, stock: 15, description: 'Bring the wonders of the cosmos to your backyard with unparalleled clarity.', data_ai_hint: 'telescope space' },
-    'ac1': { id: 'ac1', name: 'Chrono-Watch X', price: 499.99, image: 'https://images.unsplash.com/photo-1524805444758-089113d48a6d?q=80&w=1974&auto=format&fit=crop', category: 'Accessories', rating: 5, stock: 20, description: 'A minimalist smartwatch that blends classic design with futuristic tech.', data_ai_hint: 'smart watch' },
-};
-
+// Helper to find a product by its ID from the static list
+const getProduct = (id: string) => allProducts.find(p => p.id === id)!;
 
 export interface OrderItem {
   product: Product;
@@ -34,7 +29,7 @@ const mockOrders: Order[] = [
     {
         id: 'ord-123-abc',
         date: 'July 20, 2024',
-        total: 539.98,
+        total: 1549.98,
         status: 'Delivered',
         shippingAddress: {
             fullName: 'Alex Johnson',
@@ -45,15 +40,15 @@ const mockOrders: Order[] = [
             country: 'USA'
         },
         items: [
-            { product: mockProducts['ap1'], quantity: 1 },
-            { product: mockProducts['fw1'], quantity: 1 }
+            { product: getProduct('el1'), quantity: 1 }, // Astro-Gazer 9000
+            { product: getProduct('ac2'), quantity: 1 }  // Cyber-Shade Sunglasses
         ]
     },
     {
         id: 'ord-456-def',
-        date: 'July 15, 2024',
-        total: 1799.98,
-        status: 'Processing',
+        date: 'August 02, 2024',
+        total: 569.98,
+        status: 'Shipped',
         shippingAddress: {
             fullName: 'Maria Garcia',
             address: '456 Future Ave',
@@ -63,8 +58,44 @@ const mockOrders: Order[] = [
             country: 'USA'
         },
         items: [
-            { product: mockProducts['el1'], quantity: 1 },
-            { product: mockProducts['ac1'], quantity: 1 }
+            { product: getProduct('fw1'), quantity: 1 }, // Quantum Sneakers
+            { product: getProduct('ap1'), quantity: 1 }  // Gravity-Defy Hoodie
+        ]
+    },
+    {
+        id: 'ord-789-ghi',
+        date: 'August 05, 2024',
+        total: 1189.97,
+        status: 'Processing',
+        shippingAddress: {
+            fullName: 'Sam Lee',
+            address: '789 Tech Terrace',
+            city: 'Silicon Valley',
+            state: 'CA',
+            zip: '94043',
+            country: 'USA'
+        },
+        items: [
+            { product: getProduct('hg2'), quantity: 1 }, // Zero-Gravity Bookshelf
+            { product: getProduct('el2'), quantity: 1 }, // Nova-Glow Lamp
+            { product: getProduct('ac5'), quantity: 1 }  // Stealth-Wallet
+        ]
+    },
+     {
+        id: 'ord-jkl-012',
+        date: 'June 10, 2024',
+        total: 239.98,
+        status: 'Delivered',
+        shippingAddress: {
+            fullName: 'Alex Johnson',
+            address: '123 Cosmos Lane',
+            city: 'Starlight City',
+            state: 'CA',
+            zip: '90210',
+            country: 'USA'
+        },
+        items: [
+            { product: getProduct('ap9'), quantity: 2 } // Vertex Vest
         ]
     }
 ];
