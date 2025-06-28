@@ -1,3 +1,4 @@
+
 'use client';
 
 import { ProductCard } from '@/components/product-card';
@@ -125,7 +126,7 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
       )}
       
       {/* Spacer for desktop horizontal scroll */}
-      {!isMobile && <div className="h-screen"></div>}
+      {!isMobile && products.length > 0 && <div className="h-screen"></div>}
     </>
   );
 }
