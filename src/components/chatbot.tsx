@@ -12,9 +12,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { conductChat } from '@/ai/flows/chat';
-import type { Message } from '@/ai/flows/chat';
+import { conductChat, type Message, type AssistantResponse } from '@/ai/flows/chat';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useCart } from '@/hooks/use-cart';
+import { getProductById } from '@/lib/products';
+import { useToast } from '@/hooks/use-toast';
 
 // Helper function to parse markdown links and render them as interactive components.
 const renderMessageContent = (content: string) => {
@@ -50,12 +52,14 @@ export function Chatbot() {
     {
       role: 'model',
       content:
-        "Hello! I'm FalconBot. How can I help you find the perfect high-tech gear today?",
+        "Hello! I'm FalconBot. How can I help you find the perfect high-tech gear today? I can even add items to your cart for you.",
     },
   ]);
   const [loading, setLoading] = useState(false);
   const scrollViewportRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { addItem } = useCart();
+  const { toast } = useToast();
 
   const scrollToBottom = () => {
     if (scrollViewportRef.current) {
@@ -80,8 +84,24 @@ export function Chatbot() {
     setLoading(true);
 
     try {
-      const response = await conductChat([...messages, userMessage]);
-      setMessages((prev) => [...prev, response]);
+      const response: AssistantResponse = await conductChat([...messages, userMessage]);
+
+      // Handle the action returned by the AI
+      if (response.action === 'addToCart' && response.productId) {
+        const product = await getProductById(response.productId);
+        if (product) {
+          addItem(product, response.quantity || 1);
+          toast({
+              title: "Added to cart!",
+              description: `${product.name} is now in your shopping cart.`,
+          });
+        }
+      }
+
+      // Add the text response to the chat history
+      const assistantMessage: Message = { role: 'model', content: response.content };
+      setMessages((prev) => [...prev, assistantMessage]);
+
     } catch (error) {
       console.error('Chatbot error:', error);
       const errorMessage: Message = {
@@ -171,7 +191,7 @@ export function Chatbot() {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about products..."
+                placeholder="Add items to cart..."
                 className="pr-12"
                 disabled={loading}
               />
