@@ -24,7 +24,7 @@ export async function conductChat(history: ChatInput): Promise<Message> {
 }
 
 const productCatalog = allProducts.map(p => 
-    `- Name: ${p.name}\n  Category: ${p.category}\n  Price: $${p.price.toFixed(2)}\n  Description: ${p.description}`
+    `- Product ID: ${p.id}\n  Name: ${p.name}\n  Category: ${p.category}\n  Price: $${p.price.toFixed(2)}\n  Description: ${p.description}`
 ).join('\n\n');
 
 const chatFlow = ai.defineFlow(
@@ -44,6 +44,10 @@ const chatFlow = ai.defineFlow(
             prompt: `You are FalconBot, a friendly and helpful e-commerce assistant for "Falcon Cart".
 Your goal is to assist users with their questions about products.
 Keep your responses concise and friendly.
+
+You CANNOT add items to the cart or place orders for the user.
+If a user expresses intent to buy a product, you MUST inform them that you cannot complete the purchase for them but you can provide a direct link to the product page.
+The URL for a product is \`/product/[PRODUCT_ID]\`. Use the Product ID from the catalog. For example, for "Quantum Sneakers" with ID "fw1", the markdown link is "[Quantum Sneakers](/product/fw1)".
 
 You MUST use the product catalog below as your only source of truth for product information.
 If a user asks about a product not in the list, politely say you don't have information on it. Do not make up products or details.
