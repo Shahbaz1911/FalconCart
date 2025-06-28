@@ -78,10 +78,18 @@ export async function getOrdersByUser(userId: string): Promise<Order[]> {
     if (!db) return [];
     
     const ordersCol = collection(db, 'orders');
-    const q = query(ordersCol, where("userId", "==", userId), orderBy("createdAt", "desc"));
+    // A composite index is required for filtering on one field (userId) and ordering by another (createdAt).
+    // To avoid requiring a manual index creation step, we'll fetch the documents
+    // and then sort them in the application code.
+    const q = query(ordersCol, where("userId", "==", userId));
     const orderSnapshot = await getDocs(q);
     
-    return orderSnapshot.docs.map(fromFirestore);
+    const orders = orderSnapshot.docs.map(fromFirestore);
+
+    // Sort by creation date, newest first.
+    orders.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
+
+    return orders;
 }
 
 export async function getAllOrders(): Promise<Order[]> {
