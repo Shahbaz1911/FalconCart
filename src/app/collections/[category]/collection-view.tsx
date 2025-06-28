@@ -1,4 +1,3 @@
-
 'use client';
 
 import { ProductCard } from '@/components/product-card';
@@ -104,10 +103,12 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
       {header}
       
       {isMobile ? (
-        // Mobile View: Vertical Grid
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+        // Mobile View: Horizontal Scroll
+        <div className="flex gap-6 overflow-x-auto pb-4">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <div key={product.id} className="w-72 flex-shrink-0">
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
       ) : (
