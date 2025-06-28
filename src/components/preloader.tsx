@@ -4,47 +4,43 @@ import { useState, useEffect, useRef } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import gsap from 'gsap';
+import { Progress } from '@/components/ui/progress';
 
 export function Preloader() {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const preloaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // This effect runs only on the client
     document.body.style.overflow = 'hidden';
 
     const intervalId = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
           clearInterval(intervalId);
-          if (containerRef.current) {
-            gsap.to(containerRef.current, {
-              x: '100vw', // Move it off-screen to the right
+          if (preloaderRef.current) {
+            gsap.to(preloaderRef.current, {
               opacity: 0,
-              duration: 0.8,
-              ease: 'power2.in',
+              duration: 0.5,
+              ease: 'power1.in',
               onComplete: () => {
                 setIsVisible(false);
                 document.body.style.overflow = '';
               },
             });
           } else {
-              // Fallback if ref isn't available
-              setTimeout(() => {
-                setIsVisible(false);
-                document.body.style.overflow = '';
-              }, 500);
+            setIsVisible(false);
+            document.body.style.overflow = '';
           }
           return 100;
         }
         return prevProgress + 1;
       });
-    }, 25);
+    }, 25); // This will take about 2.5s to complete
 
     return () => {
       clearInterval(intervalId);
-      if(document.body) {
+      if (document.body) {
         document.body.style.overflow = '';
       }
     };
@@ -52,26 +48,24 @@ export function Preloader() {
 
   return (
     <div
+      ref={preloaderRef}
       className={cn(
         'fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background transition-opacity duration-500 ease-out',
         !isVisible && 'opacity-0 pointer-events-none'
       )}
     >
-      <div ref={containerRef} className="flex flex-col items-center">
-        <div className="relative w-16 h-16 text-primary">
-          {/* Background Outline Icon */}
-          <ShoppingCart className="absolute inset-0 w-full h-full" strokeWidth={1.5} />
-          
-          {/* Filled Icon for Progress */}
-          <div
-            className="absolute bottom-0 left-0 w-full overflow-hidden"
-            style={{ height: `${progress}%` }}
-          >
-            <ShoppingCart className="absolute bottom-0 left-0 w-full h-16 fill-primary" strokeWidth={1.5} />
-          </div>
+      <div className="w-full max-w-xs px-4">
+        <div className="relative h-16 w-full mb-2">
+            <div
+                className="absolute bottom-0 transition-all duration-100 ease-linear"
+                style={{ left: `calc(${progress}% - 24px)` }}
+            >
+                <ShoppingCart className="w-12 h-12 text-primary animate-running-cart" />
+            </div>
         </div>
+        <Progress value={progress} className="h-2 w-full" />
         <p className="mt-4 text-lg font-semibold text-center font-headline text-primary">
-          Loading... {progress}%
+            Getting things ready...
         </p>
       </div>
     </div>
