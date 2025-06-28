@@ -8,6 +8,7 @@ import {
     type Order as OrderType, 
     type OrderInput as LibOrderInput,
 } from '@/lib/orders';
+import { createOrUpdateCustomer } from '@/lib/customers';
 
 export type Order = OrderType;
 // The input for the hook's addOrder function should not include the userId, as it's derived from the auth context.
@@ -58,6 +59,15 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     
     const completeOrderData: LibOrderInput = { ...orderData, userId: user.uid };
     const newOrder = await createOrder(completeOrderData);
+
+    // After successfully creating the order, create or update the customer record.
+    // This is a fire-and-forget operation from the user's perspective.
+    createOrUpdateCustomer(user.uid, {
+        name: orderData.shippingAddress.fullName || user.displayName || 'N/A',
+        email: user.email || 'N/A',
+        avatar: user.photoURL,
+        orderTotal: orderData.total,
+    }).catch(err => console.error("Failed to update customer record:", err));
     
     setOrders((prev) => [newOrder, ...prev]);
     return newOrder;

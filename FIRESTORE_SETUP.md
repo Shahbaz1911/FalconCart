@@ -1,8 +1,8 @@
 # Firebase Firestore Setup Guide
 
-Your application is configured to use Firebase Firestore for storing customer orders.
+Your application is configured to use Firebase Firestore for storing customer and order data.
 
-When a user places an order, the data is automatically saved to an `orders` collection in your Firestore database.
+When a user places an order, the data is automatically saved to `orders` and `customers` collections in your Firestore database.
 
 ## 1. Create Firestore Database
 
@@ -15,17 +15,18 @@ If you haven't already, create a Firestore database in your Firebase project:
 - Select a Firestore location. Choose the one closest to your users.
 - Click **Enable**.
 
-## 2. Orders Collection
+## 2. Data Collections
 
-There's no need to manually create the `orders` collection. The app will create it automatically when the first order is placed.
+There's no need to manually create the collections. The app will create them automatically when the first order is placed.
+
+### Orders Collection
 
 For reference, here is the data structure for an order document:
 
 ```json
 {
     "userId": "some-firebase-auth-uid",
-    "date": "July 20, 2024",
-    "createdAt": "July 20, 2024 at 10:00:00 AM UTC-5",
+    "createdAt": "Timestamp",
     "total": 1389.98,
     "status": "Delivered",
     "shippingAddress": {
@@ -45,7 +46,6 @@ For reference, here is the data structure for an order document:
                 "price": 1299.99,
                 "image": "...",
                 "category": "Electronics",
-                "data_ai_hint": "telescope space",
                 "description": "...",
                 "rating": 5,
                 "stock": 15
@@ -55,4 +55,21 @@ For reference, here is the data structure for an order document:
 }
 ```
 
-Product and customer data for this application are managed locally within the app's code and are not stored in Firestore.
+### Customers Collection
+
+When a user places an order, a corresponding document is created or updated in the `customers` collection. The document ID is the user's Firebase Authentication UID.
+
+```json
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "avatar": "https://url.to/user/photo.jpg",
+    "totalOrders": 5,
+    "totalSpent": 2450.75,
+    "firstOrderAt": "Timestamp",
+    "lastOrderAt": "Timestamp",
+    "data_ai_hint": "person portrait"
+}
+```
+
+Product data for this application is managed locally within the app's code and is not stored in Firestore.

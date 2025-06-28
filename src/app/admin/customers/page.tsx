@@ -1,4 +1,5 @@
 
+
 import { getCustomers } from '@/lib/customers';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -34,7 +35,7 @@ export default async function AdminCustomersPage() {
                   <TableCell>
                     <div className="flex items-center gap-3">
                         <Avatar className="h-9 w-9">
-                            <AvatarImage src={customer.avatar} alt={customer.name} data-ai-hint={customer.data_ai_hint} />
+                            <AvatarImage src={customer.avatar ?? undefined} alt={customer.name} data-ai-hint={customer.data_ai_hint} />
                             <AvatarFallback>{customer.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div className="font-medium">{customer.name}</div>
