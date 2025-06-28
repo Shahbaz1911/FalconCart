@@ -65,7 +65,7 @@ export function ProductView({ product }: ProductViewProps) {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+    <div className="grid md:grid-cols-2 gap-6 md:gap-12">
       <div className="bg-card rounded-lg p-4 flex items-center justify-center">
         {/* Add an ID here to be targeted by the animation */}
         <div id="product-image" className="aspect-square relative w-full max-w-md mx-auto">
@@ -81,14 +81,14 @@ export function ProductView({ product }: ProductViewProps) {
         </div>
       </div>
       <div className="flex flex-col justify-center">
-        <h1 className="text-3xl md:text-4xl font-bold font-headline mb-2">{product.name}</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-headline mb-2">{product.name}</h1>
         <p className="text-muted-foreground text-sm mb-4">{product.category}</p>
-        <p className="text-lg mb-6">{product.description}</p>
+        <p className="text-base mb-6">{product.description}</p>
         <div className="flex items-center justify-between mb-6">
-          <span className="text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
+          <span className="text-3xl md:text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
         </div>
         <AddToCartButton onClick={handleAddToCart} />
-        <div className="mt-12">
+        <div className="mt-8 md:mt-12">
           <Recommendations product={product} />
         </div>
       </div>
