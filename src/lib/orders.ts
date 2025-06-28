@@ -25,7 +25,7 @@ export interface Order {
   };
 }
 
-const mockOrders: Order[] = [
+export const mockInitialOrders: Order[] = [
     {
         id: 'ord-123-abc',
         date: 'July 20, 2024',
@@ -47,7 +47,7 @@ const mockOrders: Order[] = [
     {
         id: 'ord-456-def',
         date: 'August 02, 2024',
-        total: 569.98,
+        total: 539.98,
         status: 'Shipped',
         shippingAddress: {
             fullName: 'Maria Garcia',
@@ -65,7 +65,7 @@ const mockOrders: Order[] = [
     {
         id: 'ord-789-ghi',
         date: 'August 05, 2024',
-        total: 1189.97,
+        total: 1089.97,
         status: 'Processing',
         shippingAddress: {
             fullName: 'Sam Lee',
@@ -102,43 +102,3 @@ const mockOrders: Order[] = [
 
 // Type for creating a new order.
 export type OrderInput = Omit<Order, 'id' | 'date'>;
-
-// Converts a date to a readable date string
-const formatDate = (date: Date) => {
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-};
-
-export async function getOrders(): Promise<Order[]> {
-  // Simulate network latency
-  await new Promise(resolve => setTimeout(resolve, 300));
-  // Sort by date descending
-  return [...mockOrders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
-
-export async function getOrderById(id: string): Promise<Order | undefined> {
-  // Simulate network latency
-  await new Promise(resolve => setTimeout(resolve, 300));
-  return mockOrders.find(order => order.id === id);
-}
-
-// This function will now create and add an order to our in-memory list.
-export async function createOrder(orderData: OrderInput): Promise<Order> {
-    const newOrder: Order = {
-        ...orderData,
-        id: `ord-${Math.random().toString(36).substring(2, 9)}`,
-        date: formatDate(new Date()),
-    };
-    
-    // Add the new order to the beginning of the list
-    mockOrders.unshift(newOrder);
-    
-    console.log("Order created and added to mock list:", newOrder);
-
-    return newOrder;
-}

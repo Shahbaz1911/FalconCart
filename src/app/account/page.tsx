@@ -1,13 +1,15 @@
-import { getOrders } from '@/lib/orders';
+'use client';
+
+import { useOrders } from '@/hooks/use-orders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Package, CreditCard, Activity } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-export default async function AccountDashboardPage() {
-    const orders = await getOrders();
+export default function AccountDashboardPage() {
+    const { orders } = useOrders();
     const totalSpent = orders.reduce((acc, order) => acc + order.total, 0);
-    const latestOrder = orders.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+    const latestOrder = orders.length > 0 ? orders[0] : null;
 
   return (
     <div className="space-y-8">

@@ -1,4 +1,6 @@
-import { getOrderById } from '@/lib/orders';
+'use client';
+
+import { useOrders } from '@/hooks/use-orders';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -53,8 +55,9 @@ const OrderStatusTracker = ({ status }: { status: 'Processing' | 'Shipped' | 'De
     );
 }
 
-export default async function OrderDetailPage({ params }: OrderDetailPageProps) {
-  const order = await getOrderById(params.id);
+export default function OrderDetailPage({ params }: OrderDetailPageProps) {
+  const { getOrderById } = useOrders();
+  const order = getOrderById(params.id);
 
   if (!order) {
     notFound();

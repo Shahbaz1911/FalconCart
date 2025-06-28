@@ -22,7 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/components/auth-provider';
 import { generateOrderImage } from '@/ai/flows/generate-order-image';
 import { sendOrderConfirmation } from '@/ai/flows/send-order-confirmation';
-import { createOrder, type OrderInput } from '@/lib/orders';
+import { useOrders, type OrderInput } from '@/hooks/use-orders';
 
 // SVG for PayPal
 const PayPalIcon = () => (
@@ -62,6 +62,7 @@ const checkoutSchema = z.object({
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
   const router = useRouter();
   const [confirmationData, setConfirmationData] = useState<{
     orderId: string;
@@ -99,7 +100,7 @@ export default function CheckoutPage() {
         status: 'Processing',
       };
 
-      const newOrder = await createOrder(orderInput);
+      const newOrder = addOrder(orderInput);
       console.log(`Checkout successful. New Order created:`, newOrder);
 
       // Fire-and-forget email confirmation

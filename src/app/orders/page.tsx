@@ -1,4 +1,6 @@
-import { getOrders } from '@/lib/orders';
+'use client';
+
+import { useOrders } from '@/hooks/use-orders';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
@@ -6,8 +8,8 @@ import { PackageCheck, ChevronRight } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
 
-export default async function OrdersPage() {
-  const orders = await getOrders();
+export default function OrdersPage() {
+  const { orders } = useOrders();
 
   if (orders.length === 0) {
     return (

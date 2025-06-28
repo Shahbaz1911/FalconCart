@@ -1,5 +1,6 @@
+'use client';
 
-import { getOrders } from '@/lib/orders';
+import { useOrders } from '@/hooks/use-orders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PageHeader } from '@/components/admin/page-header';
@@ -8,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function AdminOrdersPage() {
-  const orders = await getOrders();
+export default function AdminOrdersPage() {
+  const { orders } = useOrders();
 
   return (
     <div className="space-y-8">

@@ -1,31 +1,46 @@
+'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Package, CreditCard, Users } from 'lucide-react';
 import { PageHeader } from '@/components/admin/page-header';
 import { Bar, BarChart as BarChartComponent, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { getOrders } from '@/lib/orders';
+import { useOrders } from '@/hooks/use-orders';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
-const chartData = [
-  { name: 'Jan', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Feb', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Mar', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Apr', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'May', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Jun', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Jul', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Aug', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Sep', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Oct', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Nov', total: Math.floor(Math.random() * 5000) + 1000 },
-  { name: 'Dec', total: Math.floor(Math.random() * 5000) + 1000 },
+const initialChartData = [
+  { name: 'Jan', total: 0 },
+  { name: 'Feb', total: 0 },
+  { name: 'Mar', total: 0 },
+  { name: 'Apr', total: 0 },
+  { name: 'May', total: 0 },
+  { name: 'Jun', total: 0 },
+  { name: 'Jul', total: 0 },
+  { name: 'Aug', total: 0 },
+  { name: 'Sep', total: 0 },
+  { name: 'Oct', total: 0 },
+  { name: 'Nov', total: 0 },
+  { name: 'Dec', total: 0 },
 ];
 
-export default async function AdminDashboardPage() {
-    const recentOrders = (await getOrders()).slice(0, 5);
+export default function AdminDashboardPage() {
+    const { orders } = useOrders();
+    const recentOrders = orders.slice(0, 5);
+
+    const [chartData, setChartData] = useState(initialChartData);
+    
+    useEffect(() => {
+        // This should run only on the client
+        const newChartData = initialChartData.map(month => ({
+            ...month,
+            total: Math.floor(Math.random() * 5000) + 1000
+        }));
+        setChartData(newChartData);
+    }, []);
+
   return (
     <div className="space-y-8">
       <PageHeader title="Dashboard" description="Here's a summary of your store's performance." />
@@ -46,8 +61,8 @@ export default async function AdminDashboardPage() {
                     <CreditCard className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+                    <div className="text-2xl font-bold">+{orders.length}</div>
+                    <p className="text-xs text-muted-foreground">Total orders placed</p>
                 </CardContent>
             </Card>
             <Card>
