@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
@@ -33,6 +32,7 @@ const apparelProducts: Product[] = [
 export function ApparelShowcase() {
   const componentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const spacerRef = useRef<HTMLDivElement>(null);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -40,33 +40,53 @@ export function ApparelShowcase() {
   }, []);
 
   useLayoutEffect(() => {
+    if (!isClient) return;
+    
     gsap.registerPlugin(ScrollTrigger);
 
     const component = componentRef.current;
     const track = trackRef.current;
+    const spacer = spacerRef.current;
 
-    if (!component || !track) return;
+    if (!component || !track || !spacer) return;
     
-    const scrollAmount = track.scrollWidth - component.clientWidth;
-    
-    if (scrollAmount <= 0) return;
+    // Let browser render before calculating widths
+    const timeoutId = setTimeout(() => {
+        const scrollAmount = track.scrollWidth - component.clientWidth;
+        
+        if (scrollAmount <= 0) {
+            spacer.style.height = '0px';
+            return;
+        }
 
-    let ctx = gsap.context(() => {
-      gsap.to(track, {
-        x: -scrollAmount,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: component,
-          start: 'top top',
-          pin: true,
-          scrub: 1,
-          end: () => `+=${scrollAmount}`,
-          invalidateOnRefresh: true,
-        },
-      });
-    }, component);
+        spacer.style.height = `${scrollAmount}px`;
 
-    return () => ctx.revert();
+        let ctx = gsap.context(() => {
+        gsap.to(track, {
+            x: -scrollAmount,
+            ease: 'none',
+            scrollTrigger: {
+            trigger: component,
+            start: 'top top',
+            pin: true,
+            scrub: 1,
+            end: () => `+=${scrollAmount}`,
+            invalidateOnRefresh: true,
+            },
+        });
+        }, component);
+
+        return () => {
+            ctx.revert();
+            // Reset spacer height on cleanup
+            if(spacer) {
+                spacer.style.height = '0px';
+            }
+        };
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+
   }, [isClient]);
 
   const header = (
@@ -93,7 +113,7 @@ export function ApparelShowcase() {
             </div>
         </div>
       
-      <div style={{ height: '100vh' }}></div>
+      <div ref={spacerRef} />
     </section>
   );
 }
