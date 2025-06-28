@@ -88,10 +88,10 @@ const mockOrders: Order[] = [
         status: 'Delivered',
         shippingAddress: {
             fullName: 'Alex Johnson',
-            address: '123 Cosmos Lane',
-            city: 'Starlight City',
-            state: 'CA',
-            zip: '90210',
+            address: '999 Rocket Road, Apt 5',
+            city: 'Cape Canaveral',
+            state: 'FL',
+            zip: '32920',
             country: 'USA'
         },
         items: [
@@ -101,15 +101,17 @@ const mockOrders: Order[] = [
 ];
 
 // Type for creating a new order.
-type OrderInput = Omit<Order, 'id' | 'date'>;
+export type OrderInput = Omit<Order, 'id' | 'date'>;
 
 // Converts a date to a readable date string
 const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
-    });
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 };
 
 export async function getOrders(): Promise<Order[]> {
@@ -125,12 +127,18 @@ export async function getOrderById(id: string): Promise<Order | undefined> {
   return mockOrders.find(order => order.id === id);
 }
 
-// This function is now a placeholder. The checkout page will simulate success without calling this.
-export async function createOrder(orderData: OrderInput): Promise<string> {
-    console.log("Simulating order creation with data:", orderData);
-    // In a real app, this would return a new order ID from a database.
-    // For now, we'll return a random mock ID.
-    const newOrderId = `ord-${Math.random().toString(36).substring(2, 9)}`;
-    console.log(`Generated mock order ID: ${newOrderId}`);
-    return newOrderId;
+// This function will now create and add an order to our in-memory list.
+export async function createOrder(orderData: OrderInput): Promise<Order> {
+    const newOrder: Order = {
+        ...orderData,
+        id: `ord-${Math.random().toString(36).substring(2, 9)}`,
+        date: formatDate(new Date()),
+    };
+    
+    // Add the new order to the beginning of the list
+    mockOrders.unshift(newOrder);
+    
+    console.log("Order created and added to mock list:", newOrder);
+
+    return newOrder;
 }

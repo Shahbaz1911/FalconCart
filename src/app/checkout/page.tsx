@@ -22,6 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/components/auth-provider';
 import { generateOrderImage } from '@/ai/flows/generate-order-image';
 import { sendOrderConfirmation } from '@/ai/flows/send-order-confirmation';
+import { createOrder, type OrderInput } from '@/lib/orders';
 
 // SVG for PayPal
 const PayPalIcon = () => (
@@ -81,17 +82,25 @@ export default function CheckoutPage() {
 
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     try {
-      // Since this version uses static data, we simulate order creation.
-      // We generate a mock order ID for the confirmation flows.
-      const newOrderId = `ord-${Math.random().toString(36).substring(2, 9)}`;
-      const newOrderDate = new Date().toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-      console.log(`Checkout successful. Mock Order ID: ${newOrderId}`);
+      const orderInput: OrderInput = {
+        shippingAddress: {
+          fullName: values.fullName,
+          address: values.address,
+          city: values.city,
+          state: values.state,
+          zip: values.zip,
+          country: values.country,
+        },
+        items: items.map(item => ({
+            product: item.product,
+            quantity: item.quantity,
+        })),
+        total: totalPrice,
+        status: 'Processing',
+      };
+
+      const newOrder = await createOrder(orderInput);
+      console.log(`Checkout successful. New Order created:`, newOrder);
 
       // Fire-and-forget email confirmation
       if (user?.email) {
@@ -101,13 +110,13 @@ export default function CheckoutPage() {
             const imageResult = await generateOrderImage({
               productNames: items.map(item => item.product.name),
               totalPrice: totalPrice,
-              orderId: newOrderId,
+              orderId: newOrder.id,
             });
 
             console.log('Sending confirmation email...');
             await sendOrderConfirmation({
               email: user.email!,
-              orderId: newOrderId,
+              orderId: newOrder.id,
               imageDataUri: imageResult.imageDataUri,
             });
           } catch (emailError) {
@@ -118,9 +127,9 @@ export default function CheckoutPage() {
       }
 
       setConfirmationData({
-          orderId: newOrderId,
-          orderDate: newOrderDate,
-          total: totalPrice,
+          orderId: newOrder.id,
+          orderDate: newOrder.date,
+          total: newOrder.total,
       });
 
     } catch (error) {
