@@ -32,7 +32,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('falcon-cart', JSON.stringify(items));
   }, [items]);
 
-  const addItem = (product: Product, quantity: number) => {
+  const addItem = React.useCallback((product: Product, quantity: number) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.product.id === product.id);
       if (existingItem) {
@@ -44,9 +44,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
       return [...prevItems, { product, quantity }];
     });
-  };
+  }, []);
 
-  const updateItemQuantity = (productId: string, quantity: number) => {
+  const updateItemQuantity = React.useCallback((productId: string, quantity: number) => {
     setItems((prevItems) => {
       if (quantity <= 0) {
         return prevItems.filter((item) => item.product.id !== productId);
@@ -55,24 +55,32 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         item.product.id === productId ? { ...item, quantity } : item
       );
     });
-  };
+  }, []);
 
-  const removeItem = (productId: string) => {
+  const removeItem = React.useCallback((productId: string) => {
     setItems((prevItems) => prevItems.filter((item) => item.product.id !== productId));
-  };
+  }, []);
 
-  const clearCart = () => {
+  const clearCart = React.useCallback(() => {
     setItems([]);
-  };
+  }, []);
 
-  const totalPrice = items.reduce(
+  const totalPrice = React.useMemo(() => items.reduce(
     (total, item) => total + item.product.price * item.quantity,
     0
-  );
+  ), [items]);
 
-  return React.createElement(CartContext.Provider, {
-    value: { items, addItem, updateItemQuantity, removeItem, clearCart, totalPrice }
-  }, children);
+  const value = React.useMemo(() => ({
+    items,
+    addItem,
+    updateItemQuantity,
+    removeItem,
+    clearCart,
+    totalPrice
+  }), [items, addItem, updateItemQuantity, removeItem, clearCart, totalPrice]);
+
+
+  return React.createElement(CartContext.Provider, { value: value }, children);
 };
 
 export const useCart = () => {

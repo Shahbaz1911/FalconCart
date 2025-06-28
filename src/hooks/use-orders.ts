@@ -52,7 +52,7 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
       });
   }, [user, authLoading]);
 
-  const addOrder = async (orderData: OrderInput): Promise<Order> => {
+  const addOrder = React.useCallback(async (orderData: OrderInput): Promise<Order> => {
     if (!user) {
       throw new Error("User must be logged in to place an order.");
     }
@@ -71,16 +71,15 @@ export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
     
     setOrders((prev) => [newOrder, ...prev]);
     return newOrder;
-  };
+  }, [user]);
 
-  const getOrderById = (id: string): Order | undefined => {
+  const getOrderById = React.useCallback((id: string): Order | undefined => {
     return orders.find(o => o.id === id);
-  };
+  }, [orders]);
   
-  // No need to sort here, Firestore query does it.
-  const value = { orders, loading, addOrder, getOrderById };
+  const value = React.useMemo(() => ({ orders, loading, addOrder, getOrderById }), [orders, loading, addOrder, getOrderById]);
 
-  return React.createElement(OrdersContext.Provider, { value }, children);
+  return React.createElement(OrdersContext.Provider, { value: value }, children);
 };
 
 export const useOrders = () => {
