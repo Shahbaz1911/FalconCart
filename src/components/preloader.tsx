@@ -54,7 +54,7 @@ export function Preloader() {
         !isVisible && 'opacity-0 pointer-events-none'
       )}
     >
-      <div className="w-full max-w-xs px-4">
+      <div className="w-full max-w-xs px-4 text-center">
         <div className="relative h-16 w-full mb-2">
             <div
                 className="absolute bottom-0 transition-all duration-100 ease-linear"
@@ -64,7 +64,10 @@ export function Preloader() {
             </div>
         </div>
         <Progress value={progress} className="h-2 w-full" />
-        <p className="mt-4 text-lg font-semibold text-center font-headline text-primary">
+        <p className="mt-4 text-5xl font-bold font-mono text-primary">
+          {progress}<span className="text-3xl">%</span>
+        </p>
+        <p className="mt-1 text-sm font-medium text-muted-foreground">
             Getting things ready...
         </p>
       </div>
