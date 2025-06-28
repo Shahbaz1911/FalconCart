@@ -8,7 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
-import { allProducts } from '@/lib/products';
+import { getProducts } from '@/lib/products';
 
 const MessageSchema = z.object({
   role: z.enum(['user', 'model']),
@@ -32,10 +32,6 @@ export async function conductChat(history: ChatInput): Promise<AssistantResponse
     return chatFlow(history);
 }
 
-const productCatalog = allProducts.map(p => 
-    `- Product ID: ${p.id}\n  Name: ${p.name}\n  Category: ${p.category}\n  Price: $${p.price.toFixed(2)}\n  Description: ${p.description}`
-).join('\n\n');
-
 const chatFlow = ai.defineFlow(
     {
         name: 'chatFlow',
@@ -43,6 +39,11 @@ const chatFlow = ai.defineFlow(
         outputSchema: AssistantResponseSchema,
     },
     async (chatHistory) => {
+        const allProducts = await getProducts();
+        const productCatalog = allProducts.map(p => 
+            `- Product ID: ${p.id}\n  Name: ${p.name}\n  Category: ${p.category}\n  Price: $${p.price.toFixed(2)}\n  Description: ${p.description}`
+        ).join('\n\n');
+
         // The last message is the user's prompt. The rest is history.
         const lastUserMessage = chatHistory.pop();
         if (!lastUserMessage || lastUserMessage.role !== 'user') {

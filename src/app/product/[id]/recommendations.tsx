@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getProductRecommendations } from '@/ai/flows/product-recommendations';
-import { getProductById, type Product } from '@/lib/products';
+import { getProductById, getProducts, type Product } from '@/lib/products';
 
 interface RecommendationsProps {
   product: Product;
@@ -18,6 +18,7 @@ export function Recommendations({ product }: RecommendationsProps) {
     const fetchRecommendations = async () => {
       setLoading(true);
       try {
+        // AI-based recommendations (if they work)
         const result = await getProductRecommendations({
           productId: product.id,
           productName: product.name,
@@ -25,20 +26,36 @@ export function Recommendations({ product }: RecommendationsProps) {
           productCategory: product.category,
         });
 
-        if (result && result.recommendations) {
+        let recommendedProducts: Product[] = [];
+
+        if (result && result.recommendations && result.recommendations.length > 0) {
           const recommendedProductPromises = result.recommendations
             .map(rec => getProductById(rec.productId));
-
+          
           const resolvedProducts = await Promise.all(recommendedProductPromises);
           
-          const recommendedProducts = resolvedProducts
-            .filter((p): p is Product => !!p && p.id !== product.id)
-            .slice(0, 3); // Take up to 3 valid, different products
-
-          setRecommendations(recommendedProducts);
+          recommendedProducts = resolvedProducts
+            .filter((p): p is Product => !!p && p.id !== product.id);
         }
+
+        // Fallback to category-based recommendations if AI fails or returns nothing
+        if (recommendedProducts.length === 0) {
+          console.log("AI recommendations failed or were empty, falling back to category-based.");
+          const allProducts = await getProducts();
+          recommendedProducts = allProducts
+            .filter(p => p.category === product.category && p.id !== product.id);
+        }
+
+        setRecommendations(recommendedProducts.slice(0, 3)); // Take up to 3 products
+
       } catch (error) {
-        console.error('Failed to fetch recommendations:', error);
+        console.error('Failed to fetch recommendations, falling back to category:', error);
+        // Fallback in case of error
+        const allProducts = await getProducts();
+        const categoryProducts = allProducts
+            .filter(p => p.category === product.category && p.id !== product.id)
+            .slice(0, 3);
+        setRecommendations(categoryProducts);
       } finally {
         setLoading(false);
       }

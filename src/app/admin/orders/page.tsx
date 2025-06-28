@@ -1,6 +1,7 @@
 'use client';
 
-import { useOrders } from '@/hooks/use-orders';
+import { useEffect, useState } from 'react';
+import { getAllOrders, type Order } from '@/lib/orders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { PageHeader } from '@/components/admin/page-header';
@@ -8,9 +9,34 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminOrdersPage() {
-  const { orders } = useOrders();
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllOrders().then(allOrders => {
+      setOrders(allOrders);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+        <div className="space-y-8">
+            <PageHeader title="Orders" description="Manage your store's orders." />
+            <Card>
+                <CardHeader><CardTitle>All Orders</CardTitle></CardHeader>
+                <CardContent>
+                    <div className="space-y-2">
+                        {[...Array(10)].map((_, i) => <Skeleton key={i} className="h-12 w-full" />)}
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    )
+  }
 
   return (
     <div className="space-y-8">

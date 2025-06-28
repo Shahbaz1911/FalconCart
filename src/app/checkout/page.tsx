@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -83,6 +82,7 @@ export default function CheckoutPage() {
 
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
     try {
+      // The useOrders hook will add the userId from the auth context.
       const orderInput: OrderInput = {
         shippingAddress: {
           fullName: values.fullName,
@@ -100,7 +100,7 @@ export default function CheckoutPage() {
         status: 'Processing',
       };
 
-      const newOrder = addOrder(orderInput);
+      const newOrder = await addOrder(orderInput);
       console.log(`Checkout successful. New Order created:`, newOrder);
 
       // Fire-and-forget email confirmation

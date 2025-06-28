@@ -27,17 +27,27 @@ export default function Home() {
     fetchProducts();
   }, []);
   
-  const featuredProducts = allProducts.slice(6, 10);
+  const featuredProducts = useMemo(() => {
+      // Create a copy and shuffle it to show different products on each load
+      return [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 4);
+  }, [allProducts]);
   
   const [selectedCategory, setSelectedCategory] = useState('All');
   
-  const categories = useMemo(() => ['All', ...new Set(allProducts.map(p => p.category))], [allProducts]);
+  const categories = useMemo(() => {
+      if (allProducts.length === 0) return [];
+      return ['All', ...new Set(allProducts.map(p => p.category))];
+  }, [allProducts]);
   
   const trendingProducts = useMemo(() => {
-    const products = selectedCategory === 'All'
-      ? allProducts.slice(0, 8)
+    if (allProducts.length === 0) return [];
+    
+    let products = selectedCategory === 'All'
+      ? allProducts
       : allProducts.filter(p => p.category === selectedCategory);
-    return products.slice(0, 8);
+      
+    // Sort by rating and then maybe stock or a random factor to ensure variety
+    return [...products].sort((a,b) => b.rating - a.rating).slice(0, 8);
   }, [allProducts, selectedCategory]);
 
   const features = [
@@ -57,20 +67,28 @@ export default function Home() {
         <p className="text-muted-foreground text-center mb-8">Check out what's popular right now.</p>
         
         <div className="flex justify-center flex-wrap gap-2 mb-8">
-          {categories.map(category => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? 'default' : 'secondary'}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </Button>
-          ))}
+          {loading ? (
+             <div className="flex gap-2">
+                 <Skeleton className="h-10 w-20" />
+                 <Skeleton className="h-10 w-24" />
+                 <Skeleton className="h-10 w-28" />
+             </div>
+          ) : (
+            categories.map(category => (
+                <Button
+                  key={category}
+                  variant={selectedCategory === category ? 'default' : 'secondary'}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </Button>
+            ))
+          )}
         </div>
 
         {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-72 w-full" />)}
+                {[...Array(8)].map((_, i) => <Skeleton key={i} className="h-[420px] w-full" />)}
             </div>
         ) : trendingProducts.length > 0 ? (
            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -91,7 +109,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold font-headline text-center mb-8">Our Featured Picks</h2>
         {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-72 w-full" />)}
+                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-[420px] w-full" />)}
             </div>
         ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

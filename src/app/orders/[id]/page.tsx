@@ -1,17 +1,18 @@
-
 'use client';
 
-import { useOrders } from '@/hooks/use-orders';
+import { useEffect, useState } from 'react';
+import { getOrderById, type Order } from '@/lib/orders';
 import { notFound, useParams } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CheckCircle2, Truck, Wrench, Download } from 'lucide-react';
+import { CheckCircle2, Truck, Wrench, Download, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const OrderStatusTracker = ({ status }: { status: 'Processing' | 'Shipped' | 'Delivered' }) => {
     const statuses = ['Processing', 'Shipped', 'Delivered'];
@@ -54,13 +55,14 @@ const OrderStatusTracker = ({ status }: { status: 'Processing' | 'Shipped' | 'De
 
 export default function OrderDetailPage() {
   const params = useParams();
-  const { getOrderById } = useOrders();
   const orderId = Array.isArray(params.id) ? params.id[0] : params.id;
-  const order = getOrderById(orderId);
+  const [order, setOrder] = useState<Order | null | undefined>(undefined);
 
-  if (!order) {
-    notFound();
-  }
+  useEffect(() => {
+    if (orderId) {
+      getOrderById(orderId).then(setOrder);
+    }
+  }, [orderId]);
 
   const handleDownloadOrderPdf = () => {
     if (!order) return;
@@ -153,6 +155,26 @@ export default function OrderDetailPage() {
     addFooter();
     doc.save(`Invoice-${order.id}.pdf`);
   };
+
+  if (order === undefined) {
+    return (
+        <div className="space-y-8">
+            <Skeleton className="h-12 w-1/3" />
+            <Skeleton className="h-24 w-full" />
+            <div className="grid md:grid-cols-3 gap-8">
+                <Skeleton className="md:col-span-2 h-64" />
+                <div className="space-y-6">
+                    <Skeleton className="h-32" />
+                    <Skeleton className="h-32" />
+                </div>
+            </div>
+        </div>
+    );
+  }
+
+  if (order === null) {
+    notFound();
+  }
 
   return (
     <div>

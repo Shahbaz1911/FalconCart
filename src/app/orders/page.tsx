@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useOrders } from '@/hooks/use-orders';
@@ -11,9 +10,10 @@ import Image from 'next/image';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { useAuth } from '@/components/auth-provider';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function OrdersPage() {
-  const { orders } = useOrders();
+  const { orders, loading } = useOrders();
   const { user } = useAuth();
 
   const handleDownloadHistoryPdf = () => {
@@ -76,6 +76,22 @@ export default function OrdersPage() {
     doc.save('order-history.pdf');
   };
 
+  if (loading) {
+    return (
+        <div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+                <Skeleton className="h-10 w-48" />
+                <Skeleton className="h-10 w-36" />
+            </div>
+            <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                    <Skeleton key={i} className="h-20 w-full" />
+                ))}
+            </div>
+        </div>
+    );
+  }
+
   if (orders.length === 0) {
     return (
         <div className="text-center py-20">
@@ -137,7 +153,7 @@ export default function OrdersPage() {
                 <div className="flex-1">
                   <h4 className="font-semibold mb-2">Items</h4>
                   <div className="flex -space-x-2 overflow-hidden">
-                    {order.items.map(({ product }) => (
+                    {order.items.slice(0, 5).map(({ product }) => (
                       <div key={product.id} className="inline-block h-12 w-12 rounded-full ring-2 ring-background">
                          <Image
                           src={product.image}

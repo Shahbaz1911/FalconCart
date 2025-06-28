@@ -1,15 +1,15 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DollarSign, Package, CreditCard, Users } from 'lucide-react';
 import { PageHeader } from '@/components/admin/page-header';
 import { Bar, BarChart as BarChartComponent, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useOrders } from '@/hooks/use-orders';
+import { getAllOrders, type Order } from '@/lib/orders';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { useEffect, useState } from 'react';
 
 const initialChartData = [
   { name: 'Jan', total: 0 },
@@ -27,13 +27,16 @@ const initialChartData = [
 ];
 
 export default function AdminDashboardPage() {
-    const { orders } = useOrders();
+    const [orders, setOrders] = useState<Order[]>([]);
     const recentOrders = orders.slice(0, 5);
 
     const [chartData, setChartData] = useState(initialChartData);
     
     useEffect(() => {
-        // This should run only on the client
+        // Fetch all orders for the admin view
+        getAllOrders().then(setOrders);
+
+        // This should run only on the client to generate random chart data
         const newChartData = initialChartData.map(month => ({
             ...month,
             total: Math.floor(Math.random() * 5000) + 1000

@@ -1,73 +1,76 @@
-
 'use client';
 
 import * as React from 'react';
-import { mockInitialOrders } from '@/lib/orders';
-import type { Order as OrderType, OrderInput as OrderInputType } from '@/lib/orders';
+import { useAuth } from '@/components/auth-provider';
+import { 
+    getOrdersByUser, 
+    createOrder,
+    type Order as OrderType, 
+    type OrderInput as LibOrderInput,
+} from '@/lib/orders';
 
 export type Order = OrderType;
-export type OrderInput = OrderInputType;
+// The input for the hook's addOrder function should not include the userId, as it's derived from the auth context.
+export type OrderInput = Omit<LibOrderInput, 'userId'>;
 
 interface OrdersContextType {
   orders: Order[];
-  addOrder: (orderData: OrderInput) => Order;
+  loading: boolean;
+  addOrder: (orderData: OrderInput) => Promise<Order>;
   getOrderById: (id: string) => Order | undefined;
 }
 
 const OrdersContext = React.createContext<OrdersContextType | undefined>(undefined);
 
-// Converts a date to a readable date string
-const formatDate = (date: Date) => {
-    return date.toLocaleString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
-};
-
 export const OrdersProvider = ({ children }: { children: React.ReactNode }) => {
-  const [orders, setOrders] = React.useState<Order[]>(() => {
-    if (typeof window !== 'undefined') {
-      const savedOrders = localStorage.getItem('falcon-orders');
-      try {
-        if (savedOrders) {
-          const parsedOrders = JSON.parse(savedOrders);
-          if (Array.isArray(parsedOrders)) {
-            return parsedOrders;
-          }
-        }
-      } catch (e) {
-        console.error("Failed to parse orders from localStorage", e);
-        return mockInitialOrders;
-      }
-    }
-    return mockInitialOrders;
-  });
+  const { user, loading: authLoading } = useAuth();
+  const [orders, setOrders] = React.useState<Order[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    localStorage.setItem('falcon-orders', JSON.stringify(orders));
-  }, [orders]);
+    if (authLoading) {
+        setLoading(true);
+        return;
+    }
+    if (!user) {
+      setOrders([]);
+      setLoading(false);
+      return;
+    }
 
-  const addOrder = (orderData: OrderInput): Order => {
-    const newOrder: Order = {
-      ...orderData,
-      id: `ord-${Math.random().toString(36).substring(2, 9)}`,
-      date: formatDate(new Date()),
-    };
+    setLoading(true);
+    getOrdersByUser(user.uid)
+      .then(userOrders => {
+        setOrders(userOrders);
+      })
+      .catch(err => {
+        console.error("Failed to fetch orders:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [user, authLoading]);
+
+  const addOrder = async (orderData: OrderInput): Promise<Order> => {
+    if (!user) {
+      throw new Error("User must be logged in to place an order.");
+    }
     
-    setOrders((prevOrders) => [newOrder, ...prevOrders]);
+    const completeOrderData: LibOrderInput = { ...orderData, userId: user.uid };
+    const newOrder = await createOrder(completeOrderData);
+    
+    setOrders((prev) => [newOrder, ...prev]);
     return newOrder;
   };
 
   const getOrderById = (id: string): Order | undefined => {
-    return orders.find(order => order.id === id);
+    return orders.find(o => o.id === id);
   };
+  
+  // No need to sort here, Firestore query does it.
+  const value = { orders, loading, addOrder, getOrderById };
 
-  const sortedOrders = [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  return React.createElement(OrdersContext.Provider, {
-    value: { orders: sortedOrders, addOrder, getOrderById }
-  }, children);
+  return React.createElement(OrdersContext.Provider, { value }, children);
 };
 
 export const useOrders = () => {

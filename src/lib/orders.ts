@@ -1,8 +1,18 @@
+import { db } from './firebase';
+import { 
+    collection, 
+    getDocs, 
+    doc, 
+    getDoc, 
+    addDoc, 
+    query, 
+    where, 
+    serverTimestamp, 
+    Timestamp,
+    orderBy
+} from 'firebase/firestore';
 import type { Product } from './products';
-import { allProducts } from './products';
 
-// Helper to find a product by its ID from the static list
-const getProduct = (id: string) => allProducts.find(p => p.id === id)!;
 
 export interface OrderItem {
   product: Product;
@@ -11,7 +21,9 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
-  date: string;
+  userId: string;
+  date: string; // User-friendly date string
+  createdAt: Timestamp; // For sorting
   total: number;
   status: 'Processing' | 'Shipped' | 'Delivered';
   items: OrderItem[];
@@ -25,80 +37,76 @@ export interface Order {
   };
 }
 
-export const mockInitialOrders: Order[] = [
-    {
-        id: 'ord-123-abc',
-        date: 'July 20, 2024',
-        total: 1549.98,
-        status: 'Delivered',
-        shippingAddress: {
-            fullName: 'Alex Johnson',
-            address: '123 Cosmos Lane',
-            city: 'Starlight City',
-            state: 'CA',
-            zip: '90210',
-            country: 'USA'
-        },
-        items: [
-            { product: getProduct('el1'), quantity: 1 }, // Astro-Gazer 9000
-            { product: getProduct('ac2'), quantity: 1 }  // Cyber-Shade Sunglasses
-        ]
-    },
-    {
-        id: 'ord-456-def',
-        date: 'August 02, 2024',
-        total: 539.98,
-        status: 'Shipped',
-        shippingAddress: {
-            fullName: 'Maria Garcia',
-            address: '456 Future Ave',
-            city: 'Neo-Metropolis',
-            state: 'NY',
-            zip: '10001',
-            country: 'USA'
-        },
-        items: [
-            { product: getProduct('fw1'), quantity: 1 }, // Quantum Sneakers
-            { product: getProduct('ap1'), quantity: 1 }  // Gravity-Defy Hoodie
-        ]
-    },
-    {
-        id: 'ord-789-ghi',
-        date: 'August 05, 2024',
-        total: 1089.97,
-        status: 'Processing',
-        shippingAddress: {
-            fullName: 'Sam Lee',
-            address: '789 Tech Terrace',
-            city: 'Silicon Valley',
-            state: 'CA',
-            zip: '94043',
-            country: 'USA'
-        },
-        items: [
-            { product: getProduct('hg2'), quantity: 1 }, // Zero-Gravity Bookshelf
-            { product: getProduct('el2'), quantity: 1 }, // Nova-Glow Lamp
-            { product: getProduct('ac5'), quantity: 1 }  // Stealth-Wallet
-        ]
-    },
-     {
-        id: 'ord-jkl-012',
-        date: 'June 10, 2024',
-        total: 239.98,
-        status: 'Delivered',
-        shippingAddress: {
-            fullName: 'Alex Johnson',
-            address: '999 Rocket Road, Apt 5',
-            city: 'Cape Canaveral',
-            state: 'FL',
-            zip: '32920',
-            country: 'USA'
-        },
-        items: [
-            { product: getProduct('ap9'), quantity: 2 } // Vertex Vest
-        ]
-    }
-];
+export type OrderInput = Omit<Order, 'id' | 'date' | 'createdAt'>;
 
-// Type for creating a new order.
-export type OrderInput = Omit<Order, 'id' | 'date'>;
+// Converts a Firestore Timestamp to a readable date string
+const formatDate = (timestamp: Timestamp) => {
+    return timestamp.toDate().toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+
+const fromFirestore = (docSnap: any): Order => {
+    const data = docSnap.data();
+    return {
+        id: docSnap.id,
+        ...data,
+        date: formatDate(data.createdAt),
+    } as Order;
+}
+
+export async function createOrder(orderData: OrderInput): Promise<Order> {
+    if (!db) {
+      throw new Error("Firestore not configured.");
+    }
+    
+    const orderWithTimestamp = {
+        ...orderData,
+        createdAt: serverTimestamp(),
+    };
+
+    const orderRef = await addDoc(collection(db, 'orders'), orderWithTimestamp);
+    
+    // Fetch the doc again to get the server-generated timestamp for immediate UI update
+    const newOrderDoc = await getDoc(orderRef);
+    return fromFirestore(newOrderDoc);
+}
+
+export async function getOrdersByUser(userId: string): Promise<Order[]> {
+    if (!db) return [];
+    
+    const ordersCol = collection(db, 'orders');
+    const q = query(ordersCol, where("userId", "==", userId), orderBy("createdAt", "desc"));
+    const orderSnapshot = await getDocs(q);
+    
+    return orderSnapshot.docs.map(fromFirestore);
+}
+
+export async function getAllOrders(): Promise<Order[]> {
+    if (!db) return [];
+    
+    const ordersCol = collection(db, 'orders');
+    const q = query(ordersCol, orderBy("createdAt", "desc"));
+    const orderSnapshot = await getDocs(q);
+    
+    return orderSnapshot.docs.map(fromFirestore);
+}
+
+export async function getOrderById(orderId: string): Promise<Order | undefined> {
+    if (!db) return undefined;
+    
+    try {
+        const orderDoc = doc(db, 'orders', orderId);
+        const orderSnapshot = await getDoc(orderDoc);
+        
+        if (orderSnapshot.exists()) {
+            return fromFirestore(orderSnapshot);
+        }
+    } catch (error) {
+        console.error("Error fetching order by ID:", error);
+    }
+
+    return undefined;
+}
