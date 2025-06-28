@@ -62,7 +62,11 @@ const checkoutSchema = z.object({
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
-  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [confirmationData, setConfirmationData] = useState<{
+    orderId: string;
+    orderDate: string;
+    total: number;
+  } | null>(null);
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -76,11 +80,17 @@ export default function CheckoutPage() {
   });
 
   const onSubmit = async (values: z.infer<typeof checkoutSchema>) => {
-    setIsPlacingOrder(true);
     try {
       // Since this version uses static data, we simulate order creation.
       // We generate a mock order ID for the confirmation flows.
       const newOrderId = `ord-${Math.random().toString(36).substring(2, 9)}`;
+      const newOrderDate = new Date().toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
       console.log(`Checkout successful. Mock Order ID: ${newOrderId}`);
 
       // Fire-and-forget email confirmation
@@ -107,12 +117,14 @@ export default function CheckoutPage() {
         })();
       }
 
-      // The success animation will take over from here.
-      // It handles clearing the cart and redirecting upon completion.
+      setConfirmationData({
+          orderId: newOrderId,
+          orderDate: newOrderDate,
+          total: totalPrice,
+      });
 
     } catch (error) {
       console.error('An unexpected error occurred during checkout:', error);
-      setIsPlacingOrder(false); // Stop animation on error
       toast({
         title: 'Checkout Failed',
         description: 'There was a problem processing your request. Please try again.',
@@ -126,11 +138,18 @@ export default function CheckoutPage() {
     router.push('/orders');
   };
 
-  if (isPlacingOrder) {
-      return <OrderSuccessAnimation onComplete={handleAnimationComplete} />;
+  if (confirmationData) {
+      return (
+        <OrderSuccessAnimation
+            orderId={confirmationData.orderId}
+            orderDate={confirmationData.orderDate}
+            total={confirmationData.total}
+            onComplete={handleAnimationComplete}
+        />
+      );
   }
   
-  if (items.length === 0 && !isPlacingOrder) {
+  if (items.length === 0) {
     return (
         <div className="text-center py-20">
             <h1 className="text-3xl font-bold font-headline">Your cart is empty.</h1>

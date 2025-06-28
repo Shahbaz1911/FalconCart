@@ -1,69 +1,63 @@
+
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Truck } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import gsap from 'gsap';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Button } from './ui/button';
 
 interface OrderSuccessAnimationProps {
+  orderId: string;
+  orderDate: string;
+  total: number;
   onComplete: () => void;
 }
 
-export function OrderSuccessAnimation({ onComplete }: OrderSuccessAnimationProps) {
+export function OrderSuccessAnimation({ orderId, orderDate, total, onComplete }: OrderSuccessAnimationProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const truckRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
-    const truck = truckRef.current;
-    if (!truck) return;
-
-    // Set initial state
-    gsap.set(truck, { x: -300, opacity: 1 });
-    gsap.set(textRef.current, { y: 30, opacity: 0 });
 
     const tl = gsap.timeline({
-        delay: 0.5,
         onComplete: () => {
-            document.body.style.overflow = '';
-            setTimeout(onComplete, 500); // Give a bit of time for fade out
+            gsap.to(containerRef.current, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    document.body.style.overflow = '';
+                    onComplete();
+                }
+            })
         }
     });
 
-    // 1. Truck arrives and text appears
-    tl.to(truck, {
-        x: '50vw',
-        translateX: '-50%',
-        duration: 1.5,
-        ease: 'power2.inOut'
-    })
-    .to(textRef.current, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power2.out'
-    }, "-=1.0");
+    // 1. Fade in background and scale up card
+    tl.to(containerRef.current, { opacity: 1, duration: 0.3 })
+      .fromTo(cardRef.current, 
+        { scale: 0.5, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' }
+      );
 
-    // 2. Truck jiggles and pauses
-    tl.to(truck, {
-        x: '+=10',
-        yoyo: true,
-        repeat: 3,
-        duration: 0.1,
-        ease: 'power1.inOut'
-    }, "+=0.5");
+    // 2. Animate the checkmark icon
+    tl.fromTo(iconRef.current,
+        { scale: 0 },
+        { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.5)', clearProps: 'all' },
+        "-=0.3"
+    );
 
+    // 3. Fade in details and button
+    tl.fromTo('.order-detail-item', 
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, stagger: 0.1, duration: 0.4 },
+        "-=0.2"
+    );
 
-    // 3. Truck departs and text fades
-    tl.to(truck, {
-        x: window.innerWidth + 300,
-        duration: 1.5,
-        ease: 'power2.in'
-    }, "+=1")
-    .to(textRef.current, {
-        opacity: 0,
-        duration: 0.5
-    }, "<");
+    // 4. Wait for a few seconds before automatically continuing
+    tl.to({}, { duration: 4 });
 
 
     return () => {
@@ -73,13 +67,35 @@ export function OrderSuccessAnimation({ onComplete }: OrderSuccessAnimationProps
   }, [onComplete]);
 
   return (
-    <div ref={containerRef} className="fixed inset-0 z-[200] flex items-center justify-center bg-background/90 backdrop-blur-sm overflow-hidden">
-      <div ref={truckRef} className="absolute">
-        <Truck className="w-28 h-28 text-primary" />
-      </div>
-      <h2 ref={textRef} className="absolute text-3xl font-bold font-headline text-center text-primary mt-48">
-        Your order is on its way!
-      </h2>
+    <div ref={containerRef} className="fixed inset-0 z-[200] flex items-center justify-center bg-background/90 backdrop-blur-sm opacity-0">
+        <Card ref={cardRef} className="w-full max-w-md text-center p-4 sm:p-8">
+            <CardHeader>
+                <div className="mx-auto">
+                    <CheckCircle2 ref={iconRef} className="w-20 h-20 text-green-500" />
+                </div>
+                <CardTitle className="text-3xl font-bold font-headline mt-4">Order Confirmed!</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-left">
+                <p className="text-muted-foreground text-center">Thank you for your purchase. A confirmation email has been sent.</p>
+                <div className="border-t pt-4 space-y-2">
+                    <div className="flex justify-between order-detail-item">
+                        <span className="text-muted-foreground">Order ID:</span>
+                        <span className="font-mono text-sm">{orderId}</span>
+                    </div>
+                    <div className="flex justify-between order-detail-item">
+                        <span className="text-muted-foreground">Date:</span>
+                        <span className="font-medium">{orderDate}</span>
+                    </div>
+                     <div className="flex justify-between order-detail-item">
+                        <span className="text-muted-foreground">Total:</span>
+                        <span className="font-bold text-lg">${total.toFixed(2)}</span>
+                    </div>
+                </div>
+                <Button className="w-full mt-6 order-detail-item" onClick={onComplete}>
+                    View Your Orders
+                </Button>
+            </CardContent>
+        </Card>
     </div>
   );
 }
