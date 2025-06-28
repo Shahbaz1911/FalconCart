@@ -4,12 +4,40 @@ import { useOrders } from '@/hooks/use-orders';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';
-import { PackageCheck, ChevronRight } from 'lucide-react';
+import { PackageCheck, ChevronRight, Download } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Image from 'next/image';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 export default function OrdersPage() {
   const { orders } = useOrders();
+
+  const handleDownloadHistoryPdf = () => {
+    const doc = new jsPDF();
+    doc.text("Order History", 14, 16);
+    
+    const tableColumn = ["Order ID", "Date", "Status", "Total"];
+    const tableRows: (string | number)[][] = [];
+
+    orders.forEach(order => {
+      const orderData = [
+        order.id,
+        order.date,
+        order.status,
+        `$${order.total.toFixed(2)}`
+      ];
+      tableRows.push(orderData);
+    });
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save('order-history.pdf');
+  };
 
   if (orders.length === 0) {
     return (
@@ -35,9 +63,15 @@ export default function OrdersPage() {
 
   return (
     <div>
-      <h1 className="text-3xl md:text-4xl font-headline font-bold mb-8">
-        Your Orders
-      </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
+        <h1 className="text-3xl md:text-4xl font-headline font-bold">
+          Your Orders
+        </h1>
+        <Button variant="outline" onClick={handleDownloadHistoryPdf}>
+            <Download className="mr-2 h-4 w-4" />
+            Download History
+        </Button>
+      </div>
       <Accordion type="single" collapsible className="w-full space-y-4">
         {orders.map(order => (
           <AccordionItem key={order.id} value={order.id} className="border rounded-lg bg-card">

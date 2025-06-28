@@ -6,8 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
 import Link from 'next/link';
-import { CheckCircle2, Truck, Wrench } from 'lucide-react';
+import { CheckCircle2, Truck, Wrench, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 interface OrderDetailPageProps {
@@ -63,14 +66,72 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
     notFound();
   }
 
+  const handleDownloadOrderPdf = () => {
+    if (!order) return;
+    const doc = new jsPDF();
+
+    // Title
+    doc.setFontSize(22);
+    doc.text("Order Confirmation", 14, 22);
+
+    // Order Info
+    doc.setFontSize(12);
+    doc.text(`Order ID: ${order.id}`, 14, 32);
+    doc.text(`Order Date: ${order.date}`, 14, 38);
+    doc.text(`Status: ${order.status}`, 14, 44);
+
+    // Shipping Address
+    doc.setFontSize(16);
+    doc.text("Shipping Address", 14, 60);
+    doc.setFontSize(11);
+    const address = order.shippingAddress;
+    doc.text(`${address.fullName}`, 14, 68);
+    doc.text(`${address.address}`, 14, 74);
+    doc.text(`${address.city}, ${address.state} ${address.zip}`, 14, 80);
+    doc.text(`${address.country}`, 14, 86);
+    
+    // Items Table
+    const tableColumn = ["Product", "Quantity", "Price", "Subtotal"];
+    const tableRows: (string | number)[][] = [];
+
+    order.items.forEach(item => {
+        const itemData = [
+            item.product.name,
+            item.quantity,
+            `$${item.product.price.toFixed(2)}`,
+            `$${(item.product.price * item.quantity).toFixed(2)}`
+        ];
+        tableRows.push(itemData);
+    });
+
+    autoTable(doc, {
+        head: [tableColumn],
+        body: tableRows,
+        startY: 96,
+    });
+
+    // Total
+    const finalY = (doc as any).lastAutoTable.finalY; // Get end position of table
+    doc.setFontSize(14);
+    doc.text(`Total: $${order.total.toFixed(2)}`, 14, finalY + 10);
+
+    doc.save(`order-${order.id}.pdf`);
+  };
+
   return (
     <div>
-      <div className="mb-8">
-        <Link href="/orders" className="text-sm text-primary hover:underline">&larr; Back to Orders</Link>
-        <h1 className="text-3xl md:text-4xl font-headline font-bold mt-2">
-          Order Details
-        </h1>
-        <p className="text-sm text-muted-foreground font-mono mt-1">ID: {order.id}</p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 gap-4">
+        <div>
+          <Link href="/orders" className="text-sm text-primary hover:underline">&larr; Back to Orders</Link>
+          <h1 className="text-3xl md:text-4xl font-headline font-bold mt-2">
+            Order Details
+          </h1>
+          <p className="text-sm text-muted-foreground font-mono mt-1">ID: {order.id}</p>
+        </div>
+        <Button variant="outline" onClick={handleDownloadOrderPdf} className="mt-2 sm:mt-0">
+            <Download className="mr-2 h-4 w-4" />
+            Download PDF
+        </Button>
       </div>
       
       <Card className="mb-8">
