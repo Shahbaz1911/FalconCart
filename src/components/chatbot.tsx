@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { Bot, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +15,33 @@ import { cn } from '@/lib/utils';
 import { conductChat } from '@/ai/flows/chat';
 import type { Message } from '@/ai/flows/chat';
 import { useIsMobile } from '@/hooks/use-mobile';
+
+// Helper function to parse markdown links and render them as interactive components.
+const renderMessageContent = (content: string) => {
+  const linkRegex = /(\[.*?\]\(.*?\))/g;
+  const parts = content.split(linkRegex);
+
+  return parts.map((part, index) => {
+    const match = part.match(/\[(.*?)\]\((.*?)\)/);
+    if (match) {
+      const text = match[1];
+      const href = match[2];
+      return (
+        <Link
+          key={index}
+          href={href}
+          className="text-primary font-medium underline hover:text-primary/80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {text}
+        </Link>
+      );
+    }
+    return part;
+  });
+};
+
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -109,13 +137,13 @@ export function Chatbot() {
                     )}
                     <div
                         className={cn(
-                        'max-w-[80%] rounded-lg px-3 py-2 text-sm shadow-sm',
+                        'max-w-[80%] rounded-lg px-3 py-2 text-sm shadow-sm whitespace-pre-wrap',
                         message.role === 'user'
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-card'
                         )}
                     >
-                        {message.content}
+                        {renderMessageContent(message.content)}
                     </div>
                     </div>
                 ))}
