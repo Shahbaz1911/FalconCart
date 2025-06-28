@@ -8,6 +8,7 @@
 
 import { ai } from '@/ai/genkit';
 import { z } from 'genkit';
+import { allProducts } from '@/lib/products';
 
 const MessageSchema = z.object({
   role: z.enum(['user', 'model']),
@@ -22,6 +23,10 @@ export async function conductChat(history: ChatInput): Promise<Message> {
     return chatFlow(history);
 }
 
+const productCatalog = allProducts.map(p => 
+    `- Name: ${p.name}\n  Category: ${p.category}\n  Price: $${p.price.toFixed(2)}\n  Description: ${p.description}`
+).join('\n\n');
+
 const chatFlow = ai.defineFlow(
     {
         name: 'chatFlow',
@@ -30,9 +35,17 @@ const chatFlow = ai.defineFlow(
     },
     async (history) => {
         const { text } = await ai.generate({
-            prompt: `You are FalconBot, a friendly and helpful e-commerce assistant for "Falcon Cart", a store that sells futuristic and high-tech products like personal telescopes, self-lacing sneakers, smart plant pots, and more.
-            Your goal is to assist users with their questions about products, orders, and shipping.
-            Keep your responses concise and friendly. Do not make up products. If you don't know something, say you don't have that information.`,
+            prompt: `You are FalconBot, a friendly and helpful e-commerce assistant for "Falcon Cart".
+Your goal is to assist users with their questions about products, orders, and shipping.
+Keep your responses concise and friendly.
+
+You MUST use the product catalog below as your only source of truth for product information.
+If a user asks about a product not in the list, politely say you don't have information on it. Do not make up products or details.
+
+*** PRODUCT CATALOG ***
+${productCatalog}
+*** END OF CATALOG ***
+`,
             history: history.map(m => ({role: m.role, content: [{text: m.content}]})),
             config: {
                 temperature: 0.3,
