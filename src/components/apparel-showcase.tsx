@@ -19,7 +19,15 @@ const apparelProducts: Product[] = [
     { id: 'ap9', name: 'Vertex Vest', price: 119.99, image: 'https://images.unsplash.com/photo-1544022669-e489b019919b?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 4, stock: 22, description: 'A versatile vest for layering in any season.', data_ai_hint: 'utility vest' },
     { id: 'ap10', name: 'Tempest Tactical Jacket', price: 249.99, image: 'https://images.unsplash.com/photo-1591946614725-3b15a6873263?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 18, description: 'A rugged jacket with a clean, modern design.', data_ai_hint: 'tactical jacket' },
     { id: 'ap11', name: 'Nova-Thread Polo', price: 89.99, image: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1915&auto=format&fit=crop', category: 'Apparel', rating: 4, stock: 45, description: 'A classic polo shirt made with advanced, soft-touch fabric.', data_ai_hint: 'polo shirt' },
-    { id: 'ap12', name: 'Zenith Zip-Up', price: 139.99, image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 20, description: 'A comfortable and stylish zip-up for everyday wear.', data_ai_hint: 'zip-up hoodie' }
+    { id: 'ap12', name: 'Zenith Zip-Up', price: 139.99, image: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 20, description: 'A comfortable and stylish zip-up for everyday wear.', data_ai_hint: 'zip-up hoodie' },
+    { id: 'ap13', name: 'Cosmic Bomber Jacket', price: 229.99, image: 'https://images.unsplash.com/photo-1542485223-e69c095a12d1?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 20, description: 'A sleek bomber jacket with an embroidered star map on the back. Out of this world style.', data_ai_hint: 'bomber jacket' },
+    { id: 'ap14', name: 'Orbit Performance Shorts', price: 79.99, image: 'https://images.unsplash.com/photo-1591585721625-f5581c3c9e6c?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 4, stock: 50, description: 'Lightweight, breathable shorts designed for maximum mobility and comfort, whether you are on a run or exploring the city.', data_ai_hint: 'athletic shorts' },
+    { id: 'ap15', name: 'Nebula-Weave Sweater', price: 159.99, image: 'https://images.unsplash.com/photo-1616704128212-040296715f57?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 30, description: 'A cozy sweater made from a unique, shimmering thread that mimics the colors of a distant nebula.', data_ai_hint: 'stylish sweater' },
+    { id: 'ap16', name: 'Horizon Henley Shirt', price: 99.99, image: 'https://images.unsplash.com/photo-1622470953794-32404b8ce17c?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 4, stock: 40, description: 'A classic Henley shirt, reimagined with durable, soft-spun cotton for everyday adventures.', data_ai_hint: 'henley shirt' },
+    { id: 'ap17', name: 'Apex Athletic Leggings', price: 119.99, image: 'https://images.unsplash.com/photo-1594911772127-4a78b77464a9?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 35, description: 'High-performance leggings that offer both support and style, perfect for a workout or a day out.', data_ai_hint: 'athletic leggings' },
+    { id: 'ap18', name: 'Strata Layered Tee', price: 69.99, image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 4, stock: 60, description: 'A comfortable tee with a unique layered design, adding a touch of modern style to a classic look.', data_ai_hint: 'stylish tshirt' },
+    { id: 'ap19', name: 'Vortex Denim Jacket', price: 199.99, image: 'https://images.unsplash.com/photo-1543087904-2cb235aadd35?q=80&w=1974&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 22, description: 'A timeless denim jacket with a modern fit and subtle, futuristic detailing on the cuffs and collar.', data_ai_hint: 'denim jacket' },
+    { id: 'ap20', name: 'Pulse Performance Socks', price: 29.99, image: 'https://images.unsplash.com/photo-1610212570263-039c99e90089?q=80&w=2070&auto=format&fit=crop', category: 'Apparel', rating: 5, stock: 100, description: 'Comfortable and durable socks designed to keep your feet cool and supported all day long.', data_ai_hint: 'athletic socks' },
 ];
 
 export function ApparelShowcase() {
@@ -32,35 +40,33 @@ export function ApparelShowcase() {
   }, []);
 
   useLayoutEffect(() => {
-    if (isClient) {
-      gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 
-      const component = componentRef.current;
-      const track = trackRef.current;
+    const component = componentRef.current;
+    const track = trackRef.current;
 
-      if (!component || !track) return;
-      
-      const scrollAmount = track.scrollWidth - component.clientWidth;
-      
-      if (scrollAmount <= 0) return;
+    if (!component || !track) return;
+    
+    const scrollAmount = track.scrollWidth - component.clientWidth;
+    
+    if (scrollAmount <= 0) return;
 
-      let ctx = gsap.context(() => {
-        gsap.to(track, {
-          x: -scrollAmount,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: component,
-            start: 'top top',
-            pin: true,
-            scrub: 1,
-            end: () => `+=${scrollAmount}`,
-            invalidateOnRefresh: true,
-          },
-        });
-      }, component);
+    let ctx = gsap.context(() => {
+      gsap.to(track, {
+        x: -scrollAmount,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: component,
+          start: 'top top',
+          pin: true,
+          scrub: 1,
+          end: () => `+=${scrollAmount}`,
+          invalidateOnRefresh: true,
+        },
+      });
+    }, component);
 
-      return () => ctx.revert();
-    }
+    return () => ctx.revert();
   }, [isClient]);
 
   const header = (
