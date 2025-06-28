@@ -66,7 +66,7 @@ export function ProductView({ product }: ProductViewProps) {
 
   return (
     <>
-      <div className="grid md:grid-cols-2 gap-6 md:gap-12 pb-24 md:pb-0">
+      <div className="grid md:grid-cols-2 gap-6 md:gap-12">
         <div className="md:bg-card md:rounded-lg md:p-4 flex items-center justify-center">
           <div id="product-image" className="aspect-square relative w-full max-w-md mx-auto">
             <Image
@@ -81,15 +81,17 @@ export function ProductView({ product }: ProductViewProps) {
           </div>
         </div>
         <div className="flex flex-col justify-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-headline mb-2">{product.name}</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold font-headline mb-2">{product.name}</h1>
           <p className="text-muted-foreground text-sm mb-4">{product.category}</p>
-          <p className="text-base mb-6">{product.description}</p>
+          
+          <div className="hidden md:flex items-center justify-between">
+              <span className="text-3xl md:text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
+          </div>
+
+          <p className="text-base text-muted-foreground my-6">{product.description}</p>
           
           {/* Desktop price + add to cart button */}
           <div className="hidden md:flex flex-col gap-6">
-             <div className="flex items-center justify-between">
-                <span className="text-3xl md:text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
-            </div>
             <AddToCartButton onClick={handleAddToCart} />
           </div>
 
@@ -99,10 +101,13 @@ export function ProductView({ product }: ProductViewProps) {
         </div>
       </div>
       
+      {/* Spacer for mobile to push content above the sticky bar */}
+      <div className="h-24 md:hidden" />
+
       {/* Mobile-only sticky add to cart bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t p-4 flex items-center justify-between gap-4 z-40">
         <span className="text-xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
-        <div className="flex-grow">
+        <div className="flex-grow max-w-xs">
              <AddToCartButton onClick={handleAddToCart} />
         </div>
       </div>
