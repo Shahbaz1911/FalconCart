@@ -33,10 +33,16 @@ const chatFlow = ai.defineFlow(
         inputSchema: ChatInputSchema,
         outputSchema: MessageSchema,
     },
-    async (history) => {
-        const { text } = await ai.generate({
+    async (chatHistory) => {
+        // The last message is the user's prompt. The rest is history.
+        const lastUserMessage = chatHistory.pop();
+        if (!lastUserMessage || lastUserMessage.role !== 'user') {
+            return { role: 'model', content: "I'm having trouble understanding. Please try again." };
+        }
+
+        const response = await ai.generate({
             prompt: `You are FalconBot, a friendly and helpful e-commerce assistant for "Falcon Cart".
-Your goal is to assist users with their questions about products, orders, and shipping.
+Your goal is to assist users with their questions about products.
 Keep your responses concise and friendly.
 
 You MUST use the product catalog below as your only source of truth for product information.
@@ -45,8 +51,11 @@ If a user asks about a product not in the list, politely say you don't have info
 *** PRODUCT CATALOG ***
 ${productCatalog}
 *** END OF CATALOG ***
+
+Based on the conversation history and the product catalog, answer the following user question.
+User Question: "${lastUserMessage.content}"
 `,
-            history: history.map(m => ({role: m.role, content: [{text: m.content}]})),
+            history: chatHistory.map(m => ({role: m.role, content: [{text: m.content}]})),
             config: {
                 temperature: 0.3,
             },
@@ -54,7 +63,7 @@ ${productCatalog}
         
         return {
             role: 'model',
-            content: text,
+            content: response.text,
         };
     }
 );
