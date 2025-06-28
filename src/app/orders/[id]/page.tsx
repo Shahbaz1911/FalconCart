@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useOrders } from '@/hooks/use-orders';
@@ -65,14 +66,10 @@ export default function OrderDetailPage() {
     if (!order) return;
     const doc = new jsPDF();
     
-    // Base64 encoded SVG for the logo
-    const logo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4QzZCNUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNC41IDE2LjVjLTEuNSAxLjI2LTIgNS0yIDVzMy43NC0uNSA1LTJjLjcxLS44NC43LTIuMy4wNS0zLjEyUzUuMjEgMTUuNjYgNC41IDE2LjV6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNWEyLjI1IDIuMjUgMCAwIDAtMy4xOC0zLjE4bC0zLjUgMy41YTIuMjUgMi4yNSAwIDAgMCAzLjE4IDMuMTh6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNSIvPjxwYXRoIGQ9Ik03IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xNyAxOGguMDEiLz48cGF0aCBkPSJNMTAgMTFoLjAxIi8+PHBhdGggZD0iTTE0IDdoLjAxIi8+PHBhdGggZD0ibTIxLjE1IDIuODUtMi4zIDIuM2EyLjI1IDIuMjUgMCAwIDEtMy4xOCAwTDEyIDQuNmEyLjI1IDIuMjUgMCAwIDEgMC0zLjE4bDIuMy0yLjNhMi4yNSAyLjI1IDAgMCAxIDMuMTggMGwzLjUgMy41YTIuMjUgMi4yNSAwIDAgMSAwIDMuMTh6Ii8+PC9zdmc+';
-
     const addHeader = () => {
-      doc.addImage(logo, 'PNG', 14, 15, 12, 12);
       doc.setFontSize(22);
       doc.setFont('helvetica', 'bold');
-      doc.text("Falcon Cart", 30, 22);
+      doc.text("Falcon Cart", 14, 22);
 
       doc.setFontSize(16);
       doc.text("Invoice", 196, 22, { align: 'right' });
