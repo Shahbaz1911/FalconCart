@@ -1,5 +1,3 @@
-import { db } from './firebase';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 export interface Customer {
   id: string;
@@ -11,36 +9,36 @@ export interface Customer {
   data_ai_hint?: string;
 }
 
+const allCustomers: Customer[] = [
+    {
+        id: 'usr-1',
+        name: "Alex Johnson",
+        email: "alex.j@example.com",
+        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop",
+        totalOrders: 3,
+        totalSpent: 1549.97,
+        data_ai_hint: "man portrait"
+    },
+    {
+        id: 'usr-2',
+        name: "Maria Garcia",
+        email: "maria.g@example.com",
+        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop",
+        totalOrders: 1,
+        totalSpent: 499.99,
+        data_ai_hint: "woman portrait"
+    }
+];
+
+
 export async function getCustomers(): Promise<Customer[]> {
-  if (!db) {
-    console.warn("Firestore is not configured. Returning empty customers array.");
-    return [];
-  }
-  try {
-    const customersCol = collection(db, 'customers');
-    const customerSnapshot = await getDocs(customersCol);
-    const customerList = customerSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Customer));
-    return customerList;
-  } catch (error) {
-    console.error("Error fetching customers:", error);
-    return [];
-  }
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 50));
+  return allCustomers;
 }
 
 export async function getCustomerById(id: string): Promise<Customer | undefined> {
-  if (!db) {
-    console.warn("Firestore is not configured. Cannot fetch customer by ID.");
-    return undefined;
-  }
-  try {
-    const customerDoc = doc(db, 'customers', id);
-    const customerSnapshot = await getDoc(customerDoc);
-    if (customerSnapshot.exists()) {
-      return { id: customerSnapshot.id, ...customerSnapshot.data() } as Customer;
-    }
-    return undefined;
-  } catch (error) {
-    console.error(`Error fetching customer with ID ${id}:`, error);
-    return undefined;
-  }
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 50));
+  return allCustomers.find(c => c.id === id);
 }
