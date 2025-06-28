@@ -69,29 +69,61 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   const handleDownloadOrderPdf = () => {
     if (!order) return;
     const doc = new jsPDF();
-
-    // Title
-    doc.setFontSize(22);
-    doc.text("Order Confirmation", 14, 22);
-
-    // Order Info
-    doc.setFontSize(12);
-    doc.text(`Order ID: ${order.id}`, 14, 32);
-    doc.text(`Order Date: ${order.date}`, 14, 38);
-    doc.text(`Status: ${order.status}`, 14, 44);
-
-    // Shipping Address
-    doc.setFontSize(16);
-    doc.text("Shipping Address", 14, 60);
-    doc.setFontSize(11);
-    const address = order.shippingAddress;
-    doc.text(`${address.fullName}`, 14, 68);
-    doc.text(`${address.address}`, 14, 74);
-    doc.text(`${address.city}, ${address.state} ${address.zip}`, 14, 80);
-    doc.text(`${address.country}`, 14, 86);
     
+    // Base64 encoded SVG for the logo
+    const logo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4QzZCNUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNC41IDE2LjVjLTEuNSAxLjI2LTIgNS0yIDVzMy43NC0uNSA1LTJjLjcxLS44NC43LTIuMy4wNS0zLjEyUzUuMjEgMTUuNjYgNC41IDE2LjV6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNWEyLjI1IDIuMjUgMCAwIDAtMy4xOC0zLjE4bC0zLjUgMy41YTIuMjUgMi4yNSAwIDAgMCAzLjE4IDMuMTh6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNSIvPjxwYXRoIGQ9Ik03IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xNyAxOGguMDEiLz48cGF0aCBkPSJNMTAgMTFoLjAxIi8+PHBhdGggZD0iTTE0IDdoLjAxIi8+PHBhdGggZD0ibTIxLjE1IDIuODUtMi4zIDIuM2EyLjI1IDIuMjUgMCAwIDEtMy4xOCAwTDEyIDQuNmEyLjI1IDIuMjUgMCAwIDEgMC0zLjE4bDIuMy0yLjNhMi4yNSAyLjI1IDAgMCAxIDMuMTggMGwzLjUgMy41YTIuMjUgMi4yNSAwIDAgMSAwIDMuMTh6Ii8+PC9zdmc+';
+
+    const addHeader = () => {
+      doc.addImage(logo, 'PNG', 14, 15, 12, 12);
+      doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold');
+      doc.text("Falcon Cart", 30, 22);
+
+      doc.setFontSize(16);
+      doc.text("Invoice", 196, 22, { align: 'right' });
+    };
+
+    const addFooter = () => {
+        const pageCount = (doc.internal as any).getNumberOfPages();
+        for(let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text('Thank you for your business!', 14, doc.internal.pageSize.height - 10);
+            doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10, {align: 'right'});
+        }
+    };
+
+    addHeader();
+
+    // Address and Order Info
+    doc.setLineWidth(0.1);
+    doc.line(14, 30, 196, 30);
+    
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text("BILL TO:", 14, 40);
+    
+    doc.setFont('helvetica', 'normal');
+    const address = order.shippingAddress;
+    doc.text(`${address.fullName}`, 14, 46);
+    doc.text(`${address.address}`, 14, 52);
+    doc.text(`${address.city}, ${address.state} ${address.zip}`, 14, 58);
+    doc.text(`${address.country}`, 14, 64);
+
+    doc.setFont('helvetica', 'bold');
+    doc.text("Order ID:", 130, 40);
+    doc.text("Order Date:", 130, 46);
+    doc.text("Status:", 130, 52);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${order.id}`, 196, 40, { align: 'right' });
+    doc.text(`${order.date}`, 196, 46, { align: 'right' });
+    doc.text(`${order.status}`, 196, 52, { align: 'right' });
+
+
     // Items Table
-    const tableColumn = ["Product", "Quantity", "Price", "Subtotal"];
+    const tableColumn = ["Product", "Quantity", "Unit Price", "Subtotal"];
     const tableRows: (string | number)[][] = [];
 
     order.items.forEach(item => {
@@ -107,15 +139,27 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
     autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
-        startY: 96,
+        startY: 75,
+        theme: 'grid',
+        headStyles: { fillColor: [52, 42, 42] }, // A darker brown from the theme
+        styles: { cellPadding: 2.5, fontSize: 10 },
+        columnStyles: {
+            0: { cellWidth: 'auto' },
+            1: { cellWidth: 20, halign: 'center' },
+            2: { cellWidth: 30, halign: 'right' },
+            3: { cellWidth: 30, halign: 'right' },
+        }
     });
 
     // Total
-    const finalY = (doc as any).lastAutoTable.finalY; // Get end position of table
-    doc.setFontSize(14);
-    doc.text(`Total: $${order.total.toFixed(2)}`, 14, finalY + 10);
+    const finalY = (doc as any).lastAutoTable.finalY;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Total:`, 130, finalY + 15);
+    doc.text(`$${order.total.toFixed(2)}`, 196, finalY + 15, { align: 'right' });
 
-    doc.save(`order-${order.id}.pdf`);
+    addFooter();
+    doc.save(`Invoice-${order.id}.pdf`);
   };
 
   return (

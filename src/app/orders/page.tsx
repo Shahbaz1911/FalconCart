@@ -9,13 +9,49 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import Image from 'next/image';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useAuth } from '@/components/auth-provider';
 
 export default function OrdersPage() {
   const { orders } = useOrders();
+  const { user } = useAuth();
 
   const handleDownloadHistoryPdf = () => {
     const doc = new jsPDF();
-    doc.text("Order History", 14, 16);
+    
+    // Base64 encoded SVG for the logo
+    const logo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4QzZCNUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNNC41IDE2LjVjLTEuNSAxLjI2LTIgNS0yIDVzMy43NC0uNSA1LTJjLjcxLS44NC43LTIuMy4wNS0zLjEyUzUuMjEgMTUuNjYgNC41IDE2LjV6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNWEyLjI1IDIuMjUgMCAwIDAtMy4xOC0zLjE4bC0zLjUgMy41YTIuMjUgMi4yNSAwIDAgMCAzLjE4IDMuMTh6Ii8+PHBhdGggZD0ibTEyIDE1LjUgMy41LTMuNSIvPjxwYXRoIGQ9Ik03IDE4aC4wMSIvPjxwYXRoIGQ9Ik0xNyAxOGguMDEiLz48cGF0aCBkPSJNMTAgMTFoLjAxIi8+PHBhdGggZD0iTTE0IDdoLjAxIi8+PHBhdGggZD0ibTIxLjE1IDIuODUtMi4zIDIuM2EyLjI1IDIuMjUgMCAwIDEtMy4xOCAwTDEyIDQuNmEyLjI1IDIuMjUgMCAwIDEgMC0zLjE4bDIuMy0yLjNhMi4yNSAyLjI1IDAgMCAxIDMuMTggMGwzLjUgMy41YTIuMjUgMi4yNSAwIDAgMSAwIDMuMTh6Ii8+PC9zdmc+';
+
+    const addHeader = () => {
+      doc.addImage(logo, 'PNG', 14, 15, 12, 12);
+      doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold');
+      doc.text("Falcon Cart", 30, 22);
+      doc.setFontSize(16);
+      doc.text("Order History", 196, 22, { align: 'right' });
+    };
+
+    const addFooter = () => {
+        const pageCount = (doc.internal as any).getNumberOfPages();
+        for(let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text(`A summary of all your orders.`, 14, doc.internal.pageSize.height - 10);
+            doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 10, {align: 'right'});
+        }
+    };
+    
+    addHeader();
+    doc.setLineWidth(0.1);
+    doc.line(14, 30, 196, 30);
+
+    if (user) {
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text("CUSTOMER:", 14, 40);
+        doc.setFont('helvetica', 'normal');
+        doc.text(user.displayName || user.email || 'N/A', 14, 46);
+    }
     
     const tableColumn = ["Order ID", "Date", "Status", "Total"];
     const tableRows: (string | number)[][] = [];
@@ -33,9 +69,13 @@ export default function OrdersPage() {
     autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
-      startY: 20,
+      startY: user ? 55 : 40,
+      theme: 'striped',
+      headStyles: { fillColor: [52, 42, 42] },
+      styles: { cellPadding: 2.5, fontSize: 10 },
     });
 
+    addFooter();
     doc.save('order-history.pdf');
   };
 
