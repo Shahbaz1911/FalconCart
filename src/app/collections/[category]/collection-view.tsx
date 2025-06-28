@@ -9,7 +9,6 @@ import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Product } from '@/lib/products';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface CollectionViewProps {
@@ -21,7 +20,6 @@ interface CollectionViewProps {
 export function CollectionView({ products, category, displayCategoryName }: CollectionViewProps) {
   const componentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -29,7 +27,7 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
   }, []);
 
   useLayoutEffect(() => {
-    if (products.length > 0 && !isMobile && isClient) {
+    if (products.length > 0 && isClient) {
       gsap.registerPlugin(ScrollTrigger);
 
       const component = componentRef.current;
@@ -58,7 +56,7 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
 
       return () => ctx.revert();
     }
-  }, [products, isMobile, isClient]);
+  }, [products, isClient]);
 
   const header = (
     <div className="mb-8">
@@ -103,30 +101,17 @@ export function CollectionView({ products, category, displayCategoryName }: Coll
     <>
       {header}
       
-      {isMobile ? (
-        // Mobile View: Horizontal Scroll
-        <div className="flex gap-6 overflow-x-auto pb-4">
-          {products.map((product) => (
-            <div key={product.id} className="w-72 flex-shrink-0">
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
-      ) : (
-        // Desktop View: Horizontal Scroll with GSAP
-        <div ref={componentRef} className="h-[80vh] w-full overflow-hidden">
-            <div ref={trackRef} className="flex h-full items-center gap-6 w-max pr-10">
-                {products.map((product) => (
-                  <div key={product.id} className="w-72 flex-shrink-0">
-                    <ProductCard product={product} />
-                  </div>
-                ))}
-            </div>
-        </div>
-      )}
+      <div ref={componentRef} className="h-[80vh] w-full overflow-hidden">
+          <div ref={trackRef} className="flex h-full items-center gap-6 w-max pr-10">
+              {products.map((product) => (
+                <div key={product.id} className="w-72 flex-shrink-0">
+                  <ProductCard product={product} />
+                </div>
+              ))}
+          </div>
+      </div>
       
-      {/* Spacer for desktop horizontal scroll */}
-      {!isMobile && products.length > 0 && <div className="h-screen"></div>}
+      {products.length > 0 && <div className="h-screen"></div>}
     </>
   );
 }

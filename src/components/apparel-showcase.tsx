@@ -4,7 +4,6 @@
 import { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import type { Product } from '@/lib/products';
-import { useIsMobile } from '@/hooks/use-mobile';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -26,7 +25,6 @@ const apparelProducts: Product[] = [
 export function ApparelShowcase() {
   const componentRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -34,7 +32,7 @@ export function ApparelShowcase() {
   }, []);
 
   useLayoutEffect(() => {
-    if (isClient && !isMobile) {
+    if (isClient) {
       gsap.registerPlugin(ScrollTrigger);
 
       const component = componentRef.current;
@@ -63,7 +61,7 @@ export function ApparelShowcase() {
 
       return () => ctx.revert();
     }
-  }, [isClient, isMobile]);
+  }, [isClient]);
 
   const header = (
      <div className="mb-8 md:mb-0 md:absolute md:top-1/2 md:-translate-y-1/2 md:left-12 z-10 text-background p-8 bg-black/50 rounded-lg max-w-md">
@@ -78,18 +76,6 @@ export function ApparelShowcase() {
 
   return (
     <section id="apparel-showcase">
-      {isMobile ? (
-        <>
-            {header}
-            <div className="flex gap-6 overflow-x-auto pb-4">
-            {apparelProducts.map((product) => (
-                <div key={product.id} className="w-72 flex-shrink-0">
-                    <ProductCard product={product} />
-                </div>
-            ))}
-            </div>
-        </>
-      ) : (
         <div ref={componentRef} className="h-screen w-full overflow-hidden relative">
             {header}
             <div ref={trackRef} className="flex h-full items-center gap-6 w-max pr-10 pl-[calc(50%-450px)]">
@@ -100,9 +86,8 @@ export function ApparelShowcase() {
                 ))}
             </div>
         </div>
-      )}
       
-      {!isMobile && <div style={{ height: '100vh' }}></div>}
+      <div style={{ height: '100vh' }}></div>
     </section>
   );
 }
