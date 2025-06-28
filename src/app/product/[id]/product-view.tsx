@@ -65,33 +65,47 @@ export function ProductView({ product }: ProductViewProps) {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 md:gap-12">
-      <div className="bg-card rounded-lg p-4 flex items-center justify-center">
-        {/* Add an ID here to be targeted by the animation */}
-        <div id="product-image" className="aspect-square relative w-full max-w-md mx-auto">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover rounded-md"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            data-ai-hint={product.data_ai_hint}
-            priority
-          />
+    <>
+      <div className="grid md:grid-cols-2 gap-6 md:gap-12 pb-24 md:pb-0">
+        <div className="md:bg-card md:rounded-lg md:p-4 flex items-center justify-center">
+          <div id="product-image" className="aspect-square relative w-full max-w-md mx-auto">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover rounded-md"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              data-ai-hint={product.data_ai_hint}
+              priority
+            />
+          </div>
+        </div>
+        <div className="flex flex-col justify-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-headline mb-2">{product.name}</h1>
+          <p className="text-muted-foreground text-sm mb-4">{product.category}</p>
+          <p className="text-base mb-6">{product.description}</p>
+          
+          {/* Desktop price + add to cart button */}
+          <div className="hidden md:flex flex-col gap-6">
+             <div className="flex items-center justify-between">
+                <span className="text-3xl md:text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
+            </div>
+            <AddToCartButton onClick={handleAddToCart} />
+          </div>
+
+          <div className="mt-8 md:mt-12">
+            <Recommendations product={product} />
+          </div>
         </div>
       </div>
-      <div className="flex flex-col justify-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-headline mb-2">{product.name}</h1>
-        <p className="text-muted-foreground text-sm mb-4">{product.category}</p>
-        <p className="text-base mb-6">{product.description}</p>
-        <div className="flex items-center justify-between mb-6">
-          <span className="text-3xl md:text-4xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
-        </div>
-        <AddToCartButton onClick={handleAddToCart} />
-        <div className="mt-8 md:mt-12">
-          <Recommendations product={product} />
+      
+      {/* Mobile-only sticky add to cart bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm border-t p-4 flex items-center justify-between gap-4 z-40">
+        <span className="text-xl font-bold font-headline text-primary">${product.price.toFixed(2)}</span>
+        <div className="flex-grow">
+             <AddToCartButton onClick={handleAddToCart} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
