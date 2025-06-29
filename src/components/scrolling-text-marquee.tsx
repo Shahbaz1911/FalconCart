@@ -27,24 +27,21 @@ export function ScrollingTextMarquee() {
           trigger: component,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: 1.5,
+          scrub: 0.5, // Tighter scrub for a more responsive feel
         },
       });
 
-      // Animate each line with a different magnitude and direction
-      // By removing the initialOffset CSS class and controlling the transform purely with GSAP,
-      // we prevent conflicts and ensure the animation works as expected.
-      tl.to(marqueeLineRefs[0].current, { xPercent: -20 }, 0)
-        .to(marqueeLineRefs[1].current, { xPercent: 20 }, 0)
-        .to(marqueeLineRefs[2].current, { xPercent: -15 }, 0)
-        .to(marqueeLineRefs[3].current, { xPercent: 25 }, 0);
+      // Animate each line with a more significant distance
+      tl.to(marqueeLineRefs[0].current, { xPercent: -50 }, 0)
+        .to(marqueeLineRefs[1].current, { xPercent: 50 }, 0)
+        .to(marqueeLineRefs[2].current, { xPercent: -45 }, 0)
+        .to(marqueeLineRefs[3].current, { xPercent: 45 }, 0);
         
     }, component);
 
     return () => ctx.revert();
   }, []);
 
-  // GSAP now fully controls the horizontal position, preventing conflicts with CSS classes.
   const MarqueeLine = ({ text, lineRef }: { text: string; lineRef: React.RefObject<HTMLDivElement>; }) => {
     // Repeat the text to create a long, seamless line
     const repeatedText = Array(8).fill(text).join(' • ');
