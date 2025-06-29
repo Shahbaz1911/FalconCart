@@ -3,14 +3,8 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, Rocket } from "lucide-react";
 import { Button } from "./ui/button";
-import { usePathname } from "next/navigation";
 
 export function Footer() {
-  const pathname = usePathname();
-  if (pathname === '/') {
-    return null;
-  }
-
   const quickLinks = [
     { name: "Home", href: "/" },
     { name: "Products", href: "/products" },
