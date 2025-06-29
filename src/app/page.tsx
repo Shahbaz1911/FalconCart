@@ -66,16 +66,19 @@ export default function Home() {
       const ctx = gsap.context(() => {
         texts.forEach((text, i) => {
           const direction = i % 2 === 0 ? 1 : -1;
-          // Set initial position off-screen
-          gsap.set(text, { x: direction * -1 * window.innerWidth });
+          
+          // Set initial horizontal position
+          gsap.set(text, { xPercent: direction * -50 });
 
+          // Animate horizontal position on scroll
           gsap.to(text, {
-            x: direction * window.innerWidth,
+            xPercent: direction * 50,
+            ease: 'none',
             scrollTrigger: {
               trigger: section,
-              start: 'top center',
-              end: 'bottom center',
-              scrub: 1.5 + i * 0.5, // different speeds
+              start: 'top 80%',
+              end: 'bottom 20%',
+              scrub: 1 + i * 0.5, // different speeds
             },
           });
         });
@@ -153,7 +156,7 @@ export default function Home() {
                     ref={el => textRefs.current[i] = el}
                     className="absolute whitespace-nowrap text-8xl lg:text-9xl font-extrabold font-headline uppercase text-foreground"
                     style={{
-                        top: `${(i * 25) + 5}%`,
+                        top: `${(i * 22) + 6}%`, // Adjusted vertical spacing
                     }}
                 >
                     {text}
