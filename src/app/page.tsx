@@ -156,7 +156,7 @@ export default function Home() {
                     ref={el => textRefs.current[i] = el}
                     className="absolute whitespace-nowrap text-8xl lg:text-9xl font-extrabold font-headline uppercase text-foreground"
                     style={{
-                        top: `${(i * 22) + 6}%`, // Adjusted vertical spacing
+                        top: `${(i * 20) + 5}%`,
                     }}
                 >
                     {text}
