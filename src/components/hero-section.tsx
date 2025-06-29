@@ -58,8 +58,8 @@ export function HeroSection() {
                 },
             });
 
-            tl.to(styleRef.current, { xPercent: -50, opacity: 0 }, 0);
-            tl.to(comfortRef.current, { xPercent: 50, opacity: 0 }, 0);
+            tl.to(styleRef.current, { yPercent: -50, opacity: 0 }, 0);
+            tl.to(comfortRef.current, { yPercent: 50, opacity: 0 }, 0);
             tl.to(otherContentRef.current, { opacity: 0 }, 0);
 
         }, heroRef);
