@@ -73,8 +73,8 @@ export default function Home() {
             x: direction * window.innerWidth,
             scrollTrigger: {
               trigger: section,
-              start: 'top bottom',
-              end: 'bottom top',
+              start: 'top center',
+              end: 'bottom center',
               scrub: 1.5 + i * 0.5, // different speeds
             },
           });
@@ -145,7 +145,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={qualitySectionRef} className="relative bg-card p-4 sm:p-8 rounded-lg overflow-hidden h-[60vh]">
+      <section ref={qualitySectionRef} className="relative overflow-hidden h-[60vh]">
         <div className="absolute inset-0 z-0 pointer-events-none">
             {['CRAFTSMANSHIP', 'INNOVATION', 'PRECISION', 'PERFORMANCE'].map((text, i) => (
                 <div
