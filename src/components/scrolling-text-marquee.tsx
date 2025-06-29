@@ -32,21 +32,24 @@ export function ScrollingTextMarquee() {
       });
 
       // Animate each line with a different magnitude and direction
-      tl.to(marqueeLineRefs[0].current, { xPercent: -20, ease: 'none' }, 0)
-        .to(marqueeLineRefs[1].current, { xPercent: 20, ease: 'none' }, 0)
-        .to(marqueeLineRefs[2].current, { xPercent: -15, ease: 'none' }, 0)
-        .to(marqueeLineRefs[3].current, { xPercent: 25, ease: 'none' }, 0);
+      // By removing the initialOffset CSS class and controlling the transform purely with GSAP,
+      // we prevent conflicts and ensure the animation works as expected.
+      tl.to(marqueeLineRefs[0].current, { xPercent: -20 }, 0)
+        .to(marqueeLineRefs[1].current, { xPercent: 20 }, 0)
+        .to(marqueeLineRefs[2].current, { xPercent: -15 }, 0)
+        .to(marqueeLineRefs[3].current, { xPercent: 25 }, 0);
         
     }, component);
 
     return () => ctx.revert();
   }, []);
 
-  const MarqueeLine = ({ text, lineRef, initialOffset }: { text: string; lineRef: React.RefObject<HTMLDivElement>; initialOffset: string }) => {
+  // GSAP now fully controls the horizontal position, preventing conflicts with CSS classes.
+  const MarqueeLine = ({ text, lineRef }: { text: string; lineRef: React.RefObject<HTMLDivElement>; }) => {
     // Repeat the text to create a long, seamless line
     const repeatedText = Array(8).fill(text).join(' • ');
     return (
-      <div ref={lineRef} className={`flex whitespace-nowrap ${initialOffset}`}>
+      <div ref={lineRef} className="flex whitespace-nowrap">
         <p className="text-stroke-2 text-transparent font-headline uppercase text-6xl md:text-8xl font-extrabold mx-4">
           {repeatedText}
         </p>
@@ -54,9 +57,6 @@ export function ScrollingTextMarquee() {
     );
   };
   
-  // Corrected initial offsets to ensure text is visible on screen
-  const initialOffsets = ['-translate-x-[10%]', '-translate-x-[30%]', '-translate-x-[5%]', '-translate-x-[25%]'];
-
   return (
     <section ref={componentRef} className="py-24 overflow-x-hidden">
         <div className="space-y-4">
@@ -65,7 +65,6 @@ export function ScrollingTextMarquee() {
                     key={text} 
                     text={text} 
                     lineRef={marqueeLineRefs[index]}
-                    initialOffset={initialOffsets[index]}
                 />
             ))}
         </div>
