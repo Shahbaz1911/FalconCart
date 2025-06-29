@@ -11,7 +11,6 @@ import { Headset, PackageOpen, Truck, Undo2 } from 'lucide-react';
 import { HeroSection } from '@/components/hero-section';
 import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
-import { ScrollingTextMarquee } from '@/components/scrolling-text-marquee';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
@@ -27,11 +26,6 @@ export default function Home() {
     };
     fetchProducts();
   }, []);
-  
-  const featuredProducts = useMemo(() => {
-      // Create a copy and shuffle it to show different products on each load
-      return [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 4);
-  }, [allProducts]);
   
   const [selectedCategory, setSelectedCategory] = useState('All');
   
@@ -106,26 +100,6 @@ export default function Home() {
         )}
       </section>
 
-      <section>
-        <h2 className="text-3xl font-bold font-headline text-center mb-8">Our Featured Picks</h2>
-        {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-[420px] w-full" />)}
-            </div>
-        ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-            ))}
-            </div>
-        )}
-        <div className="text-center mt-12">
-          <Button asChild size="lg" variant="outline">
-            <Link href="/products">View All Products</Link>
-          </Button>
-        </div>
-      </section>
-
       <section className="bg-secondary/50 rounded-lg p-8 md:p-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
           {features.map(feature => (
@@ -151,8 +125,6 @@ export default function Home() {
 
 
       <CustomerReviews />
-
-      <ScrollingTextMarquee />
 
       <section className="bg-primary text-primary-foreground p-8 sm:p-12 rounded-lg text-center">
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
