@@ -13,6 +13,10 @@ body {
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   :root {
     --background: 40 50% 95%;
     --foreground: 25 35% 25%;

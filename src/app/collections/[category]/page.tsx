@@ -36,5 +36,28 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     notFound();
   }
 
+<<<<<<< HEAD
   return <CollectionView products={products} category={categoryKey} displayCategoryName={displayCategoryName} />;
+=======
+  const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+  const displayCategoryName = category.toLowerCase() === 'apparel' ? 'Clothes' : categoryName;
+
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <CollectionView 
+        products={products} 
+        category={category} 
+        displayCategoryName={displayCategoryName} 
+      />
+    </div>
+  );
+}
+
+export async function generateStaticParams() {
+    const products = getProducts();
+    const categories = [...new Set(products.map(p => p.category.toLowerCase()))];
+    return categories.map(category => ({
+        category,
+    }));
+>>>>>>> refs/remotes/origin/main
 }

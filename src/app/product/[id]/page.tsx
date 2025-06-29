@@ -15,5 +15,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  return <ProductView product={product} />;
+  return (
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <ProductView product={product} />
+    </div>
+  );
 }

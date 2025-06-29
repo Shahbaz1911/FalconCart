@@ -134,6 +134,9 @@ export default {
           from: { opacity: '1', transform: 'translateX(0) translateY(0) scale(1)' },
           to: { opacity: '0', transform: 'translateX(1rem) translateY(-0.5rem) scale(0.95)' },
         },
+        'spin-slow': {
+          'to': { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -141,8 +144,14 @@ export default {
         'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
         'float-subtle': 'float-subtle 6s ease-in-out infinite',
         'running-cart': 'running-cart 0.3s ease-in-out infinite',
+<<<<<<< HEAD
         'menu-open': 'menu-open 0.2s ease-out',
         'menu-close': 'menu-close 0.2s ease-in',
+=======
+        'grow-from-top-right': 'grow-from-top-right 0.3s ease-out',
+        'shrink-to-top-right': 'shrink-to-top-right 0.2s ease-in',
+        'spin-slow': 'spin-slow 20s linear infinite',
+>>>>>>> refs/remotes/origin/main
       },
     },
   },

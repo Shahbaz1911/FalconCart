@@ -177,6 +177,7 @@ export default function OrderDetailPage() {
   }
 
   return (
+<<<<<<< HEAD
     <div>
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8 gap-4">
         <div>
@@ -190,6 +191,15 @@ export default function OrderDetailPage() {
             <Download className="mr-2 h-4 w-4" />
             Download PDF
         </Button>
+=======
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mb-8">
+        <Link href="/orders" className="text-sm text-primary hover:underline">&larr; Back to Orders</Link>
+        <h1 className="text-3xl md:text-4xl font-headline font-bold mt-2">
+          Order Details
+        </h1>
+        <p className="text-sm text-muted-foreground font-mono mt-1">ID: {order.id}</p>
+>>>>>>> refs/remotes/origin/main
       </div>
       
       <Card className="mb-8">

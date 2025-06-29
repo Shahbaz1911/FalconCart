@@ -4,7 +4,6 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { CartProvider } from '@/hooks/use-cart';
 import { Toaster } from "@/components/ui/toaster"
-import { Preloader } from '@/components/preloader';
 import { ThemeProvider } from '@/components/theme-provider';
 import { MobileBottomNav } from '@/components/mobile-bottom-nav';
 import { CustomCursor } from '@/components/custom-cursor';
@@ -37,6 +36,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+<<<<<<< HEAD
           <AuthProvider>
             <OrdersProvider>
               <CartProvider>
@@ -53,6 +53,16 @@ export default function RootLayout({
               </CartProvider>
             </OrdersProvider>
           </AuthProvider>
+=======
+          <CartProvider>
+            <Header />
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <Toaster />
+          </CartProvider>
+>>>>>>> refs/remotes/origin/main
         </ThemeProvider>
       </body>
     </html>

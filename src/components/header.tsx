@@ -21,9 +21,10 @@ import { Button } from './ui/button';
 import { Separator } from './ui/separator';
 
 export function Header() {
+  const pathname = usePathname();
   const { items } = useCart();
-  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
   const [isClient, setIsClient] = useState(false);
+<<<<<<< HEAD
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -33,9 +34,18 @@ export function Header() {
 
   const pathname = usePathname();
   
+=======
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+>>>>>>> refs/remotes/origin/main
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  const itemCount = items.reduce((total, item) => total + item.quantity, 0);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const navLinks = [
     { name: 'Home', href: '/', icon: Home },
@@ -83,9 +93,15 @@ export function Header() {
 
 
   useEffect(() => {
+<<<<<<< HEAD
     const handleResize = () => updateIndicator(null);
     const timeoutId = setTimeout(() => updateIndicator(null), 50);
     window.addEventListener('resize', handleResize);
+=======
+    if (pathname === '/') return;
+    const timeoutId = setTimeout(updateIndicatorToActive, 50);
+    window.addEventListener('resize', updateIndicatorToActive);
+>>>>>>> refs/remotes/origin/main
     
     return () => {
       clearTimeout(timeoutId);
@@ -95,6 +111,10 @@ export function Header() {
   
   const handleHover = (index: number) => updateIndicator(index);
   const handleMouseLeave = () => updateIndicator(null);
+
+  if (pathname === '/') {
+    return null;
+  }
 
   return (
     <header className={cn(
