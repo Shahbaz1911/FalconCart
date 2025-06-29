@@ -11,6 +11,7 @@ import { Headset, PackageOpen, Truck, Undo2 } from 'lucide-react';
 import { HeroSection } from '@/components/hero-section';
 import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
+import { ScrollingTextMarquee } from '@/components/scrolling-text-marquee';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
@@ -150,6 +151,8 @@ export default function Home() {
 
 
       <CustomerReviews />
+
+      <ScrollingTextMarquee />
 
       <section className="bg-primary text-primary-foreground p-8 sm:p-12 rounded-lg text-center">
         <h2 className="text-3xl font-bold font-headline">Join Our Community</h2>
