@@ -24,19 +24,9 @@ export function Header() {
   const pathname = usePathname();
   const { items } = useCart();
   const [isClient, setIsClient] = useState(false);
-<<<<<<< HEAD
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const pathname = usePathname();
-  
-=======
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
->>>>>>> refs/remotes/origin/main
   const [indicatorStyle, setIndicatorStyle] = useState<{ left: number; width: number } | {}>({});
   const navRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -93,15 +83,9 @@ export function Header() {
 
 
   useEffect(() => {
-<<<<<<< HEAD
     const handleResize = () => updateIndicator(null);
     const timeoutId = setTimeout(() => updateIndicator(null), 50);
     window.addEventListener('resize', handleResize);
-=======
-    if (pathname === '/') return;
-    const timeoutId = setTimeout(updateIndicatorToActive, 50);
-    window.addEventListener('resize', updateIndicatorToActive);
->>>>>>> refs/remotes/origin/main
     
     return () => {
       clearTimeout(timeoutId);

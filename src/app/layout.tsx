@@ -10,6 +10,7 @@ import { CustomCursor } from '@/components/custom-cursor';
 import { AuthProvider } from '@/components/auth-provider';
 import { Chatbot } from '@/components/chatbot';
 import { OrdersProvider } from '@/hooks/use-orders';
+import { Preloader } from '@/components/preloader';
 
 export const metadata: Metadata = {
   title: 'Falcon Cart',
@@ -36,7 +37,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-<<<<<<< HEAD
           <AuthProvider>
             <OrdersProvider>
               <CartProvider>
@@ -53,16 +53,6 @@ export default function RootLayout({
               </CartProvider>
             </OrdersProvider>
           </AuthProvider>
-=======
-          <CartProvider>
-            <Header />
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-            <Toaster />
-          </CartProvider>
->>>>>>> refs/remotes/origin/main
         </ThemeProvider>
       </body>
     </html>

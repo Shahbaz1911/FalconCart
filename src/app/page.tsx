@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 'use client';
 
 import { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
@@ -177,14 +175,6 @@ export default function Home() {
             <Button type="submit" variant="secondary">Subscribe</Button>
         </form>
       </section>
-=======
-import { CurvedTextScroll } from '@/components/curved-text-scroll';
-
-export default function Home() {
-  return (
-    <div className="bg-background text-foreground">
-      <CurvedTextScroll />
->>>>>>> refs/remotes/origin/main
     </div>
   );
 }
