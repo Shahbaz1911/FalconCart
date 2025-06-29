@@ -20,29 +20,33 @@ export function ScrollingTextMarquee() {
     const component = componentRef.current;
     if (!component) return;
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: component,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 1.5,
-      },
-    });
+    // GSAP context for safe cleanup
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: component,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
 
-    tl.to(marqueeLineRefs[0].current, { xPercent: -20, ease: 'none' }, 0);
-    tl.to(marqueeLineRefs[1].current, { xPercent: 20, ease: 'none' }, 0);
-    tl.to(marqueeLineRefs[2].current, { xPercent: -15, ease: 'none' }, 0);
-    tl.to(marqueeLineRefs[3].current, { xPercent: 25, ease: 'none' }, 0);
+      // Animate each line with a different magnitude and direction
+      tl.to(marqueeLineRefs[0].current, { xPercent: -20, ease: 'none' }, 0)
+        .to(marqueeLineRefs[1].current, { xPercent: 20, ease: 'none' }, 0)
+        .to(marqueeLineRefs[2].current, { xPercent: -15, ease: 'none' }, 0)
+        .to(marqueeLineRefs[3].current, { xPercent: 25, ease: 'none' }, 0);
+        
+    }, component);
 
-    return () => {
-      tl.kill();
-    };
+    return () => ctx.revert();
   }, []);
 
-  const MarqueeLine = ({ text, initialOffsetClass, lineRef }: { text: string; initialOffsetClass: string; lineRef: React.RefObject<HTMLDivElement> }) => {
-    const repeatedText = Array(6).fill(text).join(' • ');
+  const MarqueeLine = ({ text, lineRef, initialOffset }: { text: string; lineRef: React.RefObject<HTMLDivElement>; initialOffset: string }) => {
+    // Repeat the text to create a long, seamless line
+    const repeatedText = Array(8).fill(text).join(' • ');
     return (
-      <div ref={lineRef} className={`flex whitespace-nowrap ${initialOffsetClass}`}>
+      <div ref={lineRef} className={`flex whitespace-nowrap ${initialOffset}`}>
         <p className="text-stroke-2 text-transparent font-headline uppercase text-6xl md:text-8xl font-extrabold mx-4">
           {repeatedText}
         </p>
@@ -50,6 +54,7 @@ export function ScrollingTextMarquee() {
     );
   };
   
+  // Corrected initial offsets to ensure text is visible on screen
   const initialOffsets = ['-translate-x-[10%]', '-translate-x-[30%]', '-translate-x-[5%]', '-translate-x-[25%]'];
 
   return (
@@ -59,8 +64,8 @@ export function ScrollingTextMarquee() {
                 <MarqueeLine 
                     key={text} 
                     text={text} 
-                    initialOffsetClass={initialOffsets[index]}
-                    lineRef={marqueeLineRefs[index]} 
+                    lineRef={marqueeLineRefs[index]}
+                    initialOffset={initialOffsets[index]}
                 />
             ))}
         </div>
