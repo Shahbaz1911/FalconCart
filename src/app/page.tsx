@@ -145,13 +145,13 @@ export default function Home() {
         </div>
       </section>
 
-      <section ref={qualitySectionRef} className="relative grid md:grid-cols-2 gap-8 items-center bg-card p-4 sm:p-8 rounded-lg overflow-hidden">
+      <section ref={qualitySectionRef} className="relative bg-card p-4 sm:p-8 rounded-lg overflow-hidden h-[60vh]">
         <div className="absolute inset-0 z-0 pointer-events-none">
             {['CRAFTSMANSHIP', 'INNOVATION', 'PRECISION', 'PERFORMANCE'].map((text, i) => (
                 <div
                     key={text}
                     ref={el => textRefs.current[i] = el}
-                    className="absolute whitespace-nowrap text-8xl lg:text-9xl font-extrabold font-headline uppercase text-transparent text-stroke-2 text-foreground/10"
+                    className="absolute whitespace-nowrap text-8xl lg:text-9xl font-extrabold font-headline uppercase text-foreground"
                     style={{
                         top: `${(i * 25) + 5}%`,
                     }}
@@ -159,15 +159,6 @@ export default function Home() {
                     {text}
                 </div>
             ))}
-        </div>
-
-        <div className="relative aspect-video rounded-lg overflow-hidden z-10">
-            <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
-        </div>
-        <div className="text-center md:text-left z-10">
-            <h2 className="text-3xl font-bold font-headline">Experience Our Quality</h2>
-            <p className="mt-4 text-muted-foreground">See our products in action and discover the craftsmanship and passion that goes into every piece we create.</p>
-            <Button size="lg" className="mt-6" variant="outline">Watch Full Demo</Button>
         </div>
       </section>
 
