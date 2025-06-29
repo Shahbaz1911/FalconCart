@@ -55,26 +55,21 @@ const reviews = [
 export function CustomerReviews() {
     const componentRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
-    const spacerRef = useRef<HTMLDivElement>(null);
 
     useLayoutEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
         const component = componentRef.current;
         const track = trackRef.current;
-        const spacer = spacerRef.current;
 
-        if (!component || !track || !spacer) return;
+        if (!component || !track) return;
         
         const timeoutId = setTimeout(() => {
             const scrollAmount = track.scrollWidth - component.clientWidth;
             
             if (scrollAmount <= 0) {
-                spacer.style.height = '0px';
                 return;
             }
-
-            spacer.style.height = `${scrollAmount}px`;
 
             let ctx = gsap.context(() => {
                 gsap.to(track, {
@@ -84,6 +79,7 @@ export function CustomerReviews() {
                         trigger: component,
                         start: 'top top',
                         pin: true,
+                        pinSpacing: false,
                         scrub: 1,
                         end: () => `+=${scrollAmount}`,
                         invalidateOnRefresh: true,
@@ -93,9 +89,6 @@ export function CustomerReviews() {
 
             return () => {
                 ctx.revert();
-                if(spacer) {
-                    spacer.style.height = '0px';
-                }
             };
         }, 100);
 
@@ -137,8 +130,6 @@ export function CustomerReviews() {
                     ))}
                 </div>
             </div>
-          
-            <div ref={spacerRef} />
         </section>
     );
 }
