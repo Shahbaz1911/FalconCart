@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef, useLayoutEffect } from 'react';
 import { ProductCard } from '@/components/product-card';
 import { getProducts, type Product } from '@/lib/products';
 import { Button } from '@/components/ui/button';
@@ -12,6 +13,8 @@ import { HeroSection } from '@/components/hero-section';
 import { FeaturedCollections } from '@/components/featured-collections';
 import { CustomerReviews } from '@/components/customer-reviews';
 import { Skeleton } from '@/components/ui/skeleton';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function Home() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
@@ -50,6 +53,36 @@ export default function Home() {
     { icon: <Undo2 />, title: 'Easy Returns', description: '30-day return policy' },
     { icon: <Headset />, title: '24/7 Support', description: 'We are here to help' }
   ];
+
+  const qualitySectionRef = useRef<HTMLElement>(null);
+  const textRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const section = qualitySectionRef.current;
+    const texts = textRefs.current.filter(Boolean) as HTMLDivElement[];
+
+    if (section && texts.length) {
+      const ctx = gsap.context(() => {
+        texts.forEach((text, i) => {
+          const direction = i % 2 === 0 ? 1 : -1;
+          // Set initial position off-screen
+          gsap.set(text, { x: direction * -1 * window.innerWidth });
+
+          gsap.to(text, {
+            x: direction * window.innerWidth,
+            scrollTrigger: {
+              trigger: section,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1.5 + i * 0.5, // different speeds
+            },
+          });
+        });
+      }, section);
+      return () => ctx.revert();
+    }
+  }, []);
   
   return (
     <div className="space-y-24 md:space-y-32">
@@ -112,11 +145,26 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid md:grid-cols-2 gap-8 items-center bg-card p-4 sm:p-8 rounded-lg">
-        <div className="relative aspect-video rounded-lg overflow-hidden">
+      <section ref={qualitySectionRef} className="relative grid md:grid-cols-2 gap-8 items-center bg-card p-4 sm:p-8 rounded-lg overflow-hidden">
+        <div className="absolute inset-0 z-0 pointer-events-none">
+            {['CRAFTSMANSHIP', 'INNOVATION', 'PRECISION', 'PERFORMANCE'].map((text, i) => (
+                <div
+                    key={text}
+                    ref={el => textRefs.current[i] = el}
+                    className="absolute whitespace-nowrap text-8xl lg:text-9xl font-extrabold font-headline uppercase text-transparent text-stroke-2 text-foreground/10"
+                    style={{
+                        top: `${(i * 25) + 5}%`,
+                    }}
+                >
+                    {text}
+                </div>
+            ))}
+        </div>
+
+        <div className="relative aspect-video rounded-lg overflow-hidden z-10">
             <Image src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" fill alt="Product video" className="object-cover" data-ai-hint="product video" />
         </div>
-        <div className="text-center md:text-left">
+        <div className="text-center md:text-left z-10">
             <h2 className="text-3xl font-bold font-headline">Experience Our Quality</h2>
             <p className="mt-4 text-muted-foreground">See our products in action and discover the craftsmanship and passion that goes into every piece we create.</p>
             <Button size="lg" className="mt-6" variant="outline">Watch Full Demo</Button>
